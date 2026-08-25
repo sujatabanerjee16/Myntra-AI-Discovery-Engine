@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import logging
 from functools import lru_cache
-
-from sentence_transformers import SentenceTransformer
+from typing import Any
 
 from common.config import get_settings
 
@@ -13,7 +12,10 @@ logger = logging.getLogger(__name__)
 
 
 @lru_cache(maxsize=1)
-def get_embedding_model() -> SentenceTransformer:
+def get_embedding_model() -> Any:
+    # Lazy import: keep API boot working on lean deploys without torch/ST.
+    from sentence_transformers import SentenceTransformer
+
     settings = get_settings()
     logger.info("Loading embedding model: %s", settings.embedding_model)
     return SentenceTransformer(settings.embedding_model)
