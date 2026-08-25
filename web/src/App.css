@@ -258,6 +258,16 @@ textarea {
   color: var(--text-primary);
 }
 
+.dropdown-footer-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.dropdown-footer-btn:disabled:hover {
+  background: #f8fafc;
+  color: var(--text-secondary);
+}
+
 /* Profile Dropdown */
 .profile-menu {
   width: 280px;

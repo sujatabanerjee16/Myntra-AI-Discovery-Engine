@@ -86,6 +86,29 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([
+    {
+      id: "eors-sync",
+      title: "EORS Sync Complete",
+      body: "Latest wishlist data imported successfully.",
+      time: "2 mins ago",
+      tone: "pink" as const,
+      unread: true,
+    },
+    {
+      id: "anomaly",
+      title: "Anomaly Detected",
+      body: "High price sensitivity in Footwear segment.",
+      time: "1 hour ago",
+      tone: "blue" as const,
+      unread: true,
+    },
+  ]);
+  const unreadCount = notifications.filter((item) => item.unread).length;
+
+  const markAllNotificationsRead = () => {
+    setNotifications((prev) => prev.map((item) => ({ ...item, unread: false })));
+  };
 
   const [profileOpen, setProfileOpen] = useState(false);
   const [email, setEmail] = useState("analyst@myntra.com");
@@ -235,7 +258,7 @@ export default function App() {
                 setProfileOpen(false);
               }}
             >
-              <div className="notification-badge-dot" />
+              {unreadCount > 0 && <div className="notification-badge-dot" />}
               <svg
                 width="18"
                 height="18"
@@ -255,61 +278,67 @@ export default function App() {
               <div className="dropdown-menu notifications-menu">
                 <div className="dropdown-header">
                   <h4>Notifications</h4>
-                  <span className="badge">2 New</span>
+                  {unreadCount > 0 && (
+                    <span className="badge">
+                      {unreadCount} New
+                    </span>
+                  )}
                 </div>
                 <div className="notification-list">
-                  <div className="notification-item unread">
-                    <div className="notification-icon bg-pink">
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <polyline points="7 10 12 15 17 10" />
-                        <line x1="12" y1="15" x2="12" y2="3" />
-                      </svg>
+                  {notifications.map((item) => (
+                    <div
+                      key={item.id}
+                      className={`notification-item${item.unread ? " unread" : ""}`}
+                    >
+                      <div className={`notification-icon bg-${item.tone}`}>
+                        {item.tone === "pink" ? (
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                          </svg>
+                        ) : (
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="notification-content">
+                        <p>
+                          <strong>{item.title}</strong>
+                        </p>
+                        <span>{item.body}</span>
+                        <small>{item.time}</small>
+                      </div>
                     </div>
-                    <div className="notification-content">
-                      <p>
-                        <strong>EORS Sync Complete</strong>
-                      </p>
-                      <span>Latest wishlist data imported successfully.</span>
-                      <small>2 mins ago</small>
-                    </div>
-                  </div>
-                  <div className="notification-item unread">
-                    <div className="notification-icon bg-blue">
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                      </svg>
-                    </div>
-                    <div className="notification-content">
-                      <p>
-                        <strong>Anomaly Detected</strong>
-                      </p>
-                      <span>High price sensitivity in Footwear segment.</span>
-                      <small>1 hour ago</small>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-                <button className="dropdown-footer-btn" onClick={() => alert("Marked all as read")}>
+                <button
+                  type="button"
+                  className="dropdown-footer-btn"
+                  onClick={markAllNotificationsRead}
+                  disabled={unreadCount === 0}
+                >
                   Mark all as read
                 </button>
               </div>
