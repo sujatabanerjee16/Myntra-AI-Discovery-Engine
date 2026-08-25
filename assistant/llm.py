@@ -92,9 +92,14 @@ _PRONOUN_I_CONTRACTION_RE = re.compile(r"(?<![A-Za-z])i'(m|ve|d|ll|re)(?![A-Za-z
 
 
 def _normalize_pronoun_i(text: str) -> str:
-    """Ensure standalone pronoun i / i'm appear as I / I'm."""
-    fixed = _PRONOUN_I_RE.sub("I", text)
-    return _PRONOUN_I_CONTRACTION_RE.sub(lambda m: f"I'{m.group(1).lower()}", fixed)
+    """Ensure standalone pronoun i / i'm appear as I / I'm.
+
+    Normalize contractions first so the standalone-``i`` pass never re-touches
+    text the contraction pass already fixed (its uppercased ``I'`` no longer
+    matches the lowercase-only standalone pattern).
+    """
+    fixed = _PRONOUN_I_CONTRACTION_RE.sub(lambda m: f"I'{m.group(1).lower()}", text)
+    return _PRONOUN_I_RE.sub("I", fixed)
 
 
 def generate_grounded_answer(

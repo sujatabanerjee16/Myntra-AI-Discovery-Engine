@@ -57,10 +57,13 @@ def load_corpus_chunks() -> list[dict[str, Any]]:
         source = doc["source"]
         source_ref = doc.get("source_ref")
         for chunk in doc.get("chunks", []):
-            chunk_key = f"{source_ref}:{chunk.get('chunk_index', 0)}"
+            chunk_index = chunk.get("chunk_index", 0)
+            chunk_key = f"{source_ref}:{chunk_index}"
             chunks.append(
                 {
                     "chunk_id": parse_chunk_uuid(chunk_key),
+                    "document_id": parse_chunk_uuid(str(source_ref)),
+                    "chunk_index": chunk_index,
                     "text": chunk["text"],
                     "source": source,
                     "source_ref": source_ref,

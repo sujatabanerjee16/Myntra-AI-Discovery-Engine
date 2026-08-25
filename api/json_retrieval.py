@@ -70,8 +70,8 @@ def search_chunks_json(
         results.append(
             RetrievedChunk(
                 chunk_id=chunk["chunk_id"],
-                document_id=chunk["chunk_id"],
-                chunk_index=0,
+                document_id=chunk["document_id"],
+                chunk_index=chunk.get("chunk_index", 0),
                 text=chunk["text"],
                 score=round(score, 4),
                 source=SourceType(chunk["source"]),
