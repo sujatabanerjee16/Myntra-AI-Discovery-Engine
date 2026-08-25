@@ -85,9 +85,13 @@ Do **not** put `GROQ_API_KEY` in the Vercel frontend.
 
 | Variable | Example | Notes |
 | -------- | ------- | ----- |
-| `VITE_API_BASE` | `https://wishlist-api.onrender.com` | No trailing slash; **no** `/api` prefix |
+| `VITE_API_BASE` | `/api` | Preferred. Same-origin calls; `web/vercel.json` rewrites `/api/*` → Render. Avoids browser CORS. |
+
+Alternative (direct): `https://myntra-ai-discovery-engine.onrender.com` — then Render `CORS_ORIGINS` must allow the Vercel domain (or `*`).
 
 Rebuild the frontend after changing `VITE_*` (Vite inlines them at build time).
+
+Public app URL for this project: `https://myntra-ai-discovery-engine-five.vercel.app`
 
 ---
 
