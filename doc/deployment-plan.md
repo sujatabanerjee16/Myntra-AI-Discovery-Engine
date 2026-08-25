@@ -76,6 +76,7 @@ If you specifically need a Streamlit surface later, treat it as an **optional op
 | `GROQ_API_KEY` | *(secret)* | Required for Ask AI |
 | `GROQ_MODEL` | `llama-3.3-70b-versatile` | |
 | `CORS_ORIGINS` | `https://<your-app>.vercel.app` | Comma-separated; include preview URLs if needed |
+| `PYTHON_VERSION` | `3.12.8` | Required — Render’s default (e.g. 3.14) breaks `pydantic-core` |
 | `EMBEDDING_MODEL` | *(unused in JSON keyword mode)* | Keep default; heavy model not loaded for JSON retrieval |
 
 Do **not** put `GROQ_API_KEY` in the Vercel frontend.
