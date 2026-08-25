@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     app_name: str = "Wishlist Conversion Discovery Engine"
     environment: str = "development"
     log_level: str = "INFO"
+    # Comma-separated browser origins allowed to call the API (Vercel URLs).
+    # Empty / "*" keeps the permissive default used in local development.
+    cors_origins: str = "*"
 
     # Database
     postgres_user: str = "discovery"

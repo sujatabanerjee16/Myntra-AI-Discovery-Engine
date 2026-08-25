@@ -10,6 +10,7 @@ See the planning docs in [`doc/`](./doc):
 - [`doc/context.md`](./doc/context.md)
 - [`doc/Architecture.md`](./doc/Architecture.md)
 - [`doc/ImplementationPlan.md`](./doc/ImplementationPlan.md)
+- [`doc/deployment-plan.md`](./doc/deployment-plan.md) — Vercel (frontend) + Render (FastAPI backend)
 
 ---
 

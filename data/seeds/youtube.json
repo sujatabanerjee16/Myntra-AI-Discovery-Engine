@@ -1,0 +1,72 @@
+[
+  {
+    "source_ref": "youtube:haul-myntra-sale:comment-001",
+    "text": "Comment on Myntra haul video: I always wishlist the same kurtis you show but wait for discount. Price is too high at MRP so purchase gets postponed every time.",
+    "language": "en",
+    "created_at": "2026-05-14T12:00:00Z",
+    "metadata": { "video_topic": "myntra_haul", "theme": "price_sensitivity_waiting" }
+  },
+  {
+    "source_ref": "youtube:sneaker-unboxing:comment-002",
+    "text": "Loved the unboxing. I had these sneakers in my wishlist for a month — still unsure about sizing running small. Watching fit reviews before I decide to buy.",
+    "language": "en",
+    "created_at": "2026-05-19T09:20:00Z",
+    "metadata": { "video_topic": "sneaker_unboxing", "theme": "fit_sizing_uncertainty" }
+  },
+  {
+    "source_ref": "youtube:ethnic-tryon:comment-003",
+    "text": "Fabric looks different on camera vs product page. That's why my wishlist stays full — quality and colour trust issues. Need virtual try-on before purchase.",
+    "language": "en",
+    "created_at": "2026-05-26T17:45:00Z",
+    "metadata": { "video_topic": "ethnic_tryon", "theme": "quality_trust_doubt" }
+  },
+  {
+    "source_ref": "youtube:ajio-vs-myntra:comment-004",
+    "text": "I compare both apps after shortlisting. Whichever has better coupon wins. Wishlist on Myntra is just step one — I search elsewhere before purchasing.",
+    "language": "en",
+    "created_at": "2026-06-01T11:10:00Z",
+    "metadata": { "video_topic": "platform_comparison", "theme": "external_comparison" }
+  },
+  {
+    "source_ref": "youtube:wedding-shopping:comment-005",
+    "text": "Saved guest outfits for a wedding in August. Still thinking about styling and accessories. Occasion timing means I delay buying from wishlist until closer to the date.",
+    "language": "en",
+    "created_at": "2026-06-07T08:30:00Z",
+    "metadata": { "video_topic": "wedding_shopping", "theme": "timing_occasion" }
+  },
+  {
+    "source_ref": "youtube:return-experience:comment-006",
+    "text": "After a bad return pickup I hesitate on every wishlisted item. Logistics friction makes me bookmark passively instead of purchasing online fashion.",
+    "language": "en",
+    "created_at": "2026-06-15T19:00:00Z",
+    "metadata": { "video_topic": "returns_explained", "theme": "logistics_friction" }
+  },
+  {
+    "source_ref": "youtube:size-guide:comment-007",
+    "text": "Your size guide helped but I'm still confused between M and L for this brand. Shortlist is ready; purchase delayed until more fit reviews drop.",
+    "language": "en",
+    "created_at": "2026-06-22T13:25:00Z",
+    "metadata": { "video_topic": "size_guide", "theme": "fit_sizing_uncertainty" }
+  },
+  {
+    "source_ref": "youtube:wardrobe-declutter:comment-008",
+    "text": "Confession: my wishlist is a digital moodboard. I rarely convert. Passive bookmarking feels productive but doesn't lead to purchase.",
+    "language": "en",
+    "created_at": "2026-06-29T16:40:00Z",
+    "metadata": { "video_topic": "wardrobe_tips", "theme": "passive_bookmarking" }
+  },
+  {
+    "source_ref": "youtube:sale-live:comment-009",
+    "text": "During sale live I finally bought 2 of 11 wishlisted items. Without price drop alerts I would have kept waiting. Discount is what converts my shortlist.",
+    "language": "en",
+    "created_at": "2026-07-05T20:15:00Z",
+    "metadata": { "video_topic": "sale_live", "theme": "price_sensitivity_waiting" }
+  },
+  {
+    "source_ref": "youtube:review-honesty:comment-010",
+    "text": "Hard to trust star ratings. I watch YouTube reviews and Instagram tries before buying anything from wishlist. Outside validation slows conversion.",
+    "language": "en",
+    "created_at": "2026-07-12T10:05:00Z",
+    "metadata": { "video_topic": "honest_reviews", "theme": "review_trust" }
+  }
+]

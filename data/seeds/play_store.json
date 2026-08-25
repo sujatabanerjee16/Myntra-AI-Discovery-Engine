@@ -1,0 +1,72 @@
+[
+  {
+    "source_ref": "play_store:myntra:wishlist-sale-wait-001",
+    "text": "I keep adding kurtis and dresses to my wishlist but never checkout. Prices feel too high and I wait for a sale that never feels good enough. Wishlist is full, purchases almost zero.",
+    "language": "en",
+    "created_at": "2026-05-12T09:10:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "price_sensitivity_waiting", "rating": 3 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-fit-002",
+    "text": "Love browsing and shortlisting shoes, but I hesitate to buy because size charts are confusing. Saved items sit in wishlist for weeks while I compare fit reviews.",
+    "language": "en",
+    "created_at": "2026-05-18T14:22:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "fit_sizing_uncertainty", "rating": 2 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-return-003",
+    "text": "Wishlist is useful for later, but I postpone purchase because returns are stressful for ethnic wear. Unsure about quality until I see fabric in person.",
+    "language": "en",
+    "created_at": "2026-05-21T11:05:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "quality_trust_doubt", "rating": 3 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-compare-004",
+    "text": "I shortlist 8-10 outfits then leave the app to compare on Amazon and Flipkart. Wishlist becomes a bookmark, not purchase intent. Need clearer price drop alerts.",
+    "language": "en",
+    "created_at": "2026-06-02T08:40:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "external_comparison", "rating": 4 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-occasion-005",
+    "text": "Saved wedding guest dresses for an occasion next month. Still thinking, not sure about styling and whether reviews can be trusted for colour accuracy.",
+    "language": "en",
+    "created_at": "2026-06-08T19:15:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "timing_occasion", "rating": 4 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-stock-006",
+    "text": "Item was in my wishlist for ages. When I finally decided to buy, size M was out of stock. Delayed decision plus availability killed the conversion.",
+    "language": "en",
+    "created_at": "2026-06-14T16:50:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "availability_stock", "rating": 2 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-passive-007",
+    "text": "I bookmark everything I like while scrolling. Most wishlist items are passive saves for later inspiration, not something I plan to purchase soon.",
+    "language": "en",
+    "created_at": "2026-06-20T12:30:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "passive_bookmarking", "rating": 5 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-delivery-008",
+    "text": "Hesitate on wishlist sneakers because delivery estimates are long and return pickup is unreliable in my area. Logistics friction stops me from buying.",
+    "language": "en",
+    "created_at": "2026-06-25T07:55:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "logistics_friction", "rating": 2 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-review-trust-009",
+    "text": "Before buying from wishlist I read dozens of reviews and still feel unsure. Fake-looking reviews make me postpone purchase again and again.",
+    "language": "en",
+    "created_at": "2026-07-01T10:20:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "review_trust", "rating": 3 }
+  },
+  {
+    "source_ref": "play_store:myntra:wishlist-budget-010",
+    "text": "App wishlist is great for planning outfits within budget. I wait for coupon codes and price drops; without discount I rarely convert saved items.",
+    "language": "en",
+    "created_at": "2026-07-09T15:45:00Z",
+    "metadata": { "platform": "android_play_store", "theme": "price_sensitivity_waiting", "rating": 4 }
+  }
+]

@@ -1,0 +1,33 @@
+# Render Blueprint — FastAPI backend
+# https://render.com/docs/blueprint-spec
+# See doc/deployment-plan.md
+
+services:
+  - type: web
+    name: wishlist-api
+    runtime: python
+    plan: free
+    region: oregon
+    rootDir: .
+    buildCommand: pip install -r requirements-deploy.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: USE_JSON_FALLBACK
+        value: "true"
+      - key: INSIGHTS_JSON_PATH
+        value: data/insights.json
+      - key: SCRAPED_JSON_PATH
+        value: data/scraped_corpus.json
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.12.8"

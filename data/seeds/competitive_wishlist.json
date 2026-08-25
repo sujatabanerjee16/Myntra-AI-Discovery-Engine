@@ -1,0 +1,86 @@
+[
+  {
+    "source_ref": "research:competitive:myntra-vs-nykaa-beauty",
+    "text": "I wishlist makeup on Nykaa because authenticity and beauty assortment feel stronger, but apparel goes to Myntra. Still I wait for sales on both — price drop and discounts decide the purchase more than the wishlist itself.",
+    "language": "en",
+    "created_at": "2026-07-12T10:00:00Z",
+    "metadata": { "platforms": ["myntra", "nykaa"], "theme": "category_strength" }
+  },
+  {
+    "source_ref": "research:competitive:ajio-value",
+    "text": "Ajio is where I wishlist cheaper private label ethnic wear and wait for coupon codes. On Myntra I shortlist brands I actually intend to buy, but fit and sizing uncertainty still stop me from purchasing within 30 days.",
+    "language": "en",
+    "created_at": "2026-07-14T11:00:00Z",
+    "metadata": { "platforms": ["myntra", "ajio"], "theme": "price_fit" }
+  },
+  {
+    "source_ref": "reddit:competitive:wishlist-habit",
+    "text": "Honestly I bookmark inspiration on Myntra and Nykaa all the time. Nykaa for skincare and makeup trust/authenticity, Myntra for fashion discovery and assortment. Most items never get bought — passive bookmarking and waiting for End of Reason Sale.",
+    "language": "en",
+    "created_at": "2026-07-18T09:30:00Z",
+    "metadata": { "platforms": ["myntra", "nykaa"], "theme": "passive" }
+  },
+  {
+    "source_ref": "youtube:competitive:ajio-vs-myntra",
+    "text": "In this haul I show Ajio vs Myntra wishlists. Ajio wins on price and sale waiting; Myntra wins on brand exclusives and wider fashion assortment. Returns and delivery friction still make me hesitate before buying either.",
+    "language": "en",
+    "created_at": "2026-07-20T15:00:00Z",
+    "metadata": { "platforms": ["myntra", "ajio"], "theme": "haul" }
+  },
+  {
+    "source_ref": "play_store:nykaa:wishlist-trust",
+    "text": "Nykaa app is great for beauty wishlist because I trust authenticity and reviews. I still postpone purchase when too few reviews or conflicting reviews show up. Prefer Nykaa for makeup over Myntra.",
+    "language": "en",
+    "created_at": "2026-07-22T08:00:00Z",
+    "metadata": { "platforms": ["nykaa", "myntra"], "theme": "trust" }
+  },
+  {
+    "source_ref": "play_store:ajio:price",
+    "text": "Ajio is better for budget wishlist — slash prices and coupons. I compare with Myntra before buying. If Myntra has the same brand exclusive I switch apps. External comparison delays purchase every time.",
+    "language": "en",
+    "created_at": "2026-07-23T12:00:00Z",
+    "metadata": { "platforms": ["ajio", "myntra"], "theme": "comparison" }
+  },
+  {
+    "source_ref": "social:competitive:occasion",
+    "text": "Saved wedding outfits on Myntra and Ajio for a future occasion. Not needed yet so timing/occasion keeps them in wishlist. Ajio feels cheaper for ethnic; Myntra has better styling options but fit uncertainty is scary.",
+    "language": "en",
+    "created_at": "2026-07-25T18:00:00Z",
+    "metadata": { "platforms": ["myntra", "ajio"], "theme": "occasion" }
+  },
+  {
+    "source_ref": "research:competitive:why-not-buy",
+    "text": "Why wishlisted fashion does not convert: (1) waiting for sale/discount on Myntra and Ajio, (2) fit sizing uncertainty especially apparel on Myntra, (3) checking Nykaa for beauty authenticity before finalizing, (4) passive inspiration saving, (5) delivery/return logistics friction. Competitive platform preference shows when users say Nykaa is better for beauty and Ajio is better for value.",
+    "language": "en",
+    "created_at": "2026-07-28T10:00:00Z",
+    "metadata": { "platforms": ["myntra", "nykaa", "ajio"], "theme": "synthesis" }
+  },
+  {
+    "source_ref": "reddit:competitive:myntra-only-hesitation",
+    "text": "On Myntra I wishlist dresses then never buy because size charts feel inconsistent across brands and I am unsure about fit. Also waiting for a price drop during sale season. Not switching apps — just stuck in hesitation.",
+    "language": "en",
+    "created_at": "2026-07-29T14:00:00Z",
+    "metadata": { "platforms": ["myntra"], "theme": "fit_price" }
+  },
+  {
+    "source_ref": "product_review:competitive:ux",
+    "text": "Wishlist feature is easier on Myntra app UX, but for skincare I still prefer Nykaa convenience and trust. Cross-app comparison means I postpone purchase until I decide which platform feels safer.",
+    "language": "en",
+    "created_at": "2026-07-30T16:00:00Z",
+    "metadata": { "platforms": ["myntra", "nykaa"], "theme": "ux" }
+  },
+  {
+    "source_ref": "social:competitive:amazon-other",
+    "text": "Sometimes I check Amazon and Flipkart after wishlisting on Myntra or Ajio to see if price is lower. Other apps become the final comparison step and kill urgency to buy from the original wishlist.",
+    "language": "en",
+    "created_at": "2026-08-01T09:00:00Z",
+    "metadata": { "platforms": ["myntra", "ajio", "other"], "theme": "external" }
+  },
+  {
+    "source_ref": "research:competitive:shared-barriers",
+    "text": "Shared barriers across Myntra, Nykaa and Ajio wishlists: price sensitivity waiting for discounts, review trust doubts, and postponed timing for occasions. Unique to Myntra is fit sizing uncertainty in apparel; unique to Nykaa is authenticity/trust for beauty; unique to Ajio is aggressive coupon-driven sale waiting and private label value discovery.",
+    "language": "en",
+    "created_at": "2026-08-02T11:00:00Z",
+    "metadata": { "platforms": ["myntra", "nykaa", "ajio"], "theme": "shared_unique" }
+  }
+]

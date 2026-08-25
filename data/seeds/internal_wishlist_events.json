@@ -1,0 +1,162 @@
+[
+  {
+    "user_hash": "u_001",
+    "product_id": "sku_dress_101",
+    "event_type": "wishlist_add",
+    "category": "womens_apparel",
+    "segment": "price_sensitive",
+    "price_band": "1000_2000",
+    "event_at": "2026-06-01T10:00:00Z",
+    "metadata": { "channel": "app" }
+  },
+  {
+    "user_hash": "u_001",
+    "product_id": "sku_dress_101",
+    "event_type": "purchase",
+    "category": "womens_apparel",
+    "segment": "price_sensitive",
+    "price_band": "1000_2000",
+    "event_at": "2026-06-12T14:20:00Z",
+    "metadata": { "channel": "app" }
+  },
+  {
+    "user_hash": "u_002",
+    "product_id": "sku_shoe_220",
+    "event_type": "wishlist_add",
+    "category": "footwear",
+    "segment": "fit_uncertain",
+    "price_band": "2000_4000",
+    "event_at": "2026-06-03T08:15:00Z",
+    "metadata": { "channel": "web" }
+  },
+  {
+    "user_hash": "u_002",
+    "product_id": "sku_shoe_220",
+    "event_type": "product_view",
+    "category": "footwear",
+    "segment": "fit_uncertain",
+    "price_band": "2000_4000",
+    "event_at": "2026-06-05T11:00:00Z",
+    "metadata": { "channel": "web" }
+  },
+  {
+    "user_hash": "u_003",
+    "product_id": "sku_tee_330",
+    "event_type": "wishlist_add",
+    "category": "mens_apparel",
+    "segment": "trend_seekers",
+    "price_band": "500_1000",
+    "event_at": "2026-06-04T16:40:00Z",
+    "metadata": { "channel": "app" }
+  },
+  {
+    "user_hash": "u_003",
+    "product_id": "sku_tee_330",
+    "event_type": "purchase",
+    "category": "mens_apparel",
+    "segment": "trend_seekers",
+    "price_band": "500_1000",
+    "event_at": "2026-06-10T09:05:00Z",
+    "metadata": { "channel": "app" }
+  },
+  {
+    "user_hash": "u_004",
+    "product_id": "sku_bag_440",
+    "event_type": "wishlist_add",
+    "category": "accessories",
+    "segment": "bargain_hunters",
+    "price_band": "1000_2000",
+    "event_at": "2026-06-06T12:00:00Z",
+    "metadata": { "channel": "app" }
+  },
+  {
+    "user_hash": "u_005",
+    "product_id": "sku_jean_550",
+    "event_type": "wishlist_add",
+    "category": "womens_apparel",
+    "segment": "high_spenders",
+    "price_band": "2000_4000",
+    "event_at": "2026-06-07T18:30:00Z",
+    "metadata": { "channel": "web" }
+  },
+  {
+    "user_hash": "u_005",
+    "product_id": "sku_jean_550",
+    "event_type": "purchase",
+    "category": "womens_apparel",
+    "segment": "high_spenders",
+    "price_band": "2000_4000",
+    "event_at": "2026-06-15T13:10:00Z",
+    "metadata": { "channel": "web" }
+  },
+  {
+    "user_hash": "u_006",
+    "product_id": "sku_sneaker_660",
+    "event_type": "wishlist_add",
+    "category": "footwear",
+    "segment": "price_sensitive",
+    "price_band": "4000_6000",
+    "event_at": "2026-06-08T07:45:00Z",
+    "metadata": { "channel": "app" }
+  },
+  {
+    "user_hash": "u_007",
+    "product_id": "sku_kurta_770",
+    "event_type": "wishlist_add",
+    "category": "mens_apparel",
+    "segment": "new_users",
+    "price_band": "1000_2000",
+    "event_at": "2026-06-09T20:00:00Z",
+    "metadata": { "channel": "app" }
+  },
+  {
+    "user_hash": "u_007",
+    "product_id": "sku_kurta_770",
+    "event_type": "purchase",
+    "category": "mens_apparel",
+    "segment": "new_users",
+    "price_band": "1000_2000",
+    "event_at": "2026-07-20T10:00:00Z",
+    "metadata": { "channel": "app", "note": "outside_30d_window" }
+  },
+  {
+    "user_hash": "u_008",
+    "product_id": "sku_dress_101",
+    "event_type": "wishlist_add",
+    "category": "womens_apparel",
+    "segment": "fit_uncertain",
+    "price_band": "1000_2000",
+    "event_at": "2026-06-11T09:20:00Z",
+    "metadata": { "channel": "social" }
+  },
+  {
+    "user_hash": "u_009",
+    "product_id": "sku_watch_880",
+    "event_type": "wishlist_add",
+    "category": "accessories",
+    "segment": "high_spenders",
+    "price_band": "6000_10000",
+    "event_at": "2026-06-12T15:00:00Z",
+    "metadata": { "channel": "web" }
+  },
+  {
+    "user_hash": "u_009",
+    "product_id": "sku_watch_880",
+    "event_type": "purchase",
+    "category": "accessories",
+    "segment": "high_spenders",
+    "price_band": "6000_10000",
+    "event_at": "2026-06-18T11:40:00Z",
+    "metadata": { "channel": "web" }
+  },
+  {
+    "user_hash": "u_010",
+    "product_id": "sku_shoe_220",
+    "event_type": "wishlist_add",
+    "category": "footwear",
+    "segment": "bargain_hunters",
+    "price_band": "2000_4000",
+    "event_at": "2026-06-14T17:25:00Z",
+    "metadata": { "channel": "app" }
+  }
+]

@@ -1,0 +1,4574 @@
+{
+  "run_version": "run-20260824T115438Z",
+  "exported_at": "2026-08-23T13:45:44.335375+00:00",
+  "sources": [
+    "play_store",
+    "product_review",
+    "reddit",
+    "research",
+    "social",
+    "youtube"
+  ],
+  "stats": {
+    "documents": 106,
+    "chunks": 133,
+    "by_source": {
+      "research": 17,
+      "play_store": 37,
+      "reddit": 14,
+      "youtube": 11,
+      "product_review": 13,
+      "social": 14
+    },
+    "competitive_docs_merged": 12
+  },
+  "documents": [
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:0",
+      "text": "Q: Timestamp A: 2026-08-21 18:16:[phone] Q: 1. Do you currently use Myntra? A: Yes, regularly Q: 2. Have you used Myntra’s wishlist feature? A: Yes, but more than 3 months ago Q: 3. How often do you add items to your Myntra wishlist? A: A few times a week Q: 4. Approximately how many items are currently in your wishlist? A: 6–10 Q: 5. What types of products do you usually save? A: Clothing, Footwear, Accessories Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: 1–4 weeks Q: 7. How often do you eventually purchase items from your wishlist? A: Often Q: 8. What usually stops you from buying wishlist items? A: The price is too high, I am waiting for a sale, I am waiting for a coupon or discount Q: 9. What is the single biggest reason you do not purchase wishlist items? A: The price is too high Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Limited-time sale Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Not useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Slightly useful Q: What is one thing Myntra could improve about the wishlist experience? A: After 7 days, recommend products with slashed prices.",
+      "author_hash": "65e159385291201f1eca8147f4dc49df",
+      "language": "en",
+      "created_at": "2026-08-21T18:16:30.309000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 0
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-21 18:16:[phone] Q: 1. Do you currently use Myntra? A: Yes, regularly Q: 2. Have you used Myntra’s wishlist feature? A: Yes, but more than 3 months ago Q: 3. How often do you add items to your Myntra wishlist? A: A few times a week Q: 4. Approximately how many items are currently in your wishlist? A: 6–10 Q: 5. What types of products do you usually save? A: Clothing, Footwear, Accessories Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: 1–4 wee",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 0
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "ep items in your wishlist before deciding what to do? A: 1–4 weeks Q: 7. How often do you eventually purchase items from your wishlist? A: Often Q: 8. What usually stops you from buying wishlist items? A: The price is too high, I am waiting for a sale, I am waiting for a coupon or discount Q: 9. What is the single biggest reason you do not purchase wishlist items? A: The price is too high Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Limited-time sale Q: 11. How useful would",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 0
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "y a wishlist item? A: Limited-time sale Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Not useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Be",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 0
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Slightly useful Q: What is one thing Myntra could improve about the wishlist experience? A: After 7 days, recommend products with slashed prices.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 0
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:1",
+      "text": "Q: Timestamp A: 2026-08-21 18:20:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, within the past 3 months Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 11–25 Q: 5. What types of products do you usually save? A: Clothing, Footwear, Accessories Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: I usually do not revisit them Q: 7. How often do you eventually purchase items from your wishlist? A: Rarely Q: 8. What usually stops you from buying wishlist items? A: I am waiting for a sale, My preferred size is unavailable, I am unsure about the fit, I change my mind, I do not need the item anymore, I am concerned about quality Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I do not need the item anymore Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Better size or fit information Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Very useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Moderately useful",
+      "author_hash": "02859e2758fb0c238c68c47a03823d68",
+      "language": "en",
+      "created_at": "2026-08-21T18:20:34.252000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 1
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-21 18:20:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, within the past 3 months Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 11–25 Q: 5. What types of products do you usually save? A: Clothing, Footwear, Accessories Q: 6. How long do you usually keep items in your wishlist before deciding what to do?",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 1
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "usually keep items in your wishlist before deciding what to do? A: I usually do not revisit them Q: 7. How often do you eventually purchase items from your wishlist? A: Rarely Q: 8. What usually stops you from buying wishlist items? A: I am waiting for a sale, My preferred size is unavailable, I am unsure about the fit, I change my mind, I do not need the item anymore, I am concerned about quality Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I do not need the item anymore Q",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 1
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "not purchase wishlist items? A: I do not need the item anymore Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Better size or fit information Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Moderately useful Q: 11. How useful wo",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 1
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "-availability alerts ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Very useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Moderately useful",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 1
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:2",
+      "text": "Q: Timestamp A: 2026-08-21 19:11:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: No Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 11–25 Q: 5. What types of products do you usually save? A: Accessories, Home or lifestyle products Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: I usually do not revisit them Q: 7. How often do you eventually purchase items from your wishlist? A: Rarely Q: 8. What usually stops you from buying wishlist items? A: I am waiting for a sale, My preferred size is unavailable, I do not need the item anymore Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I do not need the item anymore Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Very useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Very useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Extremely useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Moderately useful",
+      "author_hash": "62cdbcb2ad8a5de4d1eea74c8dae2f56",
+      "language": "en",
+      "created_at": "2026-08-21T19:11:57.698000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 2
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-21 19:11:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: No Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 11–25 Q: 5. What types of products do you usually save? A: Accessories, Home or lifestyle products Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: I usually do not",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 2
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "in your wishlist before deciding what to do? A: I usually do not revisit them Q: 7. How often do you eventually purchase items from your wishlist? A: Rarely Q: 8. What usually stops you from buying wishlist items? A: I am waiting for a sale, My preferred size is unavailable, I do not need the item anymore Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I do not need the item anymore Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 2
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "ikely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Very useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Very useful Q: 11. How useful would the following wishlist",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 2
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "] A: Very useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Extremely useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Moderately useful",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 2
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:3",
+      "text": "Q: Timestamp A: 2026-08-21 19:46:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, within the past 3 months Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 11–25 Q: 5. What types of products do you usually save? A: Clothing, Footwear Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: I usually do not revisit them Q: 7. How often do you eventually purchase items from your wishlist? A: Sometimes Q: 8. What usually stops you from buying wishlist items? A: The price is too high, I am waiting for a sale, I am unsure about the fit Q: 9. What is the single biggest reason you do not purchase wishlist items? A: The price is too high Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Very useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Very useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Moderately useful",
+      "author_hash": "6609cac75671eb366734192c74ad1dd8",
+      "language": "en",
+      "created_at": "2026-08-21T19:46:17.418000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 3
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-21 19:46:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, within the past 3 months Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 11–25 Q: 5. What types of products do you usually save? A: Clothing, Footwear Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: I usually",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 3
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "items in your wishlist before deciding what to do? A: I usually do not revisit them Q: 7. How often do you eventually purchase items from your wishlist? A: Sometimes Q: 8. What usually stops you from buying wishlist items? A: The price is too high, I am waiting for a sale, I am unsure about the fit Q: 9. What is the single biggest reason you do not purchase wishlist items? A: The price is too high Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful woul",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 3
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Very useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Slightly useful Q: 11. How useful would the following wishlist features be",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 3
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "seful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Very useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Moderately useful",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 3
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:4",
+      "text": "Q: Timestamp A: 2026-08-21 21:52:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, but more than 3 months ago Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: I’m not sure Q: 5. What types of products do you usually save? A: Clothing Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: I usually do not revisit them Q: 7. How often do you eventually purchase items from your wishlist? A: Rarely Q: 8. What usually stops you from buying wishlist items? A: The price is too high, I am waiting for a coupon or discount Q: 9. What is the single biggest reason you do not purchase wishlist items? A: The price is too high Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Extremely useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Extremely useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Very useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Very useful",
+      "author_hash": "7946ecf1fa7201fdedd16a5e484d4c6b",
+      "language": "en",
+      "created_at": "2026-08-21T21:52:40.394000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 4
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-21 21:52:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, but more than 3 months ago Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: I’m not sure Q: 5. What types of products do you usually save? A: Clothing Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: I usually d",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 4
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "tems in your wishlist before deciding what to do? A: I usually do not revisit them Q: 7. How often do you eventually purchase items from your wishlist? A: Rarely Q: 8. What usually stops you from buying wishlist items? A: The price is too high, I am waiting for a coupon or discount Q: 9. What is the single biggest reason you do not purchase wishlist items? A: The price is too high Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following w",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 4
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "list item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Extremely useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Extremely useful Q: 11. How useful would the following wishlist features be? [Better",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 4
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "11. How useful would the following wishlist features be? [Better recommendations ] A: Very useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Very useful",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 4
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:5",
+      "text": "Q: Timestamp A: 2026-08-22 00:44:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, but more than 3 months ago Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 6–10 Q: 5. What types of products do you usually save? A: Clothing Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: 1–4 weeks Q: 7. How often do you eventually purchase items from your wishlist? A: Sometimes Q: 8. What usually stops you from buying wishlist items? A: I am waiting for a sale, My preferred size is unavailable, I am unsure about the fit Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I am unsure about the fit Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Slightly useful",
+      "author_hash": "79f019b95002278bf118d98ca636a794",
+      "language": "en",
+      "created_at": "2026-08-22T00:44:17.278000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 5
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-22 00:44:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, but more than 3 months ago Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 6–10 Q: 5. What types of products do you usually save? A: Clothing Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: 1–4 weeks Q: 7. How",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 5
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "your wishlist before deciding what to do? A: 1–4 weeks Q: 7. How often do you eventually purchase items from your wishlist? A: Sometimes Q: 8. What usually stops you from buying wishlist items? A: I am waiting for a sale, My preferred size is unavailable, I am unsure about the fit Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I am unsure about the fit Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the followin",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 5
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "ishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Bette",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 5
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "11. How useful would the following wishlist features be? [Better recommendations ] A: Slightly useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Slightly useful",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 5
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:6",
+      "text": "Q: Timestamp A: 2026-08-22 14:13:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, but more than 3 months ago Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 11–25 Q: 5. What types of products do you usually save? A: Clothing, Footwear Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: More than 3 months Q: 7. How often do you eventually purchase items from your wishlist? A: Sometimes Q: 8. What usually stops you from buying wishlist items? A: I am waiting for a coupon or discount, The item goes out of stock Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I change my mind Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Very useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Not useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Not useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Not useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Not useful Q: What is one thing Myntra could improve about the wishlist experience? A: Out of stock and price nudge/alert Q: Is there anything else you would like to share about how you decide whether to buy a wishlist item? A: No",
+      "author_hash": "4133396a5ce6aa4a266b93c06e1e2299",
+      "language": "en",
+      "created_at": "2026-08-22T14:13:08.434000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 6
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-22 14:13:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: Yes, but more than 3 months ago Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 11–25 Q: 5. What types of products do you usually save? A: Clothing, Footwear Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: More tha",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 6
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "p items in your wishlist before deciding what to do? A: More than 3 months Q: 7. How often do you eventually purchase items from your wishlist? A: Sometimes Q: 8. What usually stops you from buying wishlist items? A: I am waiting for a coupon or discount, The item goes out of stock Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I change my mind Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishli",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 6
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Very useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Not useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Not useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: N",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 6
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "e following wishlist features be? [Better recommendations ] A: Not useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Not useful Q: What is one thing Myntra could improve about the wishlist experience? A: Out of stock and price nudge/alert Q: Is there anything else you would like to share about how you decide whether to buy a wishlist item? A: No",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:7",
+      "text": "Q: Timestamp A: 2026-08-22 14:47:[phone] Q: 1. Do you currently use Myntra? A: Yes, regularly Q: 2. Have you used Myntra’s wishlist feature? A: Yes, within the past 3 months Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 1–5 Q: 5. What types of products do you usually save? A: Clothing, Footwear, Accessories Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: Less than a week Q: 7. How often do you eventually purchase items from your wishlist? A: Almost always Q: 8. What usually stops you from buying wishlist items? A: The price is too high, I am waiting for a sale Q: 9. What is the single biggest reason you do not purchase wishlist items? A: The price is too high Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Very useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Very useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Very useful Q: What is one thing Myntra could improve about the wishlist experience? A: na Q: Is there anything else you would like to share about how you decide whether to buy a wishlist item? A: Price I will consider",
+      "author_hash": "ea6831c3d666df33bd3b92cf563285f1",
+      "language": "en",
+      "created_at": "2026-08-22T14:47:33.133000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 7
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-22 14:47:[phone] Q: 1. Do you currently use Myntra? A: Yes, regularly Q: 2. Have you used Myntra’s wishlist feature? A: Yes, within the past 3 months Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: 1–5 Q: 5. What types of products do you usually save? A: Clothing, Footwear, Accessories Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: Le",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 7
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "ly keep items in your wishlist before deciding what to do? A: Less than a week Q: 7. How often do you eventually purchase items from your wishlist? A: Almost always Q: 8. What usually stops you from buying wishlist items? A: The price is too high, I am waiting for a sale Q: 9. What is the single biggest reason you do not purchase wishlist items? A: The price is too high Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist fea",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 7
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Very useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Very useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A:",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 7
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "the following wishlist features be? [Better recommendations ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Very useful Q: What is one thing Myntra could improve about the wishlist experience? A: na Q: Is there anything else you would like to share about how you decide whether to buy a wishlist item? A: Price I will consider",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 7
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:row:8",
+      "text": "Q: Timestamp A: 2026-08-22 15:28:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: No Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: I’m not sure Q: 5. What types of products do you usually save? A: Clothing, Accessories Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: 1–4 weeks Q: 7. How often do you eventually purchase items from your wishlist? A: Rarely Q: 8. What usually stops you from buying wishlist items? A: I change my mind Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I change my mind Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Moderately useful",
+      "author_hash": "9ea51f4afaf7c8e80fad0ad967b5bf22",
+      "language": "en",
+      "created_at": "2026-08-22T15:28:08.075000",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "sheet": "Myntra Wishlist.xlsx",
+        "row_index": 8
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Timestamp A: 2026-08-22 15:28:[phone] Q: 1. Do you currently use Myntra? A: Yes, occasionally Q: 2. Have you used Myntra’s wishlist feature? A: No Q: 3. How often do you add items to your Myntra wishlist? A: A few times a month Rarely Q: 4. Approximately how many items are currently in your wishlist? A: I’m not sure Q: 5. What types of products do you usually save? A: Clothing, Accessories Q: 6. How long do you usually keep items in your wishlist before deciding what to do? A: 1–4 weeks Q: 7. How often d",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 8
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "hlist before deciding what to do? A: 1–4 weeks Q: 7. How often do you eventually purchase items from your wishlist? A: Rarely Q: 8. What usually stops you from buying wishlist items? A: I change my mind Q: 9. What is the single biggest reason you do not purchase wishlist items? A: I change my mind Q: 10. Which event would most likely encourage you to buy a wishlist item? A: Price drop Q: 11. How useful would the following wishlist features be? [Price-drop notifications ] A: Moderately useful Q: 11. How usef",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 8
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "[Price-drop notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Restock notifications ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Size-availability alerts ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Price history ] A: Moderately useful Q: 11. How useful would the following wishlist features be? [Better recommendations ] A: Moderately useful Q: 11. How useful would the following wishl",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 8
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "A: Moderately useful Q: 11. How useful would the following wishlist features be? [Reminders about saved items] A: Moderately useful",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "sheet": "Myntra Wishlist.xlsx",
+            "row_index": 8
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:open:0:34369",
+      "text": "The price is too high",
+      "author_hash": "5bccaee51581fbaa70b4e611a218c9ef",
+      "language": "en",
+      "created_at": null,
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "column": "  9. What is the single biggest reason you do not purchase wishlist items? ",
+        "row_index": 0
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "The price is too high",
+          "matched_signals": [
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.472,
+          "metadata": {
+            "column": "  9. What is the single biggest reason you do not purchase wishlist items? ",
+            "row_index": 0
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:open:5:34369",
+      "text": "I am unsure about the fit",
+      "author_hash": "d95d637cc467113c665fcea0ab041413",
+      "language": "en",
+      "created_at": null,
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "column": "  9. What is the single biggest reason you do not purchase wishlist items? ",
+        "row_index": 5
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "I am unsure about the fit",
+          "matched_signals": [
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.56,
+          "metadata": {
+            "column": "  9. What is the single biggest reason you do not purchase wishlist items? ",
+            "row_index": 5
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:open:6:37758",
+      "text": "Out of stock and price nudge/alert",
+      "author_hash": "a0d69dead3dc6b1ef6d188bbff7441e7",
+      "language": "en",
+      "created_at": null,
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "column": "What is one thing Myntra could improve about the wishlist experience?\n",
+        "row_index": 6
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Out of stock and price nudge/alert",
+          "matched_signals": [
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.498,
+          "metadata": {
+            "column": "What is one thing Myntra could improve about the wishlist experience?\n",
+            "row_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:myntra-wishlist:open:7:59717",
+      "text": "Price I will consider",
+      "author_hash": "d718d465be3586cd57c8cfacba1cab71",
+      "language": "en",
+      "created_at": null,
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "column": "Is there anything else you would like to share about how you decide whether to buy a wishlist item?\n",
+        "row_index": 7
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Price I will consider",
+          "matched_signals": [
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.472,
+          "metadata": {
+            "column": "Is there anything else you would like to share about how you decide whether to buy a wishlist item?\n",
+            "row_index": 7
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:f416cfdc-56d6-49e3-b49a-3fe7fec06b98",
+      "text": "every product have excellent.. superb quality...thanks myntra",
+      "author_hash": "42c1d52411282bcd147f8e03f1557d88",
+      "language": "en",
+      "created_at": "2026-08-22T18:54:33+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "every product have excellent.. superb quality...thanks myntra",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.552,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:88382b29-f8a2-4b0a-a091-58af9259c935",
+      "text": "this app is very good for original product quality of product is genuine",
+      "author_hash": "3d2f8c1ea21f5d42ffc0138dab746c47",
+      "language": "en",
+      "created_at": "2026-08-22T18:40:10+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "this app is very good for original product quality of product is genuine",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.674,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:c98e512e-0ac6-4315-ba0c-7bec82913123",
+      "text": "Myntra is one of my favorite shopping apps because it offers a fantastic combination of variety, quality, convenience, and a smooth shopping experience. The app has a huge collection of clothing, footwear, accessories, beauty products, and many other lifestyle items, making it easy to find something for every style and occasion. I especially love how simple and user-friendly the app is, with clear product pictures, detailed descriptions, size options, customer reviews.",
+      "author_hash": "f1697944412c95ba0f6880b01055c5de",
+      "language": "en",
+      "created_at": "2026-08-22T18:26:35+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra is one of my favorite shopping apps because it offers a fantastic combination of variety, quality, convenience, and a smooth shopping experience. The app has a huge collection of clothing, footwear, accessories, beauty products, and many other lifestyle items, making it easy to find something for every style and occasion. I especially love how simple and user-friendly the app is, with clear product pictures, detailed descriptions, size options, customer reviews.",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:4a6be6f1-9c46-4ee2-bd67-d5f369003508",
+      "text": "worst experience ever the delivery person delayed my order 2 times and no response from delivery person",
+      "author_hash": "abe31479c16205a7e279ce934204818b",
+      "language": "en",
+      "created_at": "2026-08-22T18:21:51+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "delayed_decision"
+      ],
+      "metadata": {
+        "score": 1,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "worst experience ever the delivery person delayed my order 2 times and no response from delivery person",
+          "matched_signals": [
+            "delayed_decision"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.736,
+          "metadata": {
+            "score": 1,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:af3f461b-3583-4736-bcaa-66329e3a7d1c",
+      "text": "all product is good quality nd myntra is trusted side",
+      "author_hash": "09a0079fce15b74b2049030969f8b0a6",
+      "language": "en",
+      "created_at": "2026-08-22T18:03:38+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "all product is good quality nd myntra is trusted side",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.636,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:97cc9834-bb17-4327-b081-029811af5fd8",
+      "text": "very bad experience sem kapde ki quality ek bar acchi aati hai aur dusra mangaane per bahut hi bekar quality mein aata Hai return karne per rs 10 kat ke aate Hain",
+      "author_hash": "5303499336281c46e8e5714ea2559801",
+      "language": "en",
+      "created_at": "2026-08-22T17:52:51+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 1,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "very bad experience sem kapde ki quality ek bar acchi aati hai aur dusra mangaane per bahut hi bekar quality mein aata Hai return karne per rs 10 kat ke aate Hain",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 1,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:6add0060-993d-42e2-bb4a-4546648ec481",
+      "text": "Exellent. High premium quality of products deliver every time at very reasonable price. Packing and delivery good. Thanks Myntra Team.",
+      "author_hash": "eb05e76f78c311bdc1b3bc5e64c766af",
+      "language": "en",
+      "created_at": "2026-08-22T17:52:13+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Exellent. High premium quality of products deliver every time at very reasonable price. Packing and delivery good. Thanks Myntra Team.",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "premium",
+          "segment": "price_sensitive",
+          "quality_score": 0.86,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:e235f589-d7bf-43cc-aa93-62634304960b",
+      "text": "product quality is very good , and customer care also good",
+      "author_hash": "1524b6133f812bbc09f40f2539bcef99",
+      "language": "en",
+      "created_at": "2026-08-22T17:46:22+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "product quality is very good , and customer care also good",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.646,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:03c388ea-978f-4f3b-943a-3de9da67682c",
+      "text": "Good Quality Good service thank you Myntra",
+      "author_hash": "daa27d71cd7695a737266e226fd66920",
+      "language": "en",
+      "created_at": "2026-08-22T17:43:24+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 4,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Good Quality Good service thank you Myntra",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.514,
+          "metadata": {
+            "score": 4,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:f74b8950-03c1-4ace-b96e-0da972a04622",
+      "text": "it has very affordable prices and great quality and product and no problem while ordering any product i will recommend everyone to download and use this app it's very convenient and affordable thank you myntra",
+      "author_hash": "fa15e18c8715c6aa81cf80b79e43fd81",
+      "language": "en",
+      "created_at": "2026-08-22T17:30:33+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "it has very affordable prices and great quality and product and no problem while ordering any product i will recommend everyone to download and use this app it's very convenient and affordable thank you myntra",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": "quality_concerned",
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:56e18abc-749b-44b5-bc68-69856a38d6ac",
+      "text": "earlier ordered a salwar kurta from myntra from another Id which was of much high price. But received product was with worst quality. same product was available at flipkart for just Rs. 250. It was seen as if flipkart product was delivered not myntras product. The received product was of very cheap quality",
+      "author_hash": "9f4b6e0c06a2fe5f01f5d80e4535b614",
+      "language": "en",
+      "created_at": "2026-08-22T17:22:59+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "score": 3,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "earlier ordered a salwar kurta from myntra from another Id which was of much high price. But received product was with worst quality. same product was available at flipkart for just Rs. 250. It was seen as if flipkart product was delivered not myntras product. The received product was of very cheap quality",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": "comparison_shopper",
+          "quality_score": 0.86,
+          "metadata": {
+            "score": 3,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:65bfd936-1677-4b61-8588-91639a5ea7d6",
+      "text": "my order is being delayed from 14 days because price got increased after i ordered. and their customer support repeatedly requests to wait 48 hour😆",
+      "author_hash": "bdc76eb3e286a4fc5845af6980de5a18",
+      "language": "en",
+      "created_at": "2026-08-22T17:21:23+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "delayed_decision",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "score": 1,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "my order is being delayed from 14 days because price got increased after i ordered. and their customer support repeatedly requests to wait 48 hour😆",
+          "matched_signals": [
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.86,
+          "metadata": {
+            "score": 1,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:b45f82b7-f880-40bf-8245-9ffbb7903a07",
+      "text": "my best experience over myntra is bcz you have great return and refund policy, if i find any brand over there website even with little extra discount but still i choose to order it from myntra i feel safe , secure and not to be cheated. 🫠🫠",
+      "author_hash": "8121fb008ce83f7bc4e2c7839d6ac4b2",
+      "language": "en",
+      "created_at": "2026-08-22T17:18:44+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "my best experience over myntra is bcz you have great return and refund policy, if i find any brand over there website even with little extra discount but still i choose to order it from myntra i feel safe , secure and not to be cheated. 🫠🫠",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.86,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:67dceefd-5daf-4ec9-a525-7e56612dd365",
+      "text": "very bad service centre and help center they are keep waiting you for 6 day and after that they say we have no reason to tell you why your order is let they make us full so do not order anythingWorst shopping app. They have no value for their customers. My order was delayed several times without any proper update, and then it was cancelled without my permission or even informing me beforehand. This is completely unacceptable. Customer service failed to resolve the issue and kept extending",
+      "author_hash": "5ae7d6851055614cc2927c3ee6c257d2",
+      "language": "en",
+      "created_at": "2026-08-22T17:17:25+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "delayed_decision"
+      ],
+      "metadata": {
+        "score": 1,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "very bad service centre and help center they are keep waiting you for 6 day and after that they say we have no reason to tell you why your order is let they make us full so do not order anythingWorst shopping app. They have no value for their customers. My order was delayed several times without any proper update, and then it was cancelled without my permission or even informing me beforehand. This is completely unacceptable. Customer service failed to resolve the issue and kept extending",
+          "matched_signals": [
+            "delayed_decision"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 1,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:458060ea-fe84-480f-946c-20d8ac6d3df8",
+      "text": "everything are amazing and products quality is awesome👍",
+      "author_hash": "de53a30922e8ad445dfed181c0fad0f7",
+      "language": "en",
+      "created_at": "2026-08-22T16:56:54+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "everything are amazing and products quality is awesome👍",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.64,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:3cf6986a-9ab3-4caa-88a6-11e762899ef5",
+      "text": "My experience with Myntra has been quite good. The express service, the quality everything is great.",
+      "author_hash": "021467c8dec8bf9176fc64c33124a1f9",
+      "language": "en",
+      "created_at": "2026-08-22T16:47:37+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "My experience with Myntra has been quite good. The express service, the quality everything is great.",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.73,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:0f057c13-ba3b-44ed-a1c7-e306d1766802",
+      "text": "Great quality, fast delivery, and smooth shopping experience. Loved it! 🛍️✨",
+      "author_hash": "7e9e0edf1508e484cb44f9b1d9cd8ccd",
+      "language": "en",
+      "created_at": "2026-08-22T16:32:17+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Great quality, fast delivery, and smooth shopping experience. Loved it! 🛍️✨",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.68,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:a602e4ae-4d0c-4d9f-9a76-28ab9a5d9348",
+      "text": "easy and good quality",
+      "author_hash": "b104439070cc05e5c6f5e1cc83da5d78",
+      "language": "en",
+      "created_at": "2026-08-22T16:30:21+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "easy and good quality",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.472,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:07015f27-c191-486b-8759-30b46d07d8c3",
+      "text": "I have never had such a bad experience buying a product. The product itself is good, but first of all, it was not delivered to my home or anywhere near my house, so I had to travel 4 km to collect it. Also, the T-shirt I received was much larger than a normal L size. I requested an exchange, and when I travelled 4 km again from my home for the exchange, the delivery person told me that the exchange could not be processed because the system was unable to scan the product. Now, I will have to trav",
+      "author_hash": "635cc1f2f36eee7bb409eec9eaf77a15",
+      "language": "en",
+      "created_at": "2026-08-22T16:28:08+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 2,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "I have never had such a bad experience buying a product. The product itself is good, but first of all, it was not delivered to my home or anywhere near my house, so I had to travel 4 km to collect it. Also, the T-shirt I received was much larger than a normal L size. I requested an exchange, and when I travelled 4 km again from my home for the exchange, the delivery person told me that the exchange could not be processed because the system was unable to scan the product. Now, I will have to trav",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 2,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:6d329008-c837-4955-bba3-efaa876a9408",
+      "text": "nice aap sb bhi product mgva sakte ho real h , quality h",
+      "author_hash": "53b1a12862ec03b36521110a66a8ad0c",
+      "language": "en",
+      "created_at": "2026-08-22T16:19:09+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "nice aap sb bhi product mgva sakte ho real h , quality h",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.642,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:db960692-859f-4b9f-9488-862ee97bfc71",
+      "text": "very bad experience did not expect this, I wanted a size exchange the shoe comes to my door step the delivery person approves the item,that no damage has been made but the code on the tag doesn't match.Days have passed no assist from the apps side.Even the exchange day had passed no notice was made whether it will be sent or not.Then suddenly today it is showing cancelled no notifications of that either that the delivery would be done today and now the exchange has been cancelled by employee",
+      "author_hash": "f90e918f40d509d353cd88e958fd162e",
+      "language": "en",
+      "created_at": "2026-08-22T16:17:14+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 1,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "very bad experience did not expect this, I wanted a size exchange the shoe comes to my door step the delivery person approves the item,that no damage has been made but the code on the tag doesn't match.Days have passed no assist from the apps side.Even the exchange day had passed no notice was made whether it will be sent or not.Then suddenly today it is showing cancelled no notifications of that either that the delivery would be done today and now the exchange has been cancelled by employee",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 1,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:18242b77-97d6-41a6-8a6e-f3b97503b8cc",
+      "text": "the worst app to buy products too much delayed delivery and still didn't got the product even after complaining 4 to 5 times",
+      "author_hash": "ebca3c0a4b8d59bb736f21038f0fcb1e",
+      "language": "en",
+      "created_at": "2026-08-22T16:07:41+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "delayed_decision"
+      ],
+      "metadata": {
+        "score": 1,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "the worst app to buy products too much delayed delivery and still didn't got the product even after complaining 4 to 5 times",
+          "matched_signals": [
+            "delayed_decision"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.778,
+          "metadata": {
+            "score": 1,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:e3881119-a121-4082-9584-773f6c8e8627",
+      "text": "Best Fashion Find Ever—Totally Worth It! ⭐⭐⭐⭐⭐\"Myntra never disappoints with its clothing collection! This piece offers incredible value for money. The fabric didn't shrink or lose color after the first wash, which proves its top-notch quality. The entire shopping experience—from browsing to the lightning-fast delivery—was incredibly smooth. Check out my styling video to see how it moves!\"",
+      "author_hash": "e37ea14e729bd999d804e4b27dd07948",
+      "language": "en",
+      "created_at": "2026-08-22T15:53:51+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Best Fashion Find Ever—Totally Worth It! ⭐⭐⭐⭐⭐\"Myntra never disappoints with its clothing collection! This piece offers incredible value for money. The fabric didn't shrink or lose color after the first wash, which proves its top-notch quality. The entire shopping experience—from browsing to the lightning-fast delivery—was incredibly smooth. Check out my styling video to see how it moves!\"",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:6fea96f4-48c9-473d-afca-6e0559a8cea7",
+      "text": "myntra is bogus and fraud platform. don't buy from here. if you return product you will not received your refund money even after multiple follow ups. cheater bogus company.",
+      "author_hash": "4f73aa6113ab5feb6394d60bc664d30f",
+      "language": "en",
+      "created_at": "2026-08-22T15:50:42+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 1,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "myntra is bogus and fraud platform. don't buy from here. if you return product you will not received your refund money even after multiple follow ups. cheater bogus company.",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 1,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:2b33a51b-c010-4966-9b67-d1c0149c6383",
+      "text": "superb Application for online shopping, And providing very good quality products. Trustable App",
+      "author_hash": "9b1577cc14433b04b1e5014dcf52ce7e",
+      "language": "en",
+      "created_at": "2026-08-22T15:46:50+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "superb Application for online shopping, And providing very good quality products. Trustable App",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.72,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:1f0de8f9-a667-4da9-ad57-c24038d9a6a0",
+      "text": "best quality and love all products 💝😍",
+      "author_hash": "8dd5aef3da448888248e07aa39e4a43c",
+      "language": "en",
+      "created_at": "2026-08-22T14:58:57+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "best quality and love all products 💝😍",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.504,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:1b2be6a0-f616-44f2-ad91-94eb0246fd91",
+      "text": "i love to shop From. every time new style with good quality",
+      "author_hash": "28479dc400bb52c863c8049eddd0a967",
+      "language": "en",
+      "created_at": "2026-08-22T14:56:35+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "i love to shop From. every time new style with good quality",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.648,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:897bbf1e-793f-4927-8247-25b6a66be0fd",
+      "text": "easy to place order, return and exchange sizes or any other item on behalf of it.... 😍👍",
+      "author_hash": "60897467dacbf6fd39b0a24e988c26c5",
+      "language": "en",
+      "created_at": "2026-08-22T14:48:32+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "easy to place order, return and exchange sizes or any other item on behalf of it.... 😍👍",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.704,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:7c48fc9a-eb24-409c-8a9b-6db5419c380a",
+      "text": "the quality of products ordered from myntra is really good",
+      "author_hash": "d92cbea6100c3ef676b62864e81becb3",
+      "language": "en",
+      "created_at": "2026-08-22T14:48:29+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "the quality of products ordered from myntra is really good",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.646,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:82d647be-aee1-4e33-b2f7-7bc4efb65fab",
+      "text": "nice portfolio of quality product",
+      "author_hash": "8e7c7c3875101dcd20560e8d70511cd9",
+      "language": "en",
+      "created_at": "2026-08-22T14:35:38+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "nice portfolio of quality product",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.496,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:90f207ec-4871-48f1-a436-3cd78873eb43",
+      "text": "trusted app for style and fashion.",
+      "author_hash": "4a11caeb092b1fb1354022d8ae05d97d",
+      "language": "en",
+      "created_at": "2026-08-22T14:32:58+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "trusted app for style and fashion.",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.498,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:f61f803d-44bf-4d2f-aab6-7527b14a61a2",
+      "text": "superb quality products",
+      "author_hash": "83f4235ca40b172f4829f2296f712c75",
+      "language": "en",
+      "created_at": "2026-08-22T14:21:28+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "superb quality products",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.476,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:a8146f55-b0a8-4c14-aec2-051098f7de3c",
+      "text": "good experience 😃 myntra is good quality provided i am very happy myntra app but sometime delivery delayed sometime and easily exchange and return and refund so esliye no problem quality is good all products 👍my experience saying myntra is best app so i am telling anyone use myntra 🙏",
+      "author_hash": "a6c3b1285e7df586afc1aba5ae0c1e15",
+      "language": "en",
+      "created_at": "2026-08-22T13:55:26+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 4,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "good experience 😃 myntra is good quality provided i am very happy myntra app but sometime delivery delayed sometime and easily exchange and return and refund so esliye no problem quality is good all products 👍my experience saying myntra is best app so i am telling anyone use myntra 🙏",
+          "matched_signals": [
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.86,
+          "metadata": {
+            "score": 4,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:a550bd98-7974-4509-94c7-ec1cceda4901",
+      "text": "Good experience shoping in Myntra good quality products provided",
+      "author_hash": "40a174aa3bdf046ed6414ed13ea73c62",
+      "language": "en",
+      "created_at": "2026-08-22T13:53:52+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Good experience shoping in Myntra good quality products provided",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.658,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:com.myntra.android:34ad2f09-0d9e-4125-9d97-82d9c52d49d7",
+      "text": "I have tried many shopping apps before but Mantra is the best in terms of product quality and shipping, everything is on time.Myntra's customer care support is also very good.And if I have to buy any beauty products or clothes, I prefer Myntra only.",
+      "author_hash": "4c49c3754ba38f4ca0ab3718d762baca",
+      "language": "en",
+      "created_at": "2026-08-22T13:44:26+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "score": 5,
+        "thumbs_up": 0,
+        "app_id": "com.myntra.android",
+        "platform": "android_play_store"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "I have tried many shopping apps before but Mantra is the best in terms of product quality and shipping, everything is on time.Myntra's customer care support is also very good.And if I have to buy any beauty products or clothes, I prefer Myntra only.",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.78,
+          "metadata": {
+            "score": 5,
+            "thumbs_up": 0,
+            "app_id": "com.myntra.android",
+            "platform": "android_play_store"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/IndianFashionAddicts:wishlist-sale-001",
+      "text": "Anyone else have a Myntra wishlist of 40+ items and still buy nothing? I keep waiting for End of Reason Sale / discount and then the price barely drops. Price sensitivity is real — wishlist feels like shopping therapy not purchase intent.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-10T18:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "subreddit": "IndianFashionAddicts",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Anyone else have a Myntra wishlist of 40+ items and still buy nothing? I keep waiting for End of Reason Sale / discount and then the price barely drops. Price sensitivity is real — wishlist feels like shopping therapy not purchase intent.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "IndianFashionAddicts",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/indiangirlsontinder:fit-size-002",
+      "text": "Shortlisted 3 pairs of jeans on Myntra. Still unsure about sizing because every brand runs different. Comparing size charts and Reddit fit threads before I purchase. Delayed decision for weeks.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-16T09:30:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "subreddit": "indiangirlsontinder",
+        "theme": "fit_sizing_uncertainty"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Shortlisted 3 pairs of jeans on Myntra. Still unsure about sizing because every brand runs different. Comparing size charts and Reddit fit threads before I purchase. Delayed decision for weeks.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "indiangirlsontinder",
+            "theme": "fit_sizing_uncertainty"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/india:compare-platforms-003",
+      "text": "I save dresses on Myntra wishlist then check AJIO and Amazon for the same style. If another site is cheaper or has better reviews I abandon the wishlist. External comparison is my default.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-22T13:10:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "subreddit": "india",
+        "theme": "external_comparison"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "I save dresses on Myntra wishlist then check AJIO and Amazon for the same style. If another site is cheaper or has better reviews I abandon the wishlist. External comparison is my default.",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "india",
+            "theme": "external_comparison"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/fashionindia:quality-doubt-004",
+      "text": "Wishlisted a blazer but reviews mention poor fabric and stitching. Quality trust issues make me hesitate — I bookmark and wait, then never buy. Need more reliable material info.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-28T20:45:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "subreddit": "fashionindia",
+        "theme": "quality_trust_doubt"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Wishlisted a blazer but reviews mention poor fabric and stitching. Quality trust issues make me hesitate — I bookmark and wait, then never buy. Need more reliable material info.",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "fashionindia",
+            "theme": "quality_trust_doubt"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/IndianGaming:occasion-wait-005",
+      "text": "Not gaming related but — saved ethnic wear for a cousin's wedding. Occasion is in 6 weeks so I'm postponing purchase. Wishlist is genuine intent but timing delays conversion.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-03T11:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "subreddit": "india",
+        "theme": "timing_occasion"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Not gaming related but — saved ethnic wear for a cousin's wedding. Occasion is in 6 weeks so I'm postponing purchase. Wishlist is genuine intent but timing delays conversion.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": "wedding",
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "india",
+            "theme": "timing_occasion"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/Frugal_Ind:budget-wishlist-006",
+      "text": "Myntra wishlist is my budget planner. I add items, track price drops, use coupons. Without a strong offer I put off buying. Frugal shoppers treat wishlist as a waiting room.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-11T07:25:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "subreddit": "Frugal_Ind",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra wishlist is my budget planner. I add items, track price drops, use coupons. Without a strong offer I put off buying. Frugal shoppers treat wishlist as a waiting room.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "Frugal_Ind",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/AskIndia:return-policy-007",
+      "text": "Hesitate to convert wishlist footwear because return windows and pickup hassles worry me. Logistics friction + size uncertainty = items sitting saved forever.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-17T16:40:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "subreddit": "AskIndia",
+        "theme": "logistics_friction"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Hesitate to convert wishlist footwear because return windows and pickup hassles worry me. Logistics friction + size uncertainty = items sitting saved forever.",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "AskIndia",
+            "theme": "logistics_friction"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/IndianFashionAddicts:styling-unsure-008",
+      "text": "I shortlist tops then overthink styling — will it match my wardrobe? Ask friends on Instagram before buying. Styling decision uncertainty keeps wishlist from converting.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-24T12:15:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "subreddit": "IndianFashionAddicts",
+        "theme": "styling_decision_uncertainty"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "I shortlist tops then overthink styling — will it match my wardrobe? Ask friends on Instagram before buying. Styling decision uncertainty keeps wishlist from converting.",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "IndianFashionAddicts",
+            "theme": "styling_decision_uncertainty"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/bangalore:stock-oos-009",
+      "text": "Finally ready to buy from wishlist after waiting for salary. Size sold out in my city warehouse. Availability killed the purchase after weeks of consideration.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-02T08:50:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "subreddit": "bangalore",
+        "theme": "availability_stock"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Finally ready to buy from wishlist after waiting for salary. Size sold out in my city warehouse. Availability killed the purchase after weeks of consideration.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "bangalore",
+            "theme": "availability_stock"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/IndianFashionAddicts:passive-save-010",
+      "text": "Be honest — half my Myntra wishlist is just moodboard bookmarking. Passive saves with zero purchase intent. The other half is active shortlist waiting for fit confirmation.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-08T21:05:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "subreddit": "IndianFashionAddicts",
+        "theme": "passive_bookmarking"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Be honest — half my Myntra wishlist is just moodboard bookmarking. Passive saves with zero purchase intent. The other half is active shortlist waiting for fit confirmation.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "IndianFashionAddicts",
+            "theme": "passive_bookmarking"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/india:review-trust-011",
+      "text": "Before purchasing wishlisted sneakers I google reviews and watch YouTube hauls. Still not sure I trust in-app ratings. Outside research delays the buy.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-14T10:35:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "subreddit": "india",
+        "theme": "review_trust"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Before purchasing wishlisted sneakers I google reviews and watch YouTube hauls. Still not sure I trust in-app ratings. Outside research delays the buy.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "india",
+            "theme": "review_trust"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:r/mumbai:delivery-expect-012",
+      "text": "Wishlist conversion dies when delivery shows 7+ days. Faster delivery expectations — if I wanted to wait I would shop offline. Delayed shipping = postponed purchase.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-20T14:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision"
+      ],
+      "metadata": {
+        "subreddit": "mumbai",
+        "theme": "logistics_friction"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Wishlist conversion dies when delivery shows 7+ days. Faster delivery expectations — if I wanted to wait I would shop offline. Delayed shipping = postponed purchase.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "subreddit": "mumbai",
+            "theme": "logistics_friction"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:haul-myntra-sale:comment-001",
+      "text": "Comment on Myntra haul video: I always wishlist the same kurtis you show but wait for discount. Price is too high at MRP so purchase gets postponed every time.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-14T12:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "video_topic": "myntra_haul",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Comment on Myntra haul video: I always wishlist the same kurtis you show but wait for discount. Price is too high at MRP so purchase gets postponed every time.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "video_topic": "myntra_haul",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:sneaker-unboxing:comment-002",
+      "text": "Loved the unboxing. I had these sneakers in my wishlist for a month — still unsure about sizing running small. Watching fit reviews before I decide to buy.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-19T09:20:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "video_topic": "sneaker_unboxing",
+        "theme": "fit_sizing_uncertainty"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Loved the unboxing. I had these sneakers in my wishlist for a month — still unsure about sizing running small. Watching fit reviews before I decide to buy.",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "video_topic": "sneaker_unboxing",
+            "theme": "fit_sizing_uncertainty"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:ethnic-tryon:comment-003",
+      "text": "Fabric looks different on camera vs product page. That's why my wishlist stays full — quality and colour trust issues. Need virtual try-on before purchase.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-26T17:45:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "video_topic": "ethnic_tryon",
+        "theme": "quality_trust_doubt"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Fabric looks different on camera vs product page. That's why my wishlist stays full — quality and colour trust issues. Need virtual try-on before purchase.",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.86,
+          "metadata": {
+            "video_topic": "ethnic_tryon",
+            "theme": "quality_trust_doubt"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:ajio-vs-myntra:comment-004",
+      "text": "I compare both apps after shortlisting. Whichever has better coupon wins. Wishlist on Myntra is just step one — I search elsewhere before purchasing.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-01T11:10:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "price_sensitivity_waiting",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "video_topic": "platform_comparison",
+        "theme": "external_comparison"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "I compare both apps after shortlisting. Whichever has better coupon wins. Wishlist on Myntra is just step one — I search elsewhere before purchasing.",
+          "matched_signals": [
+            "wishlist_usage",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 0.94,
+          "metadata": {
+            "video_topic": "platform_comparison",
+            "theme": "external_comparison"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:wedding-shopping:comment-005",
+      "text": "Saved guest outfits for a wedding in August. Still thinking about styling and accessories. Occasion timing means I delay buying from wishlist until closer to the date.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-07T08:30:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "video_topic": "wedding_shopping",
+        "theme": "timing_occasion"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Saved guest outfits for a wedding in August. Still thinking about styling and accessories. Occasion timing means I delay buying from wishlist until closer to the date.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": "wedding",
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "video_topic": "wedding_shopping",
+            "theme": "timing_occasion"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:return-experience:comment-006",
+      "text": "After a bad return pickup I hesitate on every wishlisted item. Logistics friction makes me bookmark passively instead of purchasing online fashion.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-15T19:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "video_topic": "returns_explained",
+        "theme": "logistics_friction"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "After a bad return pickup I hesitate on every wishlisted item. Logistics friction makes me bookmark passively instead of purchasing online fashion.",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "video_topic": "returns_explained",
+            "theme": "logistics_friction"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:size-guide:comment-007",
+      "text": "Your size guide helped but I'm still confused between M and L for this brand. Shortlist is ready; purchase delayed until more fit reviews drop.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-22T13:25:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "video_topic": "size_guide",
+        "theme": "fit_sizing_uncertainty"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Your size guide helped but I'm still confused between M and L for this brand. Shortlist is ready; purchase delayed until more fit reviews drop.",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 1.0,
+          "metadata": {
+            "video_topic": "size_guide",
+            "theme": "fit_sizing_uncertainty"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:wardrobe-declutter:comment-008",
+      "text": "Confession: my wishlist is a digital moodboard. I rarely convert. Passive bookmarking feels productive but doesn't lead to purchase.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-29T16:40:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage"
+      ],
+      "metadata": {
+        "video_topic": "wardrobe_tips",
+        "theme": "passive_bookmarking"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Confession: my wishlist is a digital moodboard. I rarely convert. Passive bookmarking feels productive but doesn't lead to purchase.",
+          "matched_signals": [
+            "wishlist_usage"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.78,
+          "metadata": {
+            "video_topic": "wardrobe_tips",
+            "theme": "passive_bookmarking"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:sale-live:comment-009",
+      "text": "During sale live I finally bought 2 of 11 wishlisted items. Without price drop alerts I would have kept waiting. Discount is what converts my shortlist.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-05T20:15:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "video_topic": "sale_live",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "During sale live I finally bought 2 of 11 wishlisted items. Without price drop alerts I would have kept waiting. Discount is what converts my shortlist.",
+          "matched_signals": [
+            "wishlist_usage",
+            "price_sensitivity_waiting"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 0.86,
+          "metadata": {
+            "video_topic": "sale_live",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:review-honesty:comment-010",
+      "text": "Hard to trust star ratings. I watch YouTube reviews and Instagram tries before buying anything from wishlist. Outside validation slows conversion.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-12T10:05:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "video_topic": "honest_reviews",
+        "theme": "review_trust"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Hard to trust star ratings. I watch YouTube reviews and Instagram tries before buying anything from wishlist. Outside validation slows conversion.",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "video_topic": "honest_reviews",
+            "theme": "review_trust"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "product_review:pdp-dress-101:qa-001",
+      "text": "Q: Does this run true to size? A: I wishlisted it for 3 weeks then cancelled because reviews conflict on sizing. Still unsure about fit so I didn't purchase.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-11T10:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "section": "pdp_qa",
+        "theme": "fit_sizing_uncertainty"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Does this run true to size? A: I wishlisted it for 3 weeks then cancelled because reviews conflict on sizing. Still unsure about fit so I didn't purchase.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.86,
+          "metadata": {
+            "section": "pdp_qa",
+            "theme": "fit_sizing_uncertainty"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "product_review:pdp-shoe-220:review-002",
+      "text": "Beautiful sneakers. Added to wishlist immediately. Didn't buy yet — waiting for a price drop and checking other sites for comparison. Expensive at full price.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-17T14:30:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "price_sensitivity_waiting",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "section": "product_review",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Beautiful sneakers. Added to wishlist immediately. Didn't buy yet — waiting for a price drop and checking other sites for comparison. Expensive at full price.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": "premium",
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "section": "product_review",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "product_review:pdp-kurta-770:review-003",
+      "text": "Fabric looks thin in customer photos. Saved to wishlist but quality doubts make me hesitate. Will ask in Q&A before purchasing.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-23T09:15:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "section": "product_review",
+        "theme": "quality_trust_doubt"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Fabric looks thin in customer photos. Saved to wishlist but quality doubts make me hesitate. Will ask in Q&A before purchasing.",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.94,
+          "metadata": {
+            "section": "product_review",
+            "theme": "quality_trust_doubt"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "product_review:pdp-bag-440:qa-004",
+      "text": "Q: Is this good for office occasions? A: I shortlisted two bags and still can't decide on styling. Delayed buying until I see more occasion-ready reviews.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-30T18:40:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "section": "pdp_qa",
+        "theme": "styling_decision_uncertainty"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Is this good for office occasions? A: I shortlisted two bags and still can't decide on styling. Delayed buying until I see more occasion-ready reviews.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "footwear",
+          "occasion": "office",
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "section": "pdp_qa",
+            "theme": "styling_decision_uncertainty"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "ios_app_store:myntra:review-005",
+      "text": "iOS App Store review: Wishlist feature is handy but I postpone purchases waiting for coupons. Also compare with AJIO before I convert saved items.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-04T12:20:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platform": "ios_app_store",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "iOS App Store review: Wishlist feature is handy but I postpone purchases waiting for coupons. Also compare with AJIO before I convert saved items.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "platform": "ios_app_store",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "ios_app_store:myntra:review-006",
+      "text": "App Store: Love shortlisting outfits. Purchase hesitation comes from return policy anxiety and delivery delays in my pin code. Logistics stop wishlist conversion.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-10T08:05:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "ios_app_store",
+        "theme": "logistics_friction"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "App Store: Love shortlisting outfits. Purchase hesitation comes from return policy anxiety and delivery delays in my pin code. Logistics stop wishlist conversion.",
+          "matched_signals": [
+            "wishlist_usage",
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "platform": "ios_app_store",
+            "theme": "logistics_friction"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "ios_app_store:myntra:review-007",
+      "text": "Saved many dresses for a festive occasion. Still thinking — unsure about colour accuracy from photos. Review trust is low so I keep delaying checkout.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-16T15:50:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "ios_app_store",
+        "theme": "review_trust"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Saved many dresses for a festive occasion. Still thinking — unsure about colour accuracy from photos. Review trust is low so I keep delaying checkout.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": "festive",
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "platform": "ios_app_store",
+            "theme": "review_trust"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "forum:styleforum-india:thread-008",
+      "text": "Fashion forum: My Myntra wishlist doubles as a research list. I Google fabrics, ask the community, then maybe buy. External information seeking stretches consideration for weeks.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-21T11:35:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platform": "community_forum",
+        "theme": "external_comparison"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Fashion forum: My Myntra wishlist doubles as a research list. I Google fabrics, ask the community, then maybe buy. External information seeking stretches consideration for weeks.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "platform": "community_forum",
+            "theme": "external_comparison"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "forum:basenotes-style:thread-009",
+      "text": "Community thread: Passive wishlist bookmarks vs active shortlist — I only purchase when fit is confirmed by multiple reviews. Otherwise items sit saved forever.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-27T19:10:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "community_forum",
+        "theme": "passive_bookmarking"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Community thread: Passive wishlist bookmarks vs active shortlist — I only purchase when fit is confirmed by multiple reviews. Otherwise items sit saved forever.",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.86,
+          "metadata": {
+            "platform": "community_forum",
+            "theme": "passive_bookmarking"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "product_review:pdp-jean-550:review-010",
+      "text": "Wanted these jeans from wishlist. Size 28 went out of stock the week I decided. Availability and delayed decision together blocked purchase.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-03T13:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "section": "product_review",
+        "theme": "availability_stock"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Wanted these jeans from wishlist. Size 28 went out of stock the week I decided. Availability and delayed decision together blocked purchase.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "section": "product_review",
+            "theme": "availability_stock"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "product_review:pdp-watch-880:qa-011",
+      "text": "Q: Worth the price? A: I keep it wishlisted and check for offers monthly. Without discount I won't buy — budget constraints.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-11T07:45:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "section": "pdp_qa",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Q: Worth the price? A: I keep it wishlisted and check for offers monthly. Without discount I won't buy — budget constraints.",
+          "matched_signals": [
+            "price_sensitivity_waiting"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": "price_sensitive",
+          "quality_score": 0.778,
+          "metadata": {
+            "section": "pdp_qa",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "forum:reddit-crosspost-style:thread-012",
+      "text": "Shopping forum digest: Users report wishlisting then abandoning due to sizing confusion, sale waiting, and comparing across apps. Non-conversion patterns repeat weekly.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-18T16:20:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platform": "community_forum",
+        "theme": "purchase_hesitation"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Shopping forum digest: Users report wishlisting then abandoning due to sizing confusion, sale waiting, and comparing across apps. Non-conversion patterns repeat weekly.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "platform": "community_forum",
+            "theme": "purchase_hesitation"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:instagram:story-reply-001",
+      "text": "Public IG reply: Same — I wishlist every reel outfit then wait for sale. Rarely purchase. Price sensitivity + endless scrolling = full wishlist, empty cart.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-13T18:30:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "platform": "instagram",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Public IG reply: Same — I wishlist every reel outfit then wait for sale. Rarely purchase. Price sensitivity + endless scrolling = full wishlist, empty cart.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": "sale_waiting",
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "platform": "instagram",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:instagram:comment-fit-002",
+      "text": "Instagram comment on haul post: Looks cute but I'm unsure about fit on different body types. Shortlisted similar pieces, still hesitating to buy without try-on.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-20T12:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platform": "instagram",
+        "theme": "fit_sizing_uncertainty"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Instagram comment on haul post: Looks cute but I'm unsure about fit on different body types. Shortlisted similar pieces, still hesitating to buy without try-on.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "platform": "instagram",
+            "theme": "fit_sizing_uncertainty"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:twitter:thread-003",
+      "text": "Public thread: Online fashion shopping tip — treat wishlist as research. Compare on other apps, read reviews, ask friends. That extra searching delays purchase by design.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-05-27T09:40:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platform": "twitter",
+        "theme": "external_comparison"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Public thread: Online fashion shopping tip — treat wishlist as research. Compare on other apps, read reviews, ask friends. That extra searching delays purchase by design.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "platform": "twitter",
+            "theme": "external_comparison"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:instagram:comment-quality-004",
+      "text": "Saw this in a shopping reel comments: Fabric quality looks off in daylight photos. Keeping it wishlisted until more honest reviews appear. Trust issues.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-02T21:15:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "instagram",
+        "theme": "quality_trust_doubt"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Saw this in a shopping reel comments: Fabric quality looks off in daylight photos. Keeping it wishlisted until more honest reviews appear. Trust issues.",
+          "matched_signals": [
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.78,
+          "metadata": {
+            "platform": "instagram",
+            "theme": "quality_trust_doubt"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:facebook:group-005",
+      "text": "Fashion shopping group post: Saved festive wear for Diwali. Will purchase closer to the occasion. Timing and styling uncertainty keep me from buying now.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-09T14:55:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "facebook",
+        "theme": "timing_occasion"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Fashion shopping group post: Saved festive wear for Diwali. Will purchase closer to the occasion. Timing and styling uncertainty keep me from buying now.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": "festive",
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "platform": "facebook",
+            "theme": "timing_occasion"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:instagram:comment-return-006",
+      "text": "Public comment: Stopped converting wishlist items after a painful return. Now I bookmark passively and prefer trying in-store when possible.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-18T10:25:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "instagram",
+        "theme": "logistics_friction"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Public comment: Stopped converting wishlist items after a painful return. Now I bookmark passively and prefer trying in-store when possible.",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "platform": "instagram",
+            "theme": "logistics_friction"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:twitter:poll-007",
+      "text": "Poll replies: Most people use fashion app wishlists as moodboards not checkout queues. Passive bookmarking dominates over genuine purchase intent.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-23T17:00:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage"
+      ],
+      "metadata": {
+        "platform": "twitter",
+        "theme": "passive_bookmarking"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Poll replies: Most people use fashion app wishlists as moodboards not checkout queues. Passive bookmarking dominates over genuine purchase intent.",
+          "matched_signals": [
+            "wishlist_usage"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.78,
+          "metadata": {
+            "platform": "twitter",
+            "theme": "passive_bookmarking"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:instagram:comment-style-008",
+      "text": "Can't decide between two shortlisted co-ords. Styling looks different on influencers. Asking friends on Stories before I purchase — still not sure.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-06-30T13:40:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "purchase_hesitation",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "instagram",
+        "theme": "styling_decision_uncertainty"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Can't decide between two shortlisted co-ords. Styling looks different on influencers. Asking friends on Stories before I purchase — still not sure.",
+          "matched_signals": [
+            "purchase_hesitation",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "platform": "instagram",
+            "theme": "styling_decision_uncertainty"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:facebook:group-009",
+      "text": "Group tip: If size goes OOS on your wishlist, set alerts. I lost two active shortlist buys to stockouts after waiting for salary week.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-06T08:10:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "facebook",
+        "theme": "availability_stock"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Group tip: If size goes OOS on your wishlist, set alerts. I lost two active shortlist buys to stockouts after waiting for salary week.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "platform": "facebook",
+            "theme": "availability_stock"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:instagram:comment-review-010",
+      "text": "Before buying from wishlist I search the product on Google and YouTube. In-app reviews alone aren't enough. Outside validation slows me down.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-13T19:30:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platform": "instagram",
+        "theme": "review_trust"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Before buying from wishlist I search the product on Google and YouTube. In-app reviews alone aren't enough. Outside validation slows me down.",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "external_comparison_seeking"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "platform": "instagram",
+            "theme": "review_trust"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:twitter:thread-011",
+      "text": "Public conversation about online fashion shopping: Users delay wishlist purchases for coupons, fit confirmation, and delivery promises. Non-conversion is rarely one single reason.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-19T11:50:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "platform": "twitter",
+        "theme": "purchase_hesitation"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Public conversation about online fashion shopping: Users delay wishlist purchases for coupons, fit confirmation, and delivery promises. Non-conversion is rarely one single reason.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "platform": "twitter",
+            "theme": "purchase_hesitation"
+          }
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:instagram:comment-budget-012",
+      "text": "Wishlist updated during salary week browsing. Will wait for a better offer. Budget shopping means postponed purchase even when I love the item.",
+      "author_hash": null,
+      "language": "en",
+      "created_at": "2026-07-22T15:05:00+00:00",
+      "run_version": "run-20260823T134542Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "platform": "instagram",
+        "theme": "price_sensitivity_waiting"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Wishlist updated during salary week browsing. Will wait for a better offer. Budget shopping means postponed purchase even when I love the item.",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "platform": "instagram",
+            "theme": "price_sensitivity_waiting"
+          }
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:competitive:myntra-vs-nykaa-beauty",
+      "text": "I wishlist makeup on Nykaa because authenticity and beauty assortment feel stronger, but apparel goes to Myntra. Still I wait for sales on both — price drop and discounts decide the purchase more than the wishlist itself.",
+      "language": "en",
+      "created_at": "2026-07-12T10:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "nykaa"
+        ],
+        "theme": "category_strength"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "I wishlist makeup on Nykaa because authenticity and beauty assortment feel stronger, but apparel goes to Myntra. Still I wait for sales on both — price drop and discounts decide the purchase more than the wishlist itself.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "beauty",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:competitive:ajio-value",
+      "text": "Ajio is where I wishlist cheaper private label ethnic wear and wait for coupon codes. On Myntra I shortlist brands I actually intend to buy, but fit and sizing uncertainty still stop me from purchasing within 30 days.",
+      "language": "en",
+      "created_at": "2026-07-14T11:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "ajio"
+        ],
+        "theme": "price_fit"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Ajio is where I wishlist cheaper private label ethnic wear and wait for coupon codes. On Myntra I shortlist brands I actually intend to buy, but fit and sizing uncertainty still stop me from purchasing within 30 days.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:competitive:wishlist-habit",
+      "text": "Honestly I bookmark inspiration on Myntra and Nykaa all the time. Nykaa for skincare and makeup trust/authenticity, Myntra for fashion discovery and assortment. Most items never get bought — passive bookmarking and waiting for End of Reason Sale.",
+      "language": "en",
+      "created_at": "2026-07-18T09:30:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "nykaa"
+        ],
+        "theme": "passive"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Honestly I bookmark inspiration on Myntra and Nykaa all the time. Nykaa for skincare and makeup trust/authenticity, Myntra for fashion discovery and assortment. Most items never get bought — passive bookmarking and waiting for End of Reason Sale.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "youtube",
+      "source_ref": "youtube:competitive:ajio-vs-myntra",
+      "text": "In this haul I show Ajio vs Myntra wishlists. Ajio wins on price and sale waiting; Myntra wins on brand exclusives and wider fashion assortment. Returns and delivery friction still make me hesitate before buying either.",
+      "language": "en",
+      "created_at": "2026-07-20T15:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "ajio"
+        ],
+        "theme": "haul"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "In this haul I show Ajio vs Myntra wishlists. Ajio wins on price and sale waiting; Myntra wins on brand exclusives and wider fashion assortment. Returns and delivery friction still make me hesitate before buying either.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:nykaa:wishlist-trust",
+      "text": "Nykaa app is great for beauty wishlist because I trust authenticity and reviews. I still postpone purchase when too few reviews or conflicting reviews show up. Prefer Nykaa for makeup over Myntra.",
+      "language": "en",
+      "created_at": "2026-07-22T08:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "nykaa",
+          "myntra"
+        ],
+        "theme": "trust"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Nykaa app is great for beauty wishlist because I trust authenticity and reviews. I still postpone purchase when too few reviews or conflicting reviews show up. Prefer Nykaa for makeup over Myntra.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "beauty",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "play_store",
+      "source_ref": "play_store:ajio:price",
+      "text": "Ajio is better for budget wishlist — slash prices and coupons. I compare with Myntra before buying. If Myntra has the same brand exclusive I switch apps. External comparison delays purchase every time.",
+      "language": "en",
+      "created_at": "2026-07-23T12:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "ajio",
+          "myntra"
+        ],
+        "theme": "comparison"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Ajio is better for budget wishlist — slash prices and coupons. I compare with Myntra before buying. If Myntra has the same brand exclusive I switch apps. External comparison delays purchase every time.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:competitive:occasion",
+      "text": "Saved wedding outfits on Myntra and Ajio for a future occasion. Not needed yet so timing/occasion keeps them in wishlist. Ajio feels cheaper for ethnic; Myntra has better styling options but fit uncertainty is scary.",
+      "language": "en",
+      "created_at": "2026-07-25T18:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "ajio"
+        ],
+        "theme": "occasion"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Saved wedding outfits on Myntra and Ajio for a future occasion. Not needed yet so timing/occasion keeps them in wishlist. Ajio feels cheaper for ethnic; Myntra has better styling options but fit uncertainty is scary.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "clothing",
+          "occasion": "wedding",
+          "price_band": "budget",
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:competitive:why-not-buy",
+      "text": "Why wishlisted fashion does not convert: (1) waiting for sale/discount on Myntra and Ajio, (2) fit sizing uncertainty especially apparel on Myntra, (3) checking Nykaa for beauty authenticity before finalizing, (4) passive inspiration saving, (5) delivery/return logistics friction. Competitive platform preference shows when users say Nykaa is better for beauty and Ajio is better for value.",
+      "language": "en",
+      "created_at": "2026-07-28T10:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "nykaa",
+          "ajio"
+        ],
+        "theme": "synthesis"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Why wishlisted fashion does not convert: (1) waiting for sale/discount on Myntra and Ajio, (2) fit sizing uncertainty especially apparel on Myntra, (3) checking Nykaa for beauty authenticity before finalizing, (4) passive inspiration saving, (5) delivery/return logistics friction. Competitive platform preference shows when users say Nykaa is better for beauty and Ajio is better for value.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "beauty",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:competitive:myntra-only-hesitation",
+      "text": "On Myntra I wishlist dresses then never buy because size charts feel inconsistent across brands and I am unsure about fit. Also waiting for a price drop during sale season. Not switching apps — just stuck in hesitation.",
+      "language": "en",
+      "created_at": "2026-07-29T14:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra"
+        ],
+        "theme": "fit_price"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "On Myntra I wishlist dresses then never buy because size charts feel inconsistent across brands and I am unsure about fit. Also waiting for a price drop during sale season. Not switching apps — just stuck in hesitation.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "product_review",
+      "source_ref": "product_review:competitive:ux",
+      "text": "Wishlist feature is easier on Myntra app UX, but for skincare I still prefer Nykaa convenience and trust. Cross-app comparison means I postpone purchase until I decide which platform feels safer.",
+      "language": "en",
+      "created_at": "2026-07-30T16:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "nykaa"
+        ],
+        "theme": "ux"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Wishlist feature is easier on Myntra app UX, but for skincare I still prefer Nykaa convenience and trust. Cross-app comparison means I postpone purchase until I decide which platform feels safer.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "social",
+      "source_ref": "social:competitive:amazon-other",
+      "text": "Sometimes I check Amazon and Flipkart after wishlisting on Myntra or Ajio to see if price is lower. Other apps become the final comparison step and kill urgency to buy from the original wishlist.",
+      "language": "en",
+      "created_at": "2026-08-01T09:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "ajio",
+          "other"
+        ],
+        "theme": "external"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Sometimes I check Amazon and Flipkart after wishlisting on Myntra or Ajio to see if price is lower. Other apps become the final comparison step and kill urgency to buy from the original wishlist.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    },
+    {
+      "source": "research",
+      "source_ref": "research:competitive:shared-barriers",
+      "text": "Shared barriers across Myntra, Nykaa and Ajio wishlists: price sensitivity waiting for discounts, review trust doubts, and postponed timing for occasions. Unique to Myntra is fit sizing uncertainty in apparel; unique to Nykaa is authenticity/trust for beauty; unique to Ajio is aggressive coupon-driven sale waiting and private label value discovery.",
+      "language": "en",
+      "created_at": "2026-08-02T11:00:00Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking",
+        "purchase_hesitation",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "platforms": [
+          "myntra",
+          "nykaa",
+          "ajio"
+        ],
+        "theme": "shared_unique"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Shared barriers across Myntra, Nykaa and Ajio wishlists: price sensitivity waiting for discounts, review trust doubts, and postponed timing for occasions. Unique to Myntra is fit sizing uncertainty in apparel; unique to Nykaa is authenticity/trust for beauty; unique to Ajio is aggressive coupon-driven sale waiting and private label value discovery.",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking",
+            "purchase_hesitation",
+            "external_comparison_seeking"
+          ],
+          "category": "beauty",
+          "occasion": null,
+          "price_band": "budget",
+          "segment": null,
+          "quality_score": 0.82
+        }
+      ]
+    }
+  ]
+}

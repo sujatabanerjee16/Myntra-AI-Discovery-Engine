@@ -1,0 +1,86 @@
+[
+  {
+    "source_ref": "reddit:r/IndianFashionAddicts:wishlist-sale-001",
+    "text": "Anyone else have a Myntra wishlist of 40+ items and still buy nothing? I keep waiting for End of Reason Sale / discount and then the price barely drops. Price sensitivity is real — wishlist feels like shopping therapy not purchase intent.",
+    "language": "en",
+    "created_at": "2026-05-10T18:00:00Z",
+    "metadata": { "subreddit": "IndianFashionAddicts", "theme": "price_sensitivity_waiting" }
+  },
+  {
+    "source_ref": "reddit:r/indiangirlsontinder:fit-size-002",
+    "text": "Shortlisted 3 pairs of jeans on Myntra. Still unsure about sizing because every brand runs different. Comparing size charts and Reddit fit threads before I purchase. Delayed decision for weeks.",
+    "language": "en",
+    "created_at": "2026-05-16T09:30:00Z",
+    "metadata": { "subreddit": "indiangirlsontinder", "theme": "fit_sizing_uncertainty" }
+  },
+  {
+    "source_ref": "reddit:r/india:compare-platforms-003",
+    "text": "I save dresses on Myntra wishlist then check AJIO and Amazon for the same style. If another site is cheaper or has better reviews I abandon the wishlist. External comparison is my default.",
+    "language": "en",
+    "created_at": "2026-05-22T13:10:00Z",
+    "metadata": { "subreddit": "india", "theme": "external_comparison" }
+  },
+  {
+    "source_ref": "reddit:r/fashionindia:quality-doubt-004",
+    "text": "Wishlisted a blazer but reviews mention poor fabric and stitching. Quality trust issues make me hesitate — I bookmark and wait, then never buy. Need more reliable material info.",
+    "language": "en",
+    "created_at": "2026-05-28T20:45:00Z",
+    "metadata": { "subreddit": "fashionindia", "theme": "quality_trust_doubt" }
+  },
+  {
+    "source_ref": "reddit:r/IndianGaming:occasion-wait-005",
+    "text": "Not gaming related but — saved ethnic wear for a cousin's wedding. Occasion is in 6 weeks so I'm postponing purchase. Wishlist is genuine intent but timing delays conversion.",
+    "language": "en",
+    "created_at": "2026-06-03T11:00:00Z",
+    "metadata": { "subreddit": "india", "theme": "timing_occasion" }
+  },
+  {
+    "source_ref": "reddit:r/Frugal_Ind:budget-wishlist-006",
+    "text": "Myntra wishlist is my budget planner. I add items, track price drops, use coupons. Without a strong offer I put off buying. Frugal shoppers treat wishlist as a waiting room.",
+    "language": "en",
+    "created_at": "2026-06-11T07:25:00Z",
+    "metadata": { "subreddit": "Frugal_Ind", "theme": "price_sensitivity_waiting" }
+  },
+  {
+    "source_ref": "reddit:r/AskIndia:return-policy-007",
+    "text": "Hesitate to convert wishlist footwear because return windows and pickup hassles worry me. Logistics friction + size uncertainty = items sitting saved forever.",
+    "language": "en",
+    "created_at": "2026-06-17T16:40:00Z",
+    "metadata": { "subreddit": "AskIndia", "theme": "logistics_friction" }
+  },
+  {
+    "source_ref": "reddit:r/IndianFashionAddicts:styling-unsure-008",
+    "text": "I shortlist tops then overthink styling — will it match my wardrobe? Ask friends on Instagram before buying. Styling decision uncertainty keeps wishlist from converting.",
+    "language": "en",
+    "created_at": "2026-06-24T12:15:00Z",
+    "metadata": { "subreddit": "IndianFashionAddicts", "theme": "styling_decision_uncertainty" }
+  },
+  {
+    "source_ref": "reddit:r/bangalore:stock-oos-009",
+    "text": "Finally ready to buy from wishlist after waiting for salary. Size sold out in my city warehouse. Availability killed the purchase after weeks of consideration.",
+    "language": "en",
+    "created_at": "2026-07-02T08:50:00Z",
+    "metadata": { "subreddit": "bangalore", "theme": "availability_stock" }
+  },
+  {
+    "source_ref": "reddit:r/IndianFashionAddicts:passive-save-010",
+    "text": "Be honest — half my Myntra wishlist is just moodboard bookmarking. Passive saves with zero purchase intent. The other half is active shortlist waiting for fit confirmation.",
+    "language": "en",
+    "created_at": "2026-07-08T21:05:00Z",
+    "metadata": { "subreddit": "IndianFashionAddicts", "theme": "passive_bookmarking" }
+  },
+  {
+    "source_ref": "reddit:r/india:review-trust-011",
+    "text": "Before purchasing wishlisted sneakers I google reviews and watch YouTube hauls. Still not sure I trust in-app ratings. Outside research delays the buy.",
+    "language": "en",
+    "created_at": "2026-07-14T10:35:00Z",
+    "metadata": { "subreddit": "india", "theme": "review_trust" }
+  },
+  {
+    "source_ref": "reddit:r/mumbai:delivery-expect-012",
+    "text": "Wishlist conversion dies when delivery shows 7+ days. Faster delivery expectations — if I wanted to wait I would shop offline. Delayed shipping = postponed purchase.",
+    "language": "en",
+    "created_at": "2026-07-20T14:00:00Z",
+    "metadata": { "subreddit": "mumbai", "theme": "logistics_friction" }
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "source_ref": "social:instagram:story-reply-001",
+    "text": "Public IG reply: Same — I wishlist every reel outfit then wait for sale. Rarely purchase. Price sensitivity + endless scrolling = full wishlist, empty cart.",
+    "language": "en",
+    "created_at": "2026-05-13T18:30:00Z",
+    "metadata": { "platform": "instagram", "theme": "price_sensitivity_waiting" }
+  },
+  {
+    "source_ref": "social:instagram:comment-fit-002",
+    "text": "Instagram comment on haul post: Looks cute but I'm unsure about fit on different body types. Shortlisted similar pieces, still hesitating to buy without try-on.",
+    "language": "en",
+    "created_at": "2026-05-20T12:00:00Z",
+    "metadata": { "platform": "instagram", "theme": "fit_sizing_uncertainty" }
+  },
+  {
+    "source_ref": "social:twitter:thread-003",
+    "text": "Public thread: Online fashion shopping tip — treat wishlist as research. Compare on other apps, read reviews, ask friends. That extra searching delays purchase by design.",
+    "language": "en",
+    "created_at": "2026-05-27T09:40:00Z",
+    "metadata": { "platform": "twitter", "theme": "external_comparison" }
+  },
+  {
+    "source_ref": "social:instagram:comment-quality-004",
+    "text": "Saw this in a shopping reel comments: Fabric quality looks off in daylight photos. Keeping it wishlisted until more honest reviews appear. Trust issues.",
+    "language": "en",
+    "created_at": "2026-06-02T21:15:00Z",
+    "metadata": { "platform": "instagram", "theme": "quality_trust_doubt" }
+  },
+  {
+    "source_ref": "social:facebook:group-005",
+    "text": "Fashion shopping group post: Saved festive wear for Diwali. Will purchase closer to the occasion. Timing and styling uncertainty keep me from buying now.",
+    "language": "en",
+    "created_at": "2026-06-09T14:55:00Z",
+    "metadata": { "platform": "facebook", "theme": "timing_occasion" }
+  },
+  {
+    "source_ref": "social:instagram:comment-return-006",
+    "text": "Public comment: Stopped converting wishlist items after a painful return. Now I bookmark passively and prefer trying in-store when possible.",
+    "language": "en",
+    "created_at": "2026-06-18T10:25:00Z",
+    "metadata": { "platform": "instagram", "theme": "logistics_friction" }
+  },
+  {
+    "source_ref": "social:twitter:poll-007",
+    "text": "Poll replies: Most people use fashion app wishlists as moodboards not checkout queues. Passive bookmarking dominates over genuine purchase intent.",
+    "language": "en",
+    "created_at": "2026-06-23T17:00:00Z",
+    "metadata": { "platform": "twitter", "theme": "passive_bookmarking" }
+  },
+  {
+    "source_ref": "social:instagram:comment-style-008",
+    "text": "Can't decide between two shortlisted co-ords. Styling looks different on influencers. Asking friends on Stories before I purchase — still not sure.",
+    "language": "en",
+    "created_at": "2026-06-30T13:40:00Z",
+    "metadata": { "platform": "instagram", "theme": "styling_decision_uncertainty" }
+  },
+  {
+    "source_ref": "social:facebook:group-009",
+    "text": "Group tip: If size goes OOS on your wishlist, set alerts. I lost two active shortlist buys to stockouts after waiting for salary week.",
+    "language": "en",
+    "created_at": "2026-07-06T08:10:00Z",
+    "metadata": { "platform": "facebook", "theme": "availability_stock" }
+  },
+  {
+    "source_ref": "social:instagram:comment-review-010",
+    "text": "Before buying from wishlist I search the product on Google and YouTube. In-app reviews alone aren't enough. Outside validation slows me down.",
+    "language": "en",
+    "created_at": "2026-07-13T19:30:00Z",
+    "metadata": { "platform": "instagram", "theme": "review_trust" }
+  },
+  {
+    "source_ref": "social:twitter:thread-011",
+    "text": "Public conversation about online fashion shopping: Users delay wishlist purchases for coupons, fit confirmation, and delivery promises. Non-conversion is rarely one single reason.",
+    "language": "en",
+    "created_at": "2026-07-19T11:50:00Z",
+    "metadata": { "platform": "twitter", "theme": "purchase_hesitation" }
+  },
+  {
+    "source_ref": "social:instagram:comment-budget-012",
+    "text": "Wishlist updated during salary week browsing. Will wait for a better offer. Budget shopping means postponed purchase even when I love the item.",
+    "language": "en",
+    "created_at": "2026-07-22T15:05:00Z",
+    "metadata": { "platform": "instagram", "theme": "price_sensitivity_waiting" }
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "source_ref": "product_review:pdp-dress-101:qa-001",
+    "text": "Q: Does this run true to size? A: I wishlisted it for 3 weeks then cancelled because reviews conflict on sizing. Still unsure about fit so I didn't purchase.",
+    "language": "en",
+    "created_at": "2026-05-11T10:00:00Z",
+    "metadata": { "section": "pdp_qa", "theme": "fit_sizing_uncertainty" }
+  },
+  {
+    "source_ref": "product_review:pdp-shoe-220:review-002",
+    "text": "Beautiful sneakers. Added to wishlist immediately. Didn't buy yet — waiting for a price drop and checking other sites for comparison. Expensive at full price.",
+    "language": "en",
+    "created_at": "2026-05-17T14:30:00Z",
+    "metadata": { "section": "product_review", "theme": "price_sensitivity_waiting" }
+  },
+  {
+    "source_ref": "product_review:pdp-kurta-770:review-003",
+    "text": "Fabric looks thin in customer photos. Saved to wishlist but quality doubts make me hesitate. Will ask in Q&A before purchasing.",
+    "language": "en",
+    "created_at": "2026-05-23T09:15:00Z",
+    "metadata": { "section": "product_review", "theme": "quality_trust_doubt" }
+  },
+  {
+    "source_ref": "product_review:pdp-bag-440:qa-004",
+    "text": "Q: Is this good for office occasions? A: I shortlisted two bags and still can't decide on styling. Delayed buying until I see more occasion-ready reviews.",
+    "language": "en",
+    "created_at": "2026-05-30T18:40:00Z",
+    "metadata": { "section": "pdp_qa", "theme": "styling_decision_uncertainty" }
+  },
+  {
+    "source_ref": "ios_app_store:myntra:review-005",
+    "text": "iOS App Store review: Wishlist feature is handy but I postpone purchases waiting for coupons. Also compare with AJIO before I convert saved items.",
+    "language": "en",
+    "created_at": "2026-06-04T12:20:00Z",
+    "metadata": { "platform": "ios_app_store", "theme": "price_sensitivity_waiting" }
+  },
+  {
+    "source_ref": "ios_app_store:myntra:review-006",
+    "text": "App Store: Love shortlisting outfits. Purchase hesitation comes from return policy anxiety and delivery delays in my pin code. Logistics stop wishlist conversion.",
+    "language": "en",
+    "created_at": "2026-06-10T08:05:00Z",
+    "metadata": { "platform": "ios_app_store", "theme": "logistics_friction" }
+  },
+  {
+    "source_ref": "ios_app_store:myntra:review-007",
+    "text": "Saved many dresses for a festive occasion. Still thinking — unsure about colour accuracy from photos. Review trust is low so I keep delaying checkout.",
+    "language": "en",
+    "created_at": "2026-06-16T15:50:00Z",
+    "metadata": { "platform": "ios_app_store", "theme": "review_trust" }
+  },
+  {
+    "source_ref": "forum:styleforum-india:thread-008",
+    "text": "Fashion forum: My Myntra wishlist doubles as a research list. I Google fabrics, ask the community, then maybe buy. External information seeking stretches consideration for weeks.",
+    "language": "en",
+    "created_at": "2026-06-21T11:35:00Z",
+    "metadata": { "platform": "community_forum", "theme": "external_comparison" }
+  },
+  {
+    "source_ref": "forum:basenotes-style:thread-009",
+    "text": "Community thread: Passive wishlist bookmarks vs active shortlist — I only purchase when fit is confirmed by multiple reviews. Otherwise items sit saved forever.",
+    "language": "en",
+    "created_at": "2026-06-27T19:10:00Z",
+    "metadata": { "platform": "community_forum", "theme": "passive_bookmarking" }
+  },
+  {
+    "source_ref": "product_review:pdp-jean-550:review-010",
+    "text": "Wanted these jeans from wishlist. Size 28 went out of stock the week I decided. Availability and delayed decision together blocked purchase.",
+    "language": "en",
+    "created_at": "2026-07-03T13:00:00Z",
+    "metadata": { "section": "product_review", "theme": "availability_stock" }
+  },
+  {
+    "source_ref": "product_review:pdp-watch-880:qa-011",
+    "text": "Q: Worth the price? A: I keep it wishlisted and check for offers monthly. Without discount I won't buy — budget constraints.",
+    "language": "en",
+    "created_at": "2026-07-11T07:45:00Z",
+    "metadata": { "section": "pdp_qa", "theme": "price_sensitivity_waiting" }
+  },
+  {
+    "source_ref": "forum:reddit-crosspost-style:thread-012",
+    "text": "Shopping forum digest: Users report wishlisting then abandoning due to sizing confusion, sale waiting, and comparing across apps. Non-conversion patterns repeat weekly.",
+    "language": "en",
+    "created_at": "2026-07-18T16:20:00Z",
+    "metadata": { "platform": "community_forum", "theme": "purchase_hesitation" }
+  }
+]
