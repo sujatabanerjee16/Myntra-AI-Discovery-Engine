@@ -1,0 +1,25 @@
+[project]
+name = "wishlist-discovery-engine"
+version = "0.1.0"
+description = "AI-Powered Wishlist Conversion Discovery Engine for Myntra"
+requires-python = ">=3.11"
+
+[tool.setuptools]
+packages = ["common", "ingestion", "analytics", "assistant", "api", "storage", "eval", "internal"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["web", ".venv", "db/migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "W"]
+# B008: FastAPI relies on `Depends(...)` as a default argument value.
+ignore = ["B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

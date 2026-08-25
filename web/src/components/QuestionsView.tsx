@@ -1,0 +1,176 @@
+import { useMemo, useState } from "react";
+
+interface QuestionsViewProps {
+  /** Called when a user picks a question; parent forwards it to the Ask AI dock. */
+  onAsk: (question: string) => void;
+}
+
+interface QuestionGroup {
+  id: string;
+  title: string;
+  icon: JSX.Element;
+  questions: string[];
+}
+
+const QUESTION_GROUPS: QuestionGroup[] = [
+  {
+    id: "motivation",
+    title: "Wishlist motivation",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z" />
+      </svg>
+    ),
+    questions: [
+      "Why do users add fashion products to their wishlist?",
+      "When do users use the wishlist as genuine purchase intent versus simply as a bookmarking mechanism?",
+    ],
+  },
+  {
+    id: "barriers",
+    title: "Conversion barriers",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M5.6 5.6 18.4 18.4" />
+      </svg>
+    ),
+    questions: [
+      "What prevents wishlisted products from eventually being purchased?",
+      "What causes users to postpone a purchase?",
+      "What uncertainties remain after users have identified a product they like?",
+    ],
+  },
+  {
+    id: "competitive",
+    title: "Competitive comparison",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3v18" />
+        <path d="m6 8-3 6a3 3 0 0 0 6 0Z" />
+        <path d="m18 8-3 6a3 3 0 0 0 6 0Z" />
+        <path d="M7 6h10" />
+      </svg>
+    ),
+    questions: [
+      "Why do people wishlist on Myntra vs Nykaa or Ajio?",
+      "Which wishlist motives are shared across platforms vs unique to Myntra?",
+    ],
+  },
+  {
+    id: "journey",
+    title: "Decision journey",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 18 9 8l4 5 3-4 4 9" />
+      </svg>
+    ),
+    questions: [
+      "How do users compare multiple shortlisted products?",
+      "What information do users seek outside Myntra/AJIO before purchasing?",
+      "What role do fit, size, styling, price, reviews, occasion and social validation play?",
+    ],
+  },
+  {
+    id: "segments",
+    title: "Segments & unmet needs",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="9" cy="8" r="3" />
+        <circle cx="17" cy="10" r="2.5" />
+        <path d="M3.5 19a5.5 5.5 0 0 1 11 0" />
+        <path d="M14.5 19a4 4 0 0 1 6 0" />
+      </svg>
+    ),
+    questions: [
+      "How do these behaviors differ across user segments?",
+      "What unmet needs emerge consistently across user conversations?",
+    ],
+  },
+];
+
+/**
+ * Discoverable "Explore questions" card. Shown at the top of the dashboard so any
+ * PM immediately sees what they can ask; clicking a question runs it in the Ask AI dock.
+ */
+export default function QuestionsView({ onAsk }: QuestionsViewProps) {
+  const [expanded, setExpanded] = useState(true);
+  const [activeGroup, setActiveGroup] = useState<string>(QUESTION_GROUPS[0].id);
+
+  const totalQuestions = useMemo(
+    () => QUESTION_GROUPS.reduce((sum, group) => sum + group.questions.length, 0),
+    [],
+  );
+
+  const current = QUESTION_GROUPS.find((group) => group.id === activeGroup) ?? QUESTION_GROUPS[0];
+
+  return (
+    <section className="wi-ql-card" aria-label="Explore questions">
+      <div className="wi-ql-card-head">
+        <div className="wi-ql-card-title">
+          <span className="wi-ql-card-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3" />
+              <path d="M12 17h.01" />
+            </svg>
+          </span>
+          <div>
+            <h3>Not sure what to ask? Explore these questions</h3>
+            <p>
+              {totalQuestions} ready-made questions answered from real shopper feedback — click any
+              one to get an instant, evidence-backed answer from Discovery Chat.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          className="wi-ql-toggle"
+          aria-expanded={expanded}
+          onClick={() => setExpanded((open) => !open)}
+        >
+          {expanded ? "Hide" : "Show questions"}
+        </button>
+      </div>
+
+      {expanded && (
+        <div className="wi-ql-card-body">
+          <div className="wi-ql-tabs" role="tablist" aria-label="Question categories">
+            {QUESTION_GROUPS.map((group) => (
+              <button
+                key={group.id}
+                type="button"
+                role="tab"
+                aria-selected={group.id === activeGroup}
+                className={`wi-ql-tab ${group.id === activeGroup ? "active" : ""}`}
+                onClick={() => setActiveGroup(group.id)}
+              >
+                <span className="wi-ql-tab-icon" aria-hidden="true">
+                  {group.icon}
+                </span>
+                {group.title}
+              </button>
+            ))}
+          </div>
+
+          <div className="wi-ql-questions" role="tabpanel">
+            {current.questions.map((question) => (
+              <button
+                key={question}
+                type="button"
+                className="wi-ql-chip"
+                onClick={() => onAsk(question)}
+                title="Ask Discovery Chat"
+              >
+                <span className="wi-ql-chip-text">{question}</span>
+                <svg className="wi-ql-chip-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

@@ -1,0 +1,20 @@
+import json
+from pathlib import Path
+
+p = Path("data/scraped_corpus.json")
+data = json.loads(p.read_text(encoding="utf-8"))
+print("FILE:", p.resolve())
+print("SIZE_KB:", round(p.stat().st_size / 1024, 1))
+print("STATS:", json.dumps(data["stats"], indent=2))
+print("SOURCES:", data["sources"])
+print("--- RESEARCH SAMPLE ---")
+d = next(x for x in data["documents"] if x["source"] == "research")
+print("source_ref:", d["source_ref"])
+print("signals:", d["matched_signals"])
+print("text preview:", d["text"][:500])
+print("--- PLAY STORE SAMPLE ---")
+d2 = next(x for x in data["documents"] if x["source"] == "play_store")
+print("source_ref:", d2["source_ref"])
+print("signals:", d2["matched_signals"])
+print("text:", d2["text"])
+print("segment:", d2["chunks"][0]["segment"])

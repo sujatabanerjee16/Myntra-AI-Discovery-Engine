@@ -1,0 +1,28 @@
+# Core web/API
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+
+# Config
+pydantic==2.10.4
+pydantic-settings==2.7.1
+python-dotenv==1.0.1
+
+# Database
+SQLAlchemy==2.0.36
+alembic==1.14.0
+psycopg[binary]==3.2.3
+pgvector==0.3.6
+
+# Dev / tooling
+ruff==0.8.4
+pytest==8.3.4
+httpx==0.28.1
+
+# Ingestion (Phase 1)
+google-play-scraper==1.2.7
+openpyxl==3.1.5
+pandas==2.2.3
+sentence-transformers==3.3.1
+
+# LLM (Phase 4)
+groq==0.13.1
