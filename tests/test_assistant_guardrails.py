@@ -46,6 +46,33 @@ def test_assess_evidence_rejects_low_scores():
     assert result.sufficient is False
 
 
+def test_assess_evidence_rejects_unsupported_specific_claims():
+    chunks = [
+        _chunk(0.88, "Users wait for sales before purchasing wishlist items."),
+        _chunk(0.74, "Price drops trigger purchases from saved items."),
+    ]
+    result = assess_evidence(
+        chunks,
+        question="why do left-handed users abandon their wishlist on Tuesdays",
+    )
+    assert result.sufficient is False
+    assert result.unsupported_terms
+    assert any(term in {"left", "handed", "tuesdays", "tuesday"} for term in result.unsupported_terms)
+
+
+def test_assess_evidence_allows_general_wishlist_questions():
+    chunks = [
+        _chunk(0.88, "Users wait for sales before purchasing wishlist items."),
+        _chunk(0.74, "Price drops trigger purchases from saved items."),
+    ]
+    result = assess_evidence(
+        chunks,
+        question="help me understand my wishlist users",
+    )
+    assert result.sufficient is True
+    assert result.unsupported_terms == ()
+
+
 def test_understand_query_detects_reason_and_source():
     parsed = understand_query(
         "Why do price sensitive users wait for a sale before buying wishlist items from research?"

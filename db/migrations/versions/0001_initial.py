@@ -25,6 +25,8 @@ depends_on: Union[str, Sequence[str], None] = None
 
 EMBEDDING_DIM = get_settings().embedding_dim
 
+# create_type=False: enums are created explicitly below. Leaving create_type=True
+# makes create_table emit a second CREATE TYPE and fails on Neon/Postgres.
 source_type = postgresql.ENUM(
     "play_store",
     "reddit",
@@ -33,11 +35,13 @@ source_type = postgresql.ENUM(
     "social",
     "research",
     name="source_type",
+    create_type=False,
 )
 intent_type = postgresql.ENUM(
     "active_shortlist",
     "passive_bookmark",
     name="intent_type",
+    create_type=False,
 )
 journey_stage = postgresql.ENUM(
     "discovery",
@@ -47,6 +51,7 @@ journey_stage = postgresql.ENUM(
     "external_comparison",
     "purchase",
     name="journey_stage",
+    create_type=False,
 )
 
 

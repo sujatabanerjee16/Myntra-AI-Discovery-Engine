@@ -88,6 +88,35 @@ def test_answer_question_out_of_scope_is_clean(mock_json_backend):
 @patch("assistant.orchestrator.fetch_relevant_aggregates")
 @patch("assistant.orchestrator.backend.search_with_fallback")
 @patch("api.backend.use_json_backend", return_value=False)
+def test_answer_question_rejects_fabricated_premise(mock_json_backend, mock_search, mock_aggregates):
+    mock_search.return_value = [
+        _chunk(0.88, "Users wait for sales before purchasing wishlist items."),
+        _chunk(0.74, "Price drops trigger purchases from saved items."),
+    ]
+    mock_aggregates.return_value = MagicMock(
+        run_version="analytics-test",
+        ranked_reasons=[],
+        theme_clusters=[],
+    )
+
+    session = MagicMock()
+    trace_id = uuid4()
+    session.flush.side_effect = lambda: setattr(session.add.call_args[0][0], "id", trace_id)
+
+    response = answer_question(
+        session,
+        question="why do left-handed users abandon their wishlist on Tuesdays",
+        persist_trace=True,
+    )
+
+    assert response.insufficient_evidence is True
+    assert "cannot provide a grounded answer" in response.answer.lower()
+    assert "left" in response.answer.lower() or "tuesday" in response.answer.lower()
+
+
+@patch("assistant.orchestrator.fetch_relevant_aggregates")
+@patch("assistant.orchestrator.backend.search_with_fallback")
+@patch("api.backend.use_json_backend", return_value=False)
 def test_answer_question_insufficient_evidence(mock_json_backend, mock_search, mock_aggregates):
     mock_search.return_value = [
         _chunk(0.18, "Unrelated app performance feedback."),

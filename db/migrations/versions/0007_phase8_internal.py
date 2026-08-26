@@ -21,6 +21,7 @@ feedback_verdict = postgresql.ENUM(
     "flagged",
     "needs_review",
     name="feedback_verdict",
+    create_type=False,
 )
 
 

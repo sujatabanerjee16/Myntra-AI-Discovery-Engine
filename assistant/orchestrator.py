@@ -112,7 +112,7 @@ def answer_question(
         )
 
     context = build_grounded_context(reranked, aggregates)
-    assessment = assess_evidence(reranked)
+    assessment = assess_evidence(reranked, question=parsed.question)
 
     aggregate_confidences = [
         float(item["confidence"])

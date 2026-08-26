@@ -17,9 +17,14 @@ class EvidenceAssessment:
     chunk_count: int
     top_score: float
     avg_score: float
+    unsupported_terms: tuple[str, ...] = ()
 
 
-def assess_evidence(chunks: list[RetrievedChunk]) -> EvidenceAssessment:
+def assess_evidence(
+    chunks: list[RetrievedChunk],
+    *,
+    question: str | None = None,
+) -> EvidenceAssessment:
     """Decide whether retrieved evidence is strong enough to answer."""
     settings = get_settings()
 
@@ -66,6 +71,34 @@ def assess_evidence(chunks: list[RetrievedChunk]) -> EvidenceAssessment:
             top_score=top_score,
             avg_score=avg_score,
         )
+
+    # Topical similarity is not enough: refuse when the question asserts
+    # specific entities/claims that never appear in retrieved evidence
+    # (e.g. "left-handed users … on Tuesdays").
+    if question:
+        distinctive = distinctive_question_terms(question)
+        if distinctive:
+            evidence_tokens = _evidence_token_set(chunks)
+            evidence_text = " ".join(chunk.text.lower() for chunk in chunks)
+            supported = [
+                term
+                for term in distinctive
+                if _term_supported(term, evidence_tokens, evidence_text)
+            ]
+            if not supported:
+                unsupported = sorted(distinctive)
+                shown = ", ".join(unsupported[:6])
+                return EvidenceAssessment(
+                    sufficient=False,
+                    reason=(
+                        "Retrieved excerpts are topically related but do not mention "
+                        f"the question's specific claims ({shown})."
+                    ),
+                    chunk_count=len(chunks),
+                    top_score=top_score,
+                    avg_score=avg_score,
+                    unsupported_terms=tuple(unsupported),
+                )
 
     return EvidenceAssessment(
         sufficient=True,
@@ -125,6 +158,92 @@ _WEAK_DOMAIN_TERMS: frozenset[str] = frozenset(
 )
 
 _WORD_RE = re.compile(r"[a-z']+")
+
+# Framing / stop language skipped when extracting "specific claims" from a question.
+# Domain vocabulary is also skipped — those terms are almost always present and do
+# not distinguish fabricated premises from legitimate wishlist questions.
+_CLAIM_STOPWORDS: frozenset[str] = frozenset(
+    {
+        "a", "an", "the", "and", "or", "but", "if", "then", "so", "as", "at",
+        "by", "for", "from", "in", "into", "of", "on", "onto", "to", "with",
+        "without", "about", "after", "before", "between", "over", "under",
+        "is", "are", "was", "were", "be", "been", "being", "am", "do", "does",
+        "did", "doing", "have", "has", "had", "having", "can", "could", "would",
+        "should", "will", "shall", "may", "might", "must", "not", "no", "nor",
+        "too", "very", "just", "only", "also", "than", "that", "this", "these",
+        "those", "it", "its", "they", "them", "their", "there", "here", "what",
+        "which", "who", "whom", "whose", "when", "where", "why", "how", "whom",
+        "i", "me", "my", "mine", "we", "our", "ours", "you", "your", "yours",
+        "he", "him", "his", "she", "her", "hers",
+    }
+)
+
+_CLAIM_FRAME_TERMS: frozenset[str] = frozenset(
+    {
+        "help", "understand", "explain", "tell", "show", "please", "thanks",
+        "analyze", "analyse", "analysis", "insight", "insights", "pattern",
+        "patterns", "behavior", "behaviour", "reason", "reasons", "cause",
+        "causes", "prevent", "prevents", "preventing", "block", "blocks",
+        "blocking", "stop", "stops", "stopping", "make", "makes", "making",
+        "get", "gets", "getting", "give", "gives", "need", "needs", "want",
+        "wants", "know", "knows", "find", "finds", "see", "sees", "look",
+        "looking", "ask", "asking", "question", "questions", "answer",
+        "someone", "somebody", "people", "person", "persons", "user", "users",
+        "folks", "stuff", "thing", "things", "something", "anything",
+        "everything", "nothing", "finally", "still", "often", "always",
+        "never", "really", "actually", "basically", "generally", "usually",
+        "maybe", "perhaps", "like", "vs", "versus", "compare", "compared",
+        "comparison", "across", "among", "within", "using", "based", "related",
+        "regarding", "around", "drive", "drives", "driving", "lead", "leads",
+        "leading", "happen", "happens", "happening", "keep", "keeps", "keeping",
+    }
+)
+
+
+def _claim_skip_terms() -> frozenset[str]:
+    domain_tokens = {
+        term for term in (_DOMAIN_TERMS | _WEAK_DOMAIN_TERMS) if " " not in term
+    }
+    return frozenset(_CLAIM_STOPWORDS | _CLAIM_FRAME_TERMS | domain_tokens)
+
+
+def distinctive_question_terms(question: str) -> set[str]:
+    """Extract specific/rare tokens that look like factual claims in the question."""
+    skip = _claim_skip_terms()
+    tokens = _WORD_RE.findall(question.lower())
+    return {token for token in tokens if len(token) >= 4 and token not in skip}
+
+
+def _evidence_token_set(chunks: list[RetrievedChunk]) -> set[str]:
+    text = " ".join(chunk.text.lower() for chunk in chunks)
+    return set(_WORD_RE.findall(text))
+
+
+def _term_supported(term: str, evidence_tokens: set[str], evidence_text: str) -> bool:
+    if term in evidence_tokens or term in evidence_text:
+        return True
+    if term.endswith("s") and len(term) > 4 and term[:-1] in evidence_tokens:
+        return True
+    if f"{term}s" in evidence_tokens:
+        return True
+    return False
+
+
+def unsupported_claim_terms(
+    question: str,
+    chunks: list[RetrievedChunk],
+) -> list[str]:
+    """Return distinctive question terms that never appear in retrieved evidence."""
+    distinctive = distinctive_question_terms(question)
+    if not distinctive:
+        return []
+    evidence_tokens = _evidence_token_set(chunks)
+    evidence_text = " ".join(chunk.text.lower() for chunk in chunks)
+    return sorted(
+        term
+        for term in distinctive
+        if not _term_supported(term, evidence_tokens, evidence_text)
+    )
 
 
 def question_in_scope(question: str) -> bool:
