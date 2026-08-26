@@ -27,3 +27,16 @@ def test_research_survey_row_always_included():
     text = "I add items a few times a week and purchase often."
     result = is_relevant(text, always_include=True)
     assert result.is_relevant
+
+
+def test_positive_quality_review_not_tagged_as_fit_size_signal():
+    text = "every product have excellent.. superb quality...thanks myntra"
+    signals = detect_signals(text)
+    assert "fit_size_styling_quality_trust_occasion" not in signals
+    assert not is_relevant(text).is_relevant
+
+
+def test_hesitant_quality_review_still_tagged():
+    text = "not sure about the quality, might return it"
+    signals = detect_signals(text)
+    assert "fit_size_styling_quality_trust_occasion" in signals

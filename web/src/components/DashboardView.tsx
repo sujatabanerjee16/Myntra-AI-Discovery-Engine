@@ -654,8 +654,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                     className="wi-kpi-action"
                     onClick={() => void handleCompute()}
                     disabled={computing}
+                    title="Recompute conversion and analytics from the latest offline events"
                   >
-                    {computing ? "Computing…" : "Refresh"}
+                    {computing ? "Computing…" : "Refresh data"}
                   </button>
                 </div>
                 <p className="wi-kpi-value">{wishlistRate}</p>

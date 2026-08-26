@@ -31,23 +31,21 @@ function FashionBanner() {
         <div className="fashion-hero-badges">
           <button
             type="button"
-            className="fashion-badge"
-            onClick={() =>
-              alert(
-                "EORS (End of Reason Sale) Insights data is currently being generated. Check back soon!",
-              )
-            }
+            className="fashion-badge fashion-badge--disabled"
+            disabled
+            title="Coming soon"
+            aria-disabled="true"
           >
             End of Reason Sale Insights
           </button>
           <button
             type="button"
-            className="fashion-badge fashion-badge--outline"
-            onClick={() =>
-              alert("Autumn/Winter '26 collection data is syncing to the dashboard...")
-            }
+            className="fashion-badge fashion-badge--outline fashion-badge--disabled"
+            disabled
+            title="Coming soon"
+            aria-disabled="true"
           >
-            Autumn/Winter '26
+            Autumn/Winter &apos;26
           </button>
         </div>
       </div>
@@ -193,12 +191,14 @@ export default function App() {
               </svg>
               <input
                 type="text"
-                placeholder="Search analytics, segments..."
+                placeholder="Search analytics, segments... (Coming soon)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 autoFocus
+                disabled
+                title="Coming soon"
+                aria-disabled="true"
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") alert(`Searching for: ${searchQuery}`);
                   if (e.key === "Escape") setSearchOpen(false);
                 }}
               />
@@ -227,9 +227,9 @@ export default function App() {
             <button
               type="button"
               className="icon-btn"
-              aria-label="Search"
-              title="Search"
-              onClick={() => setSearchOpen(true)}
+              aria-label="Search (Coming soon)"
+              title="Coming soon"
+              disabled
             >
               <svg
                 width="18"
@@ -278,6 +278,7 @@ export default function App() {
               <div className="dropdown-menu notifications-menu">
                 <div className="dropdown-header">
                   <h4>Notifications</h4>
+                  <span className="badge badge--sample">Sample data</span>
                   {unreadCount > 0 && (
                     <span className="badge">
                       {unreadCount} New
@@ -432,10 +433,16 @@ export default function App() {
                 </div>
 
                 <div className="profile-menu-links">
-                  <button type="button" onClick={() => alert("Redirecting to account settings...")}>
+                  <button type="button" disabled title="Coming soon" aria-disabled="true">
                     Account Settings
                   </button>
-                  <button type="button" className="text-danger" onClick={() => alert("Logging out...")}>
+                  <button
+                    type="button"
+                    className="text-danger"
+                    disabled
+                    title="Coming soon"
+                    aria-disabled="true"
+                  >
                     Sign Out
                   </button>
                 </div>

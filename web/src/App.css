@@ -715,6 +715,21 @@ textarea {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.fashion-badge--disabled,
+.fashion-badge--disabled:hover,
+.fashion-badge--disabled:active {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.badge--sample {
+  background: rgba(148, 163, 184, 0.25);
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
 .fashion-hero-images {
   position: relative;
   z-index: 2;

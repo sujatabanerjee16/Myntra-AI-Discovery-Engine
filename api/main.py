@@ -6,6 +6,8 @@ Serves the built React dashboard from ``web/dist`` when present.
 
 from __future__ import annotations
 
+import logging
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -25,13 +27,35 @@ from api.routes import (
 )
 from common.config import get_settings
 
+logger = logging.getLogger(__name__)
 settings = get_settings()
 WEB_DIST = Path(__file__).resolve().parent.parent / "web" / "dist"
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    """Warm offline conversion metrics when serving the JSON/demo backend."""
+    try:
+        from api import backend
+
+        if backend.use_json_backend():
+            from internal.offline import run_offline_internal_pipeline
+
+            result = run_offline_internal_pipeline()
+            logger.info(
+                "Offline conversion warmed at startup run_version=%s",
+                result.run_version,
+            )
+    except Exception:  # noqa: BLE001
+        logger.exception("Failed to warm offline internal pipeline at startup")
+    yield
+
 
 app = FastAPI(
     title=settings.app_name,
     version="0.1.0",
     description="AI-Powered Wishlist Conversion Discovery Engine",
+    lifespan=lifespan,
 )
 
 _cors_origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]

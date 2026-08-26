@@ -40,14 +40,13 @@ PRIORITY_SIGNALS: dict[str, list[str]] = {
         r"\bstill thinking\b",
         r"\btake(?:s)? time\b",
     ],
+    # Bare quality/review/trust terms are gated separately — see
+    # _QUALITY_TRUST_GATED_PATTERNS — so glowing positive reviews do not match.
     "fit_size_styling_quality_trust_occasion": [
         r"\bfit\b",
         r"\bsiz(e|ing)\b",
         r"\bstyling\b",
         r"\bstyle\b",
-        r"\bquality\b",
-        r"\breview(?:s)?\b",
-        r"\btrust\b",
         r"\boccasion\b",
         r"\blook(?:s)? (?:good|bad)\b",
         r"\bmaterial\b",
@@ -79,10 +78,31 @@ PRIORITY_SIGNALS: dict[str, list[str]] = {
     ],
 }
 
+# Quality/review/trust only count when hesitation/negative cues also appear.
+_QUALITY_TRUST_GATED_PATTERNS: list[str] = [
+    r"\bquality\b",
+    r"\breview(?:s)?\b",
+    r"\btrust\b",
+]
+
+_HESITATION_CONTEXT = re.compile(
+    r"\b(?:"
+    r"concern(?:ed|s)?|doubt(?:s|ful)?|worried|worry|hesitat\w*|"
+    r"unsure|uncertain|not sure|poor|bad|fake|fraud|low quality|"
+    r"might return|want(?:ing)? to return|will return|returning|"
+    r"issue(?:s)?|problem(?:s)?|skeptic\w*|distrust|don't trust|do not trust"
+    r")\b",
+    re.IGNORECASE,
+)
+
 _COMPILED: dict[str, list[re.Pattern[str]]] = {
     signal: [re.compile(p, re.IGNORECASE) for p in patterns]
     for signal, patterns in PRIORITY_SIGNALS.items()
 }
+
+_QUALITY_TRUST_COMPILED: list[re.Pattern[str]] = [
+    re.compile(p, re.IGNORECASE) for p in _QUALITY_TRUST_GATED_PATTERNS
+]
 
 
 @dataclass(frozen=True, slots=True)
@@ -91,10 +111,26 @@ class RelevanceResult:
     matched_signals: tuple[str, ...]
 
 
+def _matches_fit_size_styling_group(text: str) -> bool:
+    """Match fit/size/style/occasion freely; gate quality/review/trust on hesitation."""
+    base_patterns = _COMPILED["fit_size_styling_quality_trust_occasion"]
+    if any(p.search(text) for p in base_patterns):
+        return True
+    if _HESITATION_CONTEXT.search(text) and any(
+        p.search(text) for p in _QUALITY_TRUST_COMPILED
+    ):
+        return True
+    return False
+
+
 def detect_signals(text: str) -> list[str]:
     """Return priority signal keys matched in *text*."""
     matched: list[str] = []
     for signal, patterns in _COMPILED.items():
+        if signal == "fit_size_styling_quality_trust_occasion":
+            if _matches_fit_size_styling_group(text):
+                matched.append(signal)
+            continue
         if any(p.search(text) for p in patterns):
             matched.append(signal)
     return matched

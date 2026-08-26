@@ -75,6 +75,15 @@ def _corroboration_from_offline() -> CorroborationResponse | None:
 
 @router.get("/conversion", response_model=ConversionMetricResponse)
 def get_conversion_metric(session: Session = Depends(get_session)) -> ConversionMetricResponse:
+    from api import backend
+
+    # Prefer warmed offline snapshot in JSON/demo mode so Render free-tier
+    # restarts still serve numbers without waiting on Postgres.
+    if backend.use_json_backend():
+        offline = _conversion_from_offline()
+        if offline is not None:
+            return offline
+
     try:
         row = session.execute(
             select(ConversionSnapshot).order_by(ConversionSnapshot.computed_at.desc()).limit(1)
