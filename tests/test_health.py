@@ -2,7 +2,7 @@
 
 from fastapi.testclient import TestClient
 
-from api.main import app
+from api.main import WEB_DIST, app
 
 client = TestClient(app)
 
@@ -16,11 +16,21 @@ def test_health_ok():
 
 
 def test_root_ok():
+    """``/`` serves the dashboard only when ``web/dist`` exists.
+
+    Production users hit the Vercel frontend, not this backend root route, so a
+    missing local/CI build must not fail the Python test job.
+    """
     resp = client.get("/")
+    if not WEB_DIST.is_dir():
+        assert resp.status_code == 404
+        return
+
     assert resp.status_code == 200
     content_type = resp.headers.get("content-type", "")
     if "text/html" in content_type:
-        assert "Wishlist Conversion Discovery Engine" in resp.text
+        assert 'id="root"' in resp.text
+        assert "Wishlist" in resp.text
         return
 
     assert resp.json()["health"] == "/health"

@@ -2,7 +2,7 @@
 
 from uuid import uuid4
 
-from assistant.guardrails import assess_evidence, build_limitations
+from assistant.guardrails import assess_evidence, build_limitations, question_in_scope
 from assistant.query import understand_query
 from common.models import SourceType
 from storage.schemas import RetrievedChunk
@@ -71,6 +71,13 @@ def test_assess_evidence_allows_general_wishlist_questions():
     )
     assert result.sufficient is True
     assert result.unsupported_terms == ()
+
+
+def test_question_in_scope_accepts_hinglish_shopping():
+    assert question_in_scope("sasta ethnic wear log kyun nahi kharidte") is True
+    assert question_in_scope("kapde kyun nahi kharidte") is True
+    assert question_in_scope("what is the capital of France") is False
+    assert question_in_scope("write me a python function to sort a list") is False
 
 
 def test_understand_query_detects_reason_and_source():

@@ -146,6 +146,26 @@ _DOMAIN_TERMS: frozenset[str] = frozenset(
         "recommend", "recommendation",
         "online order", "online orders", "saved items", "saving items",
         "save items",
+        # Common fashion descriptors that appear in Indian e-commerce questions
+        "ethnic", "kurta", "kurtas", "saree", "sari", "lehenga",
+    }
+)
+
+# Transliterated Hinglish/Hindi shopping terms (scope gate only — not translation).
+_HINGLISH_DOMAIN_TERMS: frozenset[str] = frozenset(
+    {
+        # buy / purchase
+        "kharid", "kharida", "kharidna", "kharidte", "kharidti", "kharidenge",
+        "kharidari", "kharido",
+        # cheap / expensive
+        "sasta", "saste", "sasti", "mehnga", "mehngi", "mehange", "mehengi",
+        "mehanga",
+        # discount
+        "chhoot", "chhot",
+        # clothes / wear
+        "kapda", "kapde", "libaas", "poshak", "kapdon",
+        # like / preference (wishlist-adjacent intent)
+        "pasand", "pasanda",
     }
 )
 
@@ -202,7 +222,9 @@ _CLAIM_FRAME_TERMS: frozenset[str] = frozenset(
 
 def _claim_skip_terms() -> frozenset[str]:
     domain_tokens = {
-        term for term in (_DOMAIN_TERMS | _WEAK_DOMAIN_TERMS) if " " not in term
+        term
+        for term in (_DOMAIN_TERMS | _WEAK_DOMAIN_TERMS | _HINGLISH_DOMAIN_TERMS)
+        if " " not in term
     }
     return frozenset(_CLAIM_STOPWORDS | _CLAIM_FRAME_TERMS | domain_tokens)
 
@@ -258,6 +280,8 @@ def question_in_scope(question: str) -> bool:
         return True
     tokens = set(_WORD_RE.findall(lowered))
     if tokens & _DOMAIN_TERMS:
+        return True
+    if tokens & _HINGLISH_DOMAIN_TERMS:
         return True
     return len(tokens & _WEAK_DOMAIN_TERMS) >= 2
 
