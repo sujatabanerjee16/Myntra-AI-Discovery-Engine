@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 
 from storage.schemas import RetrievalFilters
 
+
 class ParsedQuery(BaseModel):
     """Query understanding output: search text plus optional filters and hints."""
 

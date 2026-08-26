@@ -10,7 +10,6 @@ from sqlalchemy.orm import Session
 from common.cache import get_cached_retrieval, retrieval_cache_key, set_cached_retrieval
 from common.config import get_settings
 from common.models import Chunk, Document
-from ingestion.stages.embed import embed_texts
 from storage.schemas import RetrievalFilters, RetrievedChunk
 
 

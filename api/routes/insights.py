@@ -28,12 +28,26 @@ from api import backend
 from api import json_dashboard as json_dash
 from api.dashboard_queries import (
     get_dashboard_filters as db_get_dashboard_filters,
+)
+from api.dashboard_queries import (
     get_evidence_summary as db_get_evidence_summary,
+)
+from api.dashboard_queries import (
     get_filtered_reason_ranks as db_get_filtered_reason_ranks,
+)
+from api.dashboard_queries import (
     get_friction_heatmap as db_get_friction_heatmap,
+)
+from api.dashboard_queries import (
     get_intent_breakdown as db_get_intent_breakdown,
+)
+from api.dashboard_queries import (
     get_segment_comparisons as db_get_segment_comparisons,
+)
+from api.dashboard_queries import (
     get_trends as db_get_trends,
+)
+from api.dashboard_queries import (
     resolve_insight_run_version,
 )
 from common.db import get_session

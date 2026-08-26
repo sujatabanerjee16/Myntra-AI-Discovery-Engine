@@ -149,10 +149,7 @@ def get_dashboard_filters(session: Session, run_version: str | None) -> Dashboar
         return sorted(str(value) for value in session.scalars(stmt).all() if value)
 
     occasions = session.scalars(
-        select(Chunk.occasion)
-        .where(Chunk.occasion.isnot(None))
-        .distinct()
-        .order_by(Chunk.occasion)
+        select(Chunk.occasion).where(Chunk.occasion.isnot(None)).distinct().order_by(Chunk.occasion)
     ).all()
     price_bands = session.scalars(
         select(Chunk.price_band)
@@ -411,9 +408,13 @@ def get_evidence_summary(
         segment=segment,
         category=category,
     )
-    insights = session.execute(
-        stmt.order_by(Insight.confidence.desc().nullslast(), Insight.evidence_volume.desc())
-    ).scalars().all()
+    insights = (
+        session.execute(
+            stmt.order_by(Insight.confidence.desc().nullslast(), Insight.evidence_volume.desc())
+        )
+        .scalars()
+        .all()
+    )
 
     chunk_ids: list[uuid.UUID] = []
     sources: set[str] = set()

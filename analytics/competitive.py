@@ -97,7 +97,9 @@ def build_competitive_aggregates(
                 sources=set(sources),
                 avg_quality=(avg_quality + avg_attrib) / 2,
             )
-            shared = "shared" if len(label_platforms.get(label, set())) >= 2 else "unique_to_platform"
+            shared = (
+                "shared" if len(label_platforms.get(label, set())) >= 2 else "unique_to_platform"
+            )
             payloads.append(
                 {
                     "platform": platform,
@@ -131,14 +133,26 @@ def build_why_not_purchase_narrative(summary: dict[str, Any] | None = None) -> l
     often appear as shared frictions.
     """
     base = [
-        "Price / sale waiting - users shortlist now and delay until discounts (strong on Myntra and Ajio).",
-        "Fit & sizing uncertainty - apparel wishlists stall when size charts feel inconsistent (Myntra-heavy).",
+        (
+            "Price / sale waiting - users shortlist now and delay until discounts "
+            "(strong on Myntra and Ajio)."
+        ),
+        (
+            "Fit & sizing uncertainty - apparel wishlists stall when size charts "
+            "feel inconsistent (Myntra-heavy)."
+        ),
         "Passive bookmarking - inspiration saves never enter a 30-day purchase window.",
-        "External / competitive comparison - checking Nykaa, Ajio, Amazon, or Flipkart before committing.",
+        (
+            "External / competitive comparison - checking Nykaa, Ajio, Amazon, or "
+            "Flipkart before committing."
+        ),
         "Trust & authenticity - especially beauty on Nykaa; review doubt blocks checkout.",
         "Timing / occasion - saved for weddings, festivals, or later seasons.",
         "Logistics friction - delivery, returns, and stock issues reduce urgency.",
-        "Competitive platform preference - users finish the journey on the app they trust for that category.",
+        (
+            "Competitive platform preference - users finish the journey on the app "
+            "they trust for that category."
+        ),
     ]
     if not summary:
         return base
@@ -152,7 +166,9 @@ def build_why_not_purchase_narrative(summary: dict[str, Any] | None = None) -> l
             continue
         label = str(row.get("label") or "").replace("_", " ")
         share = row.get("share")
-        share_txt = f" (~{round(float(share) * 100)}% of tagged evidence)" if share is not None else ""
+        share_txt = (
+            f" (~{round(float(share) * 100)}% of tagged evidence)" if share is not None else ""
+        )
         dynamic.append(
             f"{platform.capitalize()} top barrier: {label}{share_txt} - "
             f"wishlist interest stalls here before 30-day purchase."
@@ -170,7 +186,10 @@ def build_why_not_purchase_narrative(summary: dict[str, Any] | None = None) -> l
 
 def summarize_competitive(payloads: list[dict[str, Any]]) -> dict[str, Any]:
     """Build dashboard-ready competitive summary from aggregate payloads."""
-    platforms = sorted({p["platform"] for p in payloads}, key=lambda p: list(PLATFORMS).index(p) if p in PLATFORMS else 99)
+    platforms = sorted(
+        {p["platform"] for p in payloads},
+        key=lambda p: list(PLATFORMS).index(p) if p in PLATFORMS else 99,
+    )
     motives = [p for p in payloads if p["metric_type"] == "motive"]
     barriers = [p for p in payloads if p["metric_type"] == "barrier"]
 

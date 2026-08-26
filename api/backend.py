@@ -9,7 +9,7 @@ from typing import TypeVar
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from api import json_dashboard, json_retrieval
+from api import json_retrieval
 from api.json_store import json_data_available
 from common.config import get_settings
 from common.db import database_available

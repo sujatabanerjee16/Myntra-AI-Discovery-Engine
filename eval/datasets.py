@@ -107,9 +107,7 @@ def default_faithfulness_cases() -> list[FaithfulnessEvalCase]:
     return [
         FaithfulnessEvalCase(
             question="Why do users wait to buy?",
-            answer=(
-                "Users often wait for sales and price drops before purchasing wishlist items."
-            ),
+            answer=("Users often wait for sales and price drops before purchasing wishlist items."),
             evidence_texts=[
                 "I am waiting for a sale before buying items on my wishlist.",
                 "The price is too high right now.",

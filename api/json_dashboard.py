@@ -8,6 +8,7 @@ from collections import defaultdict
 from analytics.schemas import (
     ComparisonItem,
     ComparisonResponse,
+    CompetitiveAnalysisResponse,
     DashboardFiltersResponse,
     EvidenceExcerpt,
     EvidenceSummaryResponse,
@@ -18,9 +19,11 @@ from analytics.schemas import (
     JourneyTrendItem,
     ReasonRankItem,
     ThemeClusterItem,
+    ThemeClusterResponse,
     TrendsResponse,
 )
 from api.json_store import chunk_lookup, load_corpus_chunks, load_insights_payload, parse_chunk_uuid
+from assistant.schemas import AggregateContext
 
 
 def _payload() -> dict:
@@ -44,9 +47,6 @@ def _insights(
             continue
         filtered.append(row)
     return filtered
-
-
-from assistant.schemas import AggregateContext
 
 
 def fetch_relevant_aggregates_json(reason_categories: list[str]) -> AggregateContext:
@@ -244,7 +244,9 @@ def get_segment_comparisons(
         for (dim, reason), bucket in groups.items()
     ]
     items.sort(key=lambda item: item.evidence_volume, reverse=True)
-    return ComparisonResponse(run_version=payload.get("run_version"), group_by=group_by, items=items)
+    return ComparisonResponse(
+        run_version=payload.get("run_version"), group_by=group_by, items=items
+    )
 
 
 def get_friction_heatmap(
@@ -258,9 +260,7 @@ def get_friction_heatmap(
     payload = _payload()
     row_field = "reason_category" if row_key == "reason_category" else "category"
     col_field = "segment" if column_key == "segment" else "category"
-    cells_map: dict[tuple[str, str], dict] = defaultdict(
-        lambda: {"value": 0, "confidences": []}
-    )
+    cells_map: dict[tuple[str, str], dict] = defaultdict(lambda: {"value": 0, "confidences": []})
 
     for row in _insights(segment=segment, category=category):
         row_label = row.get(row_field)
@@ -427,24 +427,32 @@ def get_evidence_summary(
 
 
 WHY_NOT_PURCHASE_NARRATIVE = [
-    "Price / sale waiting - users shortlist now and delay until discounts (strong on Myntra and Ajio).",
-    "Fit & sizing uncertainty - apparel wishlists stall when size charts feel inconsistent (Myntra-heavy).",
+    (
+        "Price / sale waiting - users shortlist now and delay until discounts "
+        "(strong on Myntra and Ajio)."
+    ),
+    (
+        "Fit & sizing uncertainty - apparel wishlists stall when size charts "
+        "feel inconsistent (Myntra-heavy)."
+    ),
     "Passive bookmarking - inspiration saves never enter a 30-day purchase window.",
-    "External / competitive comparison - checking Nykaa, Ajio, Amazon, or Flipkart before committing.",
+    (
+        "External / competitive comparison - checking Nykaa, Ajio, Amazon, or "
+        "Flipkart before committing."
+    ),
     "Trust & authenticity - especially beauty on Nykaa; review doubt blocks checkout.",
     "Timing / occasion - saved for weddings, festivals, or later seasons.",
     "Logistics friction - delivery, returns, and stock issues reduce urgency.",
-    "Competitive platform preference - users finish the journey on the app they trust for that category.",
+    (
+        "Competitive platform preference - users finish the journey on the app "
+        "they trust for that category."
+    ),
 ]
 
 
-def get_competitive_analysis() -> "CompetitiveAnalysisResponse":
+def get_competitive_analysis() -> CompetitiveAnalysisResponse:
     from analytics.competitive import build_why_not_purchase_narrative, summarize_competitive
-    from analytics.schemas import (
-        CompetitiveAnalysisResponse,
-        CompetitiveMetricItem,
-        CompetitiveTopItem,
-    )
+    from analytics.schemas import CompetitiveMetricItem, CompetitiveTopItem
 
     payload = _payload()
     competitive = payload.get("competitive") or []
@@ -487,12 +495,10 @@ def get_competitive_analysis() -> "CompetitiveAnalysisResponse":
         run_version=payload.get("run_version"),
         platforms=summary.get("platforms") or [],
         motives=_items(
-            summary.get("motives")
-            or [r for r in competitive if r.get("metric_type") == "motive"]
+            summary.get("motives") or [r for r in competitive if r.get("metric_type") == "motive"]
         ),
         barriers=_items(
-            summary.get("barriers")
-            or [r for r in competitive if r.get("metric_type") == "barrier"]
+            summary.get("barriers") or [r for r in competitive if r.get("metric_type") == "barrier"]
         ),
         shared_motives=summary.get("shared_motives") or [],
         unique_motives_by_platform=summary.get("unique_motives_by_platform") or {},

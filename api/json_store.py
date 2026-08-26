@@ -72,7 +72,9 @@ def load_corpus_chunks() -> list[dict[str, Any]]:
                     "price_band": chunk.get("price_band"),
                     "segment": chunk.get("segment"),
                     "quality_score": chunk.get("quality_score"),
-                    "matched_signals": chunk.get("matched_signals") or doc.get("matched_signals") or [],
+                    "matched_signals": chunk.get("matched_signals")
+                    or doc.get("matched_signals")
+                    or [],
                 }
             )
     return chunks

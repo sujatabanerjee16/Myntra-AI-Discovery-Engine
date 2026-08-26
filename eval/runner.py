@@ -179,11 +179,7 @@ def run_evaluation(
     else:
         faithfulness_metric = _evaluate_faithfulness_static()
 
-    passed = (
-        retrieval_metric.passed
-        and taxonomy_metric.passed
-        and faithfulness_metric.passed
-    )
+    passed = retrieval_metric.passed and taxonomy_metric.passed and faithfulness_metric.passed
 
     notes: list[str] = []
     if not retrieval_metric.passed:

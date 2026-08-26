@@ -38,9 +38,7 @@ def _fetch_research_bundle(research_excel_path: str, **_kwargs) -> list[RawRecor
 
 CONNECTOR_REGISTRY: dict[str, ConnectorFn] = {
     "research": _fetch_research_bundle,
-    "play_store": lambda **kwargs: fetch_play_store_records(
-        limit=kwargs.get("play_store_limit")
-    ),
+    "play_store": lambda **kwargs: fetch_play_store_records(limit=kwargs.get("play_store_limit")),
     "reddit": lambda **_kwargs: fetch_reddit_records(),
     "youtube": lambda **_kwargs: fetch_youtube_records(),
     "product_review": lambda **_kwargs: fetch_product_review_records(),

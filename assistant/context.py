@@ -27,12 +27,8 @@ def fetch_relevant_aggregates(
     reason_rows = session.execute(reason_stmt.limit(limit * 2)).scalars().all()
 
     if reason_categories:
-        prioritized = [
-            row for row in reason_rows if row.reason_category in reason_categories
-        ]
-        remainder = [
-            row for row in reason_rows if row.reason_category not in reason_categories
-        ]
+        prioritized = [row for row in reason_rows if row.reason_category in reason_categories]
+        remainder = [row for row in reason_rows if row.reason_category not in reason_categories]
         reason_rows = (prioritized + remainder)[:limit]
     else:
         reason_rows = reason_rows[:limit]

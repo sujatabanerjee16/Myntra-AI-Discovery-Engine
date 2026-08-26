@@ -6,7 +6,7 @@ import re
 
 from api.json_store import load_corpus_chunks
 from common.models import SourceType
-from storage.schemas import RetrievedChunk, RetrievalFilters
+from storage.schemas import RetrievalFilters, RetrievedChunk
 
 
 def _keyword_overlap(query: str, text: str) -> float:

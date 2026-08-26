@@ -52,9 +52,7 @@ def validate_corpus(records: list[RawRecord]) -> CorpusValidationReport:
                 )
 
     report.avg_text_length_by_source = {
-        source: round(sum(values) / len(values), 1)
-        for source, values in lengths.items()
-        if values
+        source: round(sum(values) / len(values), 1) for source, values in lengths.items() if values
     }
     return report
 

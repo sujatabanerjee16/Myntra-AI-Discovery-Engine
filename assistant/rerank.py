@@ -41,7 +41,5 @@ def rerank_chunks(
     scored.sort(key=lambda item: item[0], reverse=True)
     reranked: list[RetrievedChunk] = []
     for combined, chunk in scored[:top_k]:
-        reranked.append(
-            chunk.model_copy(update={"score": round(combined, 4)})
-        )
+        reranked.append(chunk.model_copy(update={"score": round(combined, 4)}))
     return reranked

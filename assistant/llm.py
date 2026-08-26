@@ -63,9 +63,7 @@ def _groq_generate(question: str, context: str) -> GeneratedAnswer:
 
     client = Groq(api_key=settings.groq_api_key)
     user_prompt = (
-        f"Question: {question}\n\n"
-        f"Grounded context:\n{context}\n\n"
-        "Respond with JSON only."
+        f"Question: {question}\n\n" f"Grounded context:\n{context}\n\n" "Respond with JSON only."
     )
 
     response = client.chat.completions.create(

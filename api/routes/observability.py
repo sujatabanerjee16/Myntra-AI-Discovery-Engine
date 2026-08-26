@@ -89,10 +89,7 @@ def list_pipeline_runs(
 ) -> PipelineRunListResponse:
     total = session.scalar(select(func.count()).select_from(PipelineRun)) or 0
     rows = session.execute(
-        select(PipelineRun)
-        .order_by(PipelineRun.created_at.desc())
-        .offset(offset)
-        .limit(limit)
+        select(PipelineRun).order_by(PipelineRun.created_at.desc()).offset(offset).limit(limit)
     ).scalars()
 
     runs = [
@@ -141,8 +138,9 @@ def list_eval_runs(
 @router.get("/eval/latest", response_model=EvalSummaryResponse)
 def latest_eval_summary(session: Session = Depends(get_session)) -> EvalSummaryResponse:
     from sqlalchemy.exc import SQLAlchemyError
+
     settings = get_settings()
-    
+
     latest = None
     try:
         row = session.execute(
@@ -182,7 +180,7 @@ def latest_eval_summary(session: Session = Depends(get_session)) -> EvalSummaryR
 def trigger_eval_run(session: Session = Depends(get_session)) -> dict[str, Any]:
     """Run the evaluation suite and persist results."""
     from api import backend
-    
+
     persist_db = not backend.use_json_backend()
     report = run_evaluation(session, persist=persist_db)
     output = write_eval_report(report)
@@ -193,8 +191,9 @@ def trigger_eval_run(session: Session = Depends(get_session)) -> dict[str, Any]:
 def quality_dashboard(session: Session = Depends(get_session)) -> QualityDashboardResponse:
     """Combined quality, trace, and cost dashboard payload."""
     from sqlalchemy.exc import SQLAlchemyError
+
     from common.db import database_available
-    
+
     corpus_stats: dict[str, Any] = {}
     if json_data_available():
         from pathlib import Path

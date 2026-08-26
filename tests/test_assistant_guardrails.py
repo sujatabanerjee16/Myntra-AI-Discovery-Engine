@@ -57,7 +57,9 @@ def test_assess_evidence_rejects_unsupported_specific_claims():
     )
     assert result.sufficient is False
     assert result.unsupported_terms
-    assert any(term in {"left", "handed", "tuesdays", "tuesday"} for term in result.unsupported_terms)
+    assert any(
+        term in {"left", "handed", "tuesdays", "tuesday"} for term in result.unsupported_terms
+    )
 
 
 def test_assess_evidence_allows_general_wishlist_questions():

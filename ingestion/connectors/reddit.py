@@ -50,9 +50,7 @@ def _fetch_live_records(*, query: str, limit: int) -> list[RawRecord]:
 
         post_id = post.get("id") or post.get("name") or text[:40]
         created = post.get("created_utc")
-        created_at = (
-            datetime.fromtimestamp(float(created), tz=UTC) if created is not None else None
-        )
+        created_at = datetime.fromtimestamp(float(created), tz=UTC) if created is not None else None
 
         records.append(
             RawRecord(

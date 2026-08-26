@@ -323,7 +323,9 @@ def _clear_run(session: Session, run_version: str) -> None:
     session.execute(delete(Insight).where(Insight.run_version == run_version))
     session.execute(delete(ReasonAggregate).where(ReasonAggregate.run_version == run_version))
     session.execute(delete(ThemeCluster).where(ThemeCluster.run_version == run_version))
-    session.execute(delete(CompetitiveAggregate).where(CompetitiveAggregate.run_version == run_version))
+    session.execute(
+        delete(CompetitiveAggregate).where(CompetitiveAggregate.run_version == run_version)
+    )
 
 
 def persist_analytics_result(session: Session, result: AnalyticsResult) -> None:

@@ -233,7 +233,9 @@ def _synthesize_add_motivation(signals: SurveySignals) -> list[str]:
     if add_frequency or retention:
         if add_frequency and retention:
             detail = (
-                f"they add items {_as_mid_sentence(_format_join(add_frequency))} and often keep them "
+                "they add items "
+                f"{_as_mid_sentence(_format_join(add_frequency))} "
+                "and often keep them "
                 f"for {_humanize_phrase(retention[0])} before deciding"
             )
         elif add_frequency:
@@ -303,8 +305,7 @@ def _synthesize_blockers(signals: SurveySignals) -> list[str]:
         if secondary:
             sentences.append(
                 _sentence(
-                    "Additional friction includes "
-                    f"{_as_mid_sentence(_format_join(secondary))}"
+                    "Additional friction includes " f"{_as_mid_sentence(_format_join(secondary))}"
                 )
             )
 
@@ -358,7 +359,8 @@ def _synthesize_intent(signals: SurveySignals, aggregates: AggregateContext | No
     if purchase_freq:
         sentences.append(
             _sentence(
-                f"Reported purchase frequency from the wishlist ({_as_mid_sentence(_format_join(purchase_freq))}) "
+                "Reported purchase frequency from the wishlist "
+                f"({_as_mid_sentence(_format_join(purchase_freq))}) "
                 "helps separate deliberate shortlisting from casual saving"
             )
         )
@@ -416,14 +418,17 @@ def _synthesize_general(
     if blockers:
         sentences.append(
             _sentence(
-                f"Purchase hesitation most often involves {_as_mid_sentence(_format_join(blockers))}"
+                "Purchase hesitation most often involves "
+                f"{_as_mid_sentence(_format_join(blockers))}"
             )
         )
 
     for snippet in signals.plain_text_snippets[:2]:
         excerpt = _truncate_at_word(snippet, 180)
         if excerpt:
-            sentences.append(_sentence(f"Public feedback also notes that {_as_mid_sentence(excerpt)}"))
+            sentences.append(
+                _sentence(f"Public feedback also notes that {_as_mid_sentence(excerpt)}")
+            )
 
     if not sentences:
         sentences.append(

@@ -77,9 +77,7 @@ class Settings(BaseSettings):
     use_json_fallback: bool = True
 
     # Phase 7 — multi-source scale-out
-    default_ingestion_sources: str = (
-        "research,play_store,reddit,youtube,product_review,social"
-    )
+    default_ingestion_sources: str = "research,play_store,reddit,youtube,product_review,social"
     reddit_search_query: str = "myntra wishlist"
     reddit_fetch_limit: int = 25
     reddit_live_fetch_enabled: bool = False

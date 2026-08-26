@@ -32,12 +32,18 @@ def main() -> int:
         )
         output = write_eval_report(report, args.output)
         print(f"Evaluation {'PASSED' if report.passed else 'FAILED'}")
-        print(f"  Retrieval hit@k: {report.retrieval.value:.2%} "
-              f"(target {report.retrieval.target:.2%})")
-        print(f"  Faithfulness:    {report.faithfulness.value:.2%} "
-              f"(target {report.faithfulness.target:.2%})")
-        print(f"  Taxonomy acc:    {report.taxonomy.value:.2%} "
-              f"(target {report.taxonomy.target:.2%})")
+        print(
+            f"  Retrieval hit@k: {report.retrieval.value:.2%} "
+            f"(target {report.retrieval.target:.2%})"
+        )
+        print(
+            f"  Faithfulness:    {report.faithfulness.value:.2%} "
+            f"(target {report.faithfulness.target:.2%})"
+        )
+        print(
+            f"  Taxonomy acc:    {report.taxonomy.value:.2%} "
+            f"(target {report.taxonomy.target:.2%})"
+        )
         print(f"Report: {output}")
         return 0 if report.passed else 1
     finally:

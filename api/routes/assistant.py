@@ -29,7 +29,8 @@ KEY_QUESTIONS = [
     "Where is Myntra stronger or weaker than Nykaa/Ajio on wishlist frictions?",
     "What information do users seek outside Myntra/AJIO before purchasing?",
     "What role do fit, size, styling, price, reviews, occasion and social validation play?",
-    "When do users use the wishlist as genuine purchase intent versus simply as a bookmarking mechanism?",
+    "When do users use the wishlist as genuine purchase intent versus "
+    "simply as a bookmarking mechanism?",
     "How do these behaviors differ across user segments?",
     "What unmet needs emerge consistently across user conversations?",
 ]
@@ -68,10 +69,7 @@ def list_traces(
     """List persisted AnswerTrace audit records."""
     total = session.scalar(select(func.count()).select_from(AnswerTrace)) or 0
     rows = session.execute(
-        select(AnswerTrace)
-        .order_by(AnswerTrace.created_at.desc())
-        .offset(offset)
-        .limit(limit)
+        select(AnswerTrace).order_by(AnswerTrace.created_at.desc()).offset(offset).limit(limit)
     ).scalars()
 
     traces = [

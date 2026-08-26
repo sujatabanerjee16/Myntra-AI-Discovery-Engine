@@ -53,13 +53,19 @@ def tag_platforms(text: str) -> PlatformTagResult:
     if not hits:
         # Default attribution: fashion wishlist talk without an explicit brand
         # is treated as Myntra-scoped directional evidence (corpus is Myntra-led).
-        return PlatformTagResult(platforms=["myntra"], attribution_confidence=0.35, primary="myntra")
+        return PlatformTagResult(
+            platforms=["myntra"], attribution_confidence=0.35, primary="myntra"
+        )
 
-    platforms = sorted(hits.keys(), key=lambda p: (-hits[p], PLATFORMS.index(p) if p in PLATFORMS else 99))
+    platforms = sorted(
+        hits.keys(), key=lambda p: (-hits[p], PLATFORMS.index(p) if p in PLATFORMS else 99)
+    )
     total = sum(hits.values())
     # Higher when multiple explicit mentions or multi-platform comparison.
     confidence = min(0.95, 0.55 + 0.12 * total + (0.1 if len(platforms) > 1 else 0.0))
-    return PlatformTagResult(platforms=platforms, attribution_confidence=round(confidence, 3), primary=platforms[0])
+    return PlatformTagResult(
+        platforms=platforms, attribution_confidence=round(confidence, 3), primary=platforms[0]
+    )
 
 
 def comparison_scope(platforms: list[str]) -> str:

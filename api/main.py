@@ -13,7 +13,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from api.routes import assistant, health, ingestion, insights, internal, observability, retrieval, storage
+from api.routes import (
+    assistant,
+    health,
+    ingestion,
+    insights,
+    internal,
+    observability,
+    retrieval,
+    storage,
+)
 from common.config import get_settings
 
 settings = get_settings()

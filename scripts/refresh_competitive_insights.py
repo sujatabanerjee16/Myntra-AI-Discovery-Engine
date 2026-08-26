@@ -75,7 +75,9 @@ def main() -> None:
     for doc in new_docs:
         if doc["source_ref"] in existing_refs:
             # Replace existing competitive seed docs so re-runs stay idempotent.
-            corpus["documents"] = [d for d in corpus["documents"] if d.get("source_ref") != doc["source_ref"]]
+            corpus["documents"] = [
+                d for d in corpus["documents"] if d.get("source_ref") != doc["source_ref"]
+            ]
         corpus["documents"].append(doc)
         added += 1
         existing_refs.add(doc["source_ref"])

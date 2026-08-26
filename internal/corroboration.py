@@ -58,9 +58,7 @@ def compute_corroboration(
             for segment in segments
             if segment in segment_non_conversion
         ]
-        internal_share = (
-            sum(internal_shares) / len(internal_shares) if internal_shares else None
-        )
+        internal_share = sum(internal_shares) / len(internal_shares) if internal_shares else None
 
         public_signal = volume / max_volume
         if internal_share is None:

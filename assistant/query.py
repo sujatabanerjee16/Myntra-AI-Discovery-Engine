@@ -135,7 +135,11 @@ def understand_query(
     reason_categories = _detect_reason_categories(normalized)
     if fashion_platforms and "competitive_platform_preference" not in reason_categories:
         # Competitive questions should retrieve comparison / preference evidence.
-        reason_categories = ["competitive_platform_preference", "external_comparison", *reason_categories][:5]
+        reason_categories = [
+            "competitive_platform_preference",
+            "external_comparison",
+            *reason_categories,
+        ][:5]
 
     search_query = normalized
     if fashion_platforms:

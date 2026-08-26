@@ -88,7 +88,9 @@ def test_answer_question_out_of_scope_is_clean(mock_json_backend):
 @patch("assistant.orchestrator.fetch_relevant_aggregates")
 @patch("assistant.orchestrator.backend.search_with_fallback")
 @patch("api.backend.use_json_backend", return_value=False)
-def test_answer_question_rejects_fabricated_premise(mock_json_backend, mock_search, mock_aggregates):
+def test_answer_question_rejects_fabricated_premise(
+    mock_json_backend, mock_search, mock_aggregates
+):
     mock_search.return_value = [
         _chunk(0.88, "Users wait for sales before purchasing wishlist items."),
         _chunk(0.74, "Price drops trigger purchases from saved items."),

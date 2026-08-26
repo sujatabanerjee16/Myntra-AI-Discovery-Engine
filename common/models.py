@@ -384,6 +384,4 @@ class InsightFeedback(Base):
     notes: Mapped[str | None] = mapped_column(Text)
     reviewer: Mapped[str] = mapped_column(String(128), default="pm")
     adjusted_confidence: Mapped[float | None] = mapped_column(Float)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
