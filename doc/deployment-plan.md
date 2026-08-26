@@ -70,27 +70,21 @@ If you specifically need a Streamlit surface later, treat it as an **optional op
 | -------- | ---------- | ----- |
 | `ENVIRONMENT` | `production` | |
 | `LOG_LEVEL` | `INFO` | |
-| `USE_JSON_FALLBACK` | `false` | `true` = keyword JSON RAG (free-tier demo). `false` = Neon/Postgres + BGE embeddings |
-| `DATABASE_URL` | `postgresql+psycopg://…@….neon.tech/neondb?sslmode=require` | Required when `USE_JSON_FALLBACK=false`. Paste in Render dashboard (secret). Prefer same DB already migrated + ingested locally |
-| `INSIGHTS_JSON_PATH` | `data/insights.json` | Still used for dashboard JSON paths if present |
+| `USE_JSON_FALLBACK` | `true` | Free-tier hosted demo uses keyword JSON RAG. Set `false` only with Neon/Postgres **and** full `requirements.txt` on a paid instance |
+| `DATABASE_URL` | *(optional / local)* | Used locally with Neon. Not required on free Render while `USE_JSON_FALLBACK=true` |
+| `INSIGHTS_JSON_PATH` | `data/insights.json` | |
 | `SCRAPED_JSON_PATH` | `data/scraped_corpus.json` | |
 | `GROQ_API_KEY` | *(secret)* | Required for Ask AI |
 | `GROQ_MODEL` | `llama-3.3-70b-versatile` | |
 | `CORS_ORIGINS` | `https://myntra-ai-discovery-engine-five.vercel.app` | Comma-separated; include preview URLs if needed |
 | `PYTHON_VERSION` | `3.12.8` | Required — Render’s default (e.g. 3.14) breaks `pydantic-core` |
-| `EMBEDDING_MODEL` | `BAAI/bge-large-en-v1.5` | Must match vectors already stored in Neon (`EMBEDDING_DIM=1024`) |
+| `EMBEDDING_MODEL` | `BAAI/bge-large-en-v1.5` | Used locally with Neon; unused on free Render JSON path |
 
 Do **not** put `GROQ_API_KEY` or `DATABASE_URL` in the Vercel frontend.
 
-### 4.1.1 Neon cutover checklist (Render)
+### 4.1.1 Neon (local proof only on free Render)
 
-1. Neon project already has `vector` extension, Alembic head, and embedded chunks (done locally).
-2. Render → **wishlist-api** → **Environment**:
-   - `DATABASE_URL` = Neon URL with `postgresql+psycopg://` and `?sslmode=require`
-   - `USE_JSON_FALLBACK` = `false`
-   - `CORS_ORIGINS` = your Vercel URL
-3. Build must use **`requirements.txt`** (includes `sentence-transformers` / torch). Free Render will usually OOM — use **Starter** (or higher).
-4. Redeploy. Smoke: `GET /health`, then Ask AI with two different questions and confirm answers diverge.
+Free Render cannot load BGE/torch, so production stays on JSON fallback. Neon + pgvector remains valid for **local** verification (`USE_JSON_FALLBACK=false` in `.env`). To put Neon on Render later you need a paid plan, `requirements.txt`, and `USE_JSON_FALLBACK=false`.
 
 ### 4.2 Frontend (Vercel)
 
@@ -110,9 +104,9 @@ Public app URL for this project: `https://myntra-ai-discovery-engine-five.vercel
 
 Repo already includes:
 
-- [`render.yaml`](../render.yaml) — Blueprint for Starter web service + Neon/pgvector
-- [`requirements.txt`](../requirements.txt) — Full API runtime **with** `sentence-transformers` / torch (needed for query embeddings)
-- [`requirements-deploy.txt`](../requirements-deploy.txt) — Lean JSON-only fallback (free-tier demo; no BGE)
+- [`render.yaml`](../render.yaml) — Blueprint for a free web service (JSON keyword RAG)
+- [`requirements-deploy.txt`](../requirements-deploy.txt) — Lean API runtime **without** `sentence-transformers` / torch
+- [`requirements.txt`](../requirements.txt) — Full local/dev stack (Neon + BGE); not for free Render
 - Start command: `uvicorn api.main:app --host 0.0.0.0 --port $PORT`
 
 ### 5.1 Dashboard steps

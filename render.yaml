@@ -2,20 +2,17 @@
 # https://render.com/docs/blueprint-spec
 # See doc/deployment-plan.md
 #
-# Neon / pgvector cutover:
-# - Set DATABASE_URL in the Render dashboard (secret; not committed).
-#   Use postgresql+psycopg://…?sslmode=require (Neon pooler or direct host).
-# - USE_JSON_FALLBACK=false forces Postgres + embedding retrieval.
-# - Free plan cannot load BGE/torch; use at least Starter and full requirements.txt.
+# Free-tier demo: JSON keyword RAG (no BGE/torch). Neon/pgvector is for local
+# proof only unless you move off the free plan and install requirements.txt.
 
 services:
   - type: web
     name: wishlist-api
     runtime: python
-    plan: starter
+    plan: free
     region: oregon
     rootDir: .
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements-deploy.txt
     startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
@@ -24,17 +21,11 @@ services:
       - key: LOG_LEVEL
         value: INFO
       - key: USE_JSON_FALLBACK
-        value: "false"
-      - key: DATABASE_URL
-        sync: false
+        value: "true"
       - key: INSIGHTS_JSON_PATH
         value: data/insights.json
       - key: SCRAPED_JSON_PATH
         value: data/scraped_corpus.json
-      - key: EMBEDDING_MODEL
-        value: BAAI/bge-large-en-v1.5
-      - key: EMBEDDING_DIM
-        value: "1024"
       - key: GROQ_MODEL
         value: llama-3.3-70b-versatile
       - key: GROQ_API_KEY
