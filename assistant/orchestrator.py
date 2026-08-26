@@ -53,15 +53,12 @@ def answer_question(
     # fabricate a grounded-looking answer for something outside the corpus's domain.
     # An explicitly detected platform (Myntra/Nykaa/Ajio) is always in scope.
     if not question_in_scope(parsed.question) and not parsed.platforms:
-        trace.insufficient_evidence = True
+        # Scope refusal is not "low evidence" — no caution banner, 0% confidence,
+        # category hints, or a duplicated limitations box.
+        trace.insufficient_evidence = False
         answer_text = build_out_of_scope_answer(parsed.question)
         confidence = 0.0
         trace.confidence = confidence
-        limitations = (
-            "This assistant only answers questions about wishlist behavior, purchase "
-            "conversion, and fashion e-commerce (e.g. Myntra, Nykaa, Ajio). The question "
-            "appears to be outside that scope, so no grounded answer was generated."
-        )
         duration_ms = round((time.perf_counter() - start) * 1000, 2)
         trace_id = _persist_trace(
             session,
@@ -69,10 +66,10 @@ def answer_question(
             answer=answer_text,
             citations=[],
             confidence=confidence,
-            limitations=limitations,
+            limitations="",
             chunk_ids=[],
             duration_ms=duration_ms,
-            insufficient_evidence=True,
+            insufficient_evidence=False,
             persist=persist_trace,
         )
         log_rag_trace(trace)
@@ -84,10 +81,10 @@ def answer_question(
             answer=answer_text,
             citations=[],
             confidence=confidence,
-            limitations=limitations,
-            insufficient_evidence=True,
+            limitations="",
+            insufficient_evidence=False,
             retrieved_chunk_count=0,
-            reason_categories=parsed.reason_categories,
+            reason_categories=[],
         )
 
     with timed_operation(trace, "retrieve", top_k=settings.retrieval_top_k):

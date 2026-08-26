@@ -64,12 +64,41 @@ class SurveySignals:
     plain_text_snippets: list[str] = field(default_factory=list)
 
 
+_SHORT_WORDS = {"a", "i"}
+
+
 def _normalize_answer(answer: str) -> str:
     cleaned = re.sub(r"\s+", " ", answer.strip())
     cleaned = re.sub(r"\[phone\]", "", cleaned, flags=re.IGNORECASE)
     cleaned = cleaned.replace("–", "-").replace("—", "-")
     cleaned = re.sub(r"^yes,\s*", "", cleaned, flags=re.IGNORECASE)
-    return cleaned.strip(" ,.;")
+    cleaned = cleaned.strip(" ,.;:")
+    # Chunk splits often cut "1-4 weeks" into "1-4 wee".
+    cleaned = re.sub(r"\b(\d+\s*-\s*\d+)\s+wee\b", r"\1 weeks", cleaned, flags=re.IGNORECASE)
+    # Trailing lone letters are truncated Q:/A: headers or mid-word cuts, not "a"/"I".
+    orphan = re.search(r"\s+(?![AaIi]\b)[A-Za-z]$", cleaned)
+    if orphan:
+        cleaned = cleaned[: orphan.start()].rstrip(" ,.;:")
+        # Keep complete phrases ("anymore q"); drop short remnants ("I usually d").
+        if len(cleaned.split()) < 4:
+            return ""
+    if re.fullmatch(r"[A-Za-z]", cleaned) and cleaned.lower() not in _SHORT_WORDS:
+        return ""
+    return cleaned.strip(" ,.;:")
+
+
+def _truncate_at_word(text: str, limit: int) -> str:
+    """Truncate to the last complete word at or before *limit* characters."""
+    cleaned = re.sub(r"\s+", " ", text.strip())
+    if len(cleaned) <= limit:
+        return cleaned.rstrip(" ,.;")
+    words: list[str] = []
+    for word in cleaned.split(" "):
+        candidate = " ".join(words + [word])
+        if len(candidate) > limit:
+            break
+        words.append(word)
+    return " ".join(words).rstrip(" ,.;")
 
 
 def _field_for_question(question: str) -> str | None:
@@ -103,6 +132,28 @@ def _top_values(counter: Counter[str], limit: int = 3) -> list[str]:
     return [value for value, _count in counter.most_common(limit)]
 
 
+def _collapse_prefix_duplicates(counter: Counter[str]) -> Counter[str]:
+    """Fold truncated keys into a longer value they prefix (chunk-split answers)."""
+    merged: Counter[str] = Counter()
+    for key in sorted(counter, key=len, reverse=True):
+        parent = next(
+            (
+                candidate
+                for candidate in merged
+                if len(key.split()) >= 2
+                and len(candidate) > len(key)
+                and candidate.startswith(key)
+                and (candidate[len(key)].isspace() or candidate[len(key)].isalpha())
+            ),
+            None,
+        )
+        if parent:
+            merged[parent] += counter[key]
+        else:
+            merged[key] += counter[key]
+    return merged
+
+
 def _format_join(values: list[str]) -> str:
     cleaned = [value.strip() for value in values if value.strip()]
     if not cleaned:
@@ -131,7 +182,9 @@ def collect_survey_signals(chunks: list[RetrievedChunk]) -> SurveySignals:
         else:
             snippet = re.sub(r"\s+", " ", chunk.text.strip())
             if snippet and len(snippet) > 20:
-                signals.plain_text_snippets.append(snippet[:240])
+                signals.plain_text_snippets.append(_truncate_at_word(snippet, 240))
+    for field_name, counter in list(signals.fields.items()):
+        signals.fields[field_name] = _collapse_prefix_duplicates(counter)
     return signals
 
 
@@ -368,7 +421,7 @@ def _synthesize_general(
         )
 
     for snippet in signals.plain_text_snippets[:2]:
-        excerpt = snippet[:180].rstrip(" ,.;")
+        excerpt = _truncate_at_word(snippet, 180)
         if excerpt:
             sentences.append(_sentence(f"Public feedback also notes that {_as_mid_sentence(excerpt)}"))
 

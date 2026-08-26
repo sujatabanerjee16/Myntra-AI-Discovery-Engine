@@ -68,6 +68,23 @@ def test_answer_question_grounded(mock_json_backend, mock_search, mock_aggregate
     session.commit.assert_called_once()
 
 
+@patch("api.backend.use_json_backend", return_value=True)
+def test_answer_question_out_of_scope_is_clean(mock_json_backend):
+    response = answer_question(
+        MagicMock(),
+        question="what is the capital of France",
+        persist_trace=False,
+    )
+
+    assert "outside what this assistant can answer" in response.answer.lower()
+    assert response.insufficient_evidence is False
+    assert response.citations == []
+    assert response.retrieved_chunk_count == 0
+    assert response.reason_categories == []
+    assert response.limitations == ""
+    assert response.confidence == 0.0
+
+
 @patch("assistant.orchestrator.fetch_relevant_aggregates")
 @patch("assistant.orchestrator.backend.search_with_fallback")
 @patch("api.backend.use_json_backend", return_value=False)

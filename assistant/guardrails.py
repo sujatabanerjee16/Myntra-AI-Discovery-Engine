@@ -89,10 +89,15 @@ def build_insufficient_evidence_answer(question: str, assessment: EvidenceAssess
 # wishlist behavior, shopping/conversion, and fashion e-commerce.
 #
 # Deliberately excludes ultra-generic words that frequently appear in unrelated
-# questions (e.g. "price", "cost", "order", "user", "return") so that a query
-# like "the price of Bitcoin" is not mistaken for an in-domain question. Domain
+# questions (e.g. "price", "cost", "user", "return") so that a query like
+# "the price of Bitcoin" is not mistaken for an in-domain question. Domain
 # price/return questions almost always also carry a stronger term below
 # (wishlist, buy, sale, purchase, discount, product, ...).
+#
+# Weaker commerce phrasing ("order", "save", "item", "complete") is handled
+# via _WEAK_DOMAIN_TERMS: those tokens only count when two or more co-occur,
+# so "complete their online orders after saving items" passes while
+# "complete my homework" alone does not.
 _DOMAIN_TERMS: frozenset[str] = frozenset(
     {
         "wishlist", "wish list", "wishlisted", "bookmark", "shortlist",
@@ -106,6 +111,16 @@ _DOMAIN_TERMS: frozenset[str] = frozenset(
         "myntra", "nykaa", "ajio", "flipkart", "occasion", "wedding", "festive",
         "delivery", "styling", "stylist", "assortment", "catalog",
         "recommend", "recommendation",
+        "online order", "online orders", "saved items", "saving items",
+        "save items",
+    }
+)
+
+# Generic on their own; require ≥2 distinct hits to count as in-domain.
+_WEAK_DOMAIN_TERMS: frozenset[str] = frozenset(
+    {
+        "order", "orders", "complete", "completing", "completed",
+        "save", "saving", "saved", "item", "items", "online",
     }
 )
 
@@ -123,7 +138,9 @@ def question_in_scope(question: str) -> bool:
     if any(" " in term and term in lowered for term in _DOMAIN_TERMS):
         return True
     tokens = set(_WORD_RE.findall(lowered))
-    return bool(tokens & _DOMAIN_TERMS)
+    if tokens & _DOMAIN_TERMS:
+        return True
+    return len(tokens & _WEAK_DOMAIN_TERMS) >= 2
 
 
 def build_out_of_scope_answer(question: str) -> str:

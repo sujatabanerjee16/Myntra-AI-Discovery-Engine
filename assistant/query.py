@@ -69,7 +69,7 @@ def _find_alias(text: str, aliases: dict[str, str]) -> str | None:
 def _detect_reason_categories(question: str) -> list[str]:
     classification = classify_reason(question)
     categories = list(classification.matched)
-    if classification.primary and classification.primary not in categories:
+    if classification.primary is not None and classification.primary not in categories:
         categories.insert(0, classification.primary)
 
     lowered = question.lower()

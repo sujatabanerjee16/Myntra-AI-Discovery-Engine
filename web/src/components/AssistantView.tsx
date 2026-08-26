@@ -310,22 +310,24 @@ export default function AssistantView({
           ))}
         </div>
         
-        <div className="wi-answer-footer">
-          <div className="wi-citations-group">
-            {response.citations.map((citation, index) => (
-              <button
-                key={citation.chunk_id}
-                type="button"
-                className="citation-chip"
-                onClick={() => setEvidenceOpen(true)}
-                title={citation.excerpt}
-              >
-                [{citationLabel(citation, index)}]
-              </button>
-            ))}
+        {response.citations.length > 0 && (
+          <div className="wi-answer-footer">
+            <div className="wi-citations-group">
+              {response.citations.map((citation, index) => (
+                <button
+                  key={citation.chunk_id}
+                  type="button"
+                  className="citation-chip"
+                  onClick={() => setEvidenceOpen(true)}
+                  title={citation.excerpt}
+                >
+                  [{citationLabel(citation, index)}]
+                </button>
+              ))}
+            </div>
+            <strong className="confidence-inline">Confidence: {confidencePct}%</strong>
           </div>
-          <strong className="confidence-inline">Confidence: {confidencePct}%</strong>
-        </div>
+        )}
       </div>
     );
   };

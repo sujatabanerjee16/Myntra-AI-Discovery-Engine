@@ -2,7 +2,14 @@
 
 from uuid import uuid4
 
-from assistant.synthesis import collect_survey_signals, parse_qa_pairs, synthesize_grounded_answer, _as_mid_sentence
+from assistant.synthesis import (
+    _as_mid_sentence,
+    _normalize_answer,
+    _truncate_at_word,
+    collect_survey_signals,
+    parse_qa_pairs,
+    synthesize_grounded_answer,
+)
 from common.models import SourceType
 from storage.schemas import RetrievedChunk
 
@@ -95,6 +102,56 @@ def test_as_mid_sentence_preserves_pronoun_i():
     assert _as_mid_sentence("i change my mind") == "I change my mind"
     assert _as_mid_sentence("I'm unsure about sizing") == "I'm unsure about sizing"
     assert _as_mid_sentence("Clothing, Footwear") == "clothing, footwear"
+
+
+def test_normalize_answer_strips_trailing_orphan_letter():
+    assert _normalize_answer("I do not need the item anymore q") == "I do not need the item anymore"
+    assert _normalize_answer("I do not need the item anymore Q") == "I do not need the item anymore"
+    assert _normalize_answer("I do not need the item anymore") == "I do not need the item anymore"
+    assert _normalize_answer("I change my mind") == "I change my mind"
+    assert _normalize_answer("I usually d") == ""
+    assert _normalize_answer("1-4 wee") == "1-4 weeks"
+    assert _normalize_answer("I am unsure about the fit") == "I am unsure about the fit"
+    assert _normalize_answer("a") == "a"
+    assert _normalize_answer("I") == "I"
+    assert _normalize_answer("q") == ""
+
+
+def test_collect_survey_signals_merges_orphan_suffix_duplicates():
+    complete = (
+        "Q: What is the single biggest reason you do not purchase wishlist items? "
+        "A: I do not need the item anymore"
+    )
+    with_orphan = (
+        "Q: What is the single biggest reason you do not purchase wishlist items? "
+        "A: I do not need the item anymore Q"
+    )
+    signals = collect_survey_signals([_chunk(complete), _chunk(with_orphan)])
+    assert list(signals.fields["primary_blocker"]) == ["I do not need the item anymore"]
+    assert signals.fields["primary_blocker"]["I do not need the item anymore"] == 2
+
+
+def test_collect_survey_signals_collapses_truncated_prefix():
+    complete = (
+        "Q: How long do you usually keep items in your wishlist before deciding what to do? "
+        "A: I usually do not revisit them"
+    )
+    truncated = (
+        "Q: How long do you usually keep items in your wishlist before deciding what to do? "
+        "A: I usually"
+    )
+    signals = collect_survey_signals([_chunk(complete), _chunk(truncated)])
+    assert list(signals.fields["retention"]) == ["I usually do not revisit them"]
+    assert signals.fields["retention"]["I usually do not revisit them"] == 2
+
+
+def test_truncate_at_word_does_not_cut_mid_word():
+    text = "Users wait 1-4 weeks before buying " + ("saved items " * 20)
+    excerpt = _truncate_at_word(text, 180)
+    assert len(excerpt) <= 180
+    assert not excerpt.endswith("wee")
+    rest = text[len(excerpt) :]
+    assert not rest or rest[0].isspace()
 
 
 def test_synthesize_blockers_preserves_capital_i():

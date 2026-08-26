@@ -110,7 +110,7 @@ SIGNAL_TO_REASON: dict[str, str] = {
 
 @dataclass(frozen=True, slots=True)
 class ReasonClassification:
-    primary: str
+    primary: str | None
     scores: dict[str, int]
     matched: list[str]
 
@@ -135,7 +135,7 @@ def classify_reason(text: str, *, signals: list[str] | None = None) -> ReasonCla
                     matched.append(mapped)
 
     if not scores:
-        return ReasonClassification(primary="styling_decision_uncertainty", scores={}, matched=[])
+        return ReasonClassification(primary=None, scores={}, matched=[])
 
     primary = max(scores, key=lambda k: scores[k])
     return ReasonClassification(primary=primary, scores=scores, matched=matched)
