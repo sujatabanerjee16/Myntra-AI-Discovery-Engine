@@ -100,7 +100,7 @@ def _evaluate_faithfulness_live(
     live_cases: list[FaithfulnessEvalCase] = []
 
     for query, chunks in retrieved_by_query.items():
-        assessment = assess_evidence(chunks)
+        assessment = assess_evidence(chunks, question=query)
         if not assessment.sufficient:
             answer = build_insufficient_evidence_answer(query, assessment)
             live_cases.append(
