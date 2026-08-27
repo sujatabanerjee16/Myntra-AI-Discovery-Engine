@@ -1,22 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
   getCompetitiveAnalysis,
   getConversionMetric,
   getFilters,
   getHeatmap,
   getIntentBreakdown,
   getRankedReasons,
-  getTrends,
   listInsightFeedback,
   runInternalCompute,
   submitInsightFeedback,
@@ -35,7 +24,6 @@ import type {
   ReasonRankResponse,
   SidebarFilters,
   SourceId,
-  TrendsResponse,
 } from "../types";
 import CompetitiveAnalysisPanel from "./CompetitiveAnalysisPanel";
 import { formatReason } from "./ConfidenceBadge";
@@ -52,8 +40,6 @@ interface Props {
   view?: "dashboard" | "competitive";
 }
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"] as const;
-const THEME_COLORS = ["#E11D48", "#3B82F6", "#10B981"] as const;
 const SOURCES: { id: SourceId; label: string }[] = [
   { id: "play_store", label: "Play Store" },
   { id: "youtube", label: "YouTube" },
@@ -117,46 +103,6 @@ function intentWeight(item: { active_shortlist_count: number; passive_bookmark_c
   return 0.7 + (1 - Math.abs(activeShare - 0.5)) * 0.4;
 }
 
-function buildThemeTimeline(
-  trends: TrendsResponse | null,
-  intensity: number,
-) {
-  const themes = (trends?.emerging_themes ?? []).slice(0, 3);
-  if (themes.length === 0) {
-    return {
-      series: [] as { key: string; label: string; color: string; delta: string }[],
-      data: MONTHS.map((month) => ({ month })),
-    };
-  }
-
-  const series = themes.map((theme, index) => {
-    const volume = Math.max(Math.round(theme.evidence_volume * intensity), 4);
-    const growth = 8 + ((index * 7 + volume) % 18);
-    return {
-      key: `theme_${index}`,
-      label: theme.label,
-      color: THEME_COLORS[index % THEME_COLORS.length],
-      delta: `+${growth}%`,
-      end: volume,
-    };
-  });
-
-  const data = MONTHS.map((month, monthIndex) => {
-    const point: Record<string, string | number> = { month };
-    series.forEach((item, seriesIndex) => {
-      const progress = (monthIndex + 1) / MONTHS.length;
-      const curve = 0.35 + progress * 0.65 + Math.sin(monthIndex + seriesIndex) * 0.04;
-      point[item.key] = Math.round(item.end * curve);
-    });
-    return point;
-  });
-
-  return {
-    series: series.map(({ key, label, color, delta }) => ({ key, label, color, delta })),
-    data,
-  };
-}
-
 export default function DashboardView({ filters, onFiltersChange, sidebar, onSidebarChange, onAskQuestion, view = "dashboard" }: Props) {
   const { priceMin, priceMax, intentType, sources, confidenceMin, platforms } = sidebar;
   const setPriceMin = (value: number) => onSidebarChange({ ...sidebar, priceMin: value });
@@ -168,7 +114,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const [reasons, setReasons] = useState<ReasonRankResponse | null>(null);
   const [heatmap, setHeatmap] = useState<HeatmapResponse | null>(null);
   const [intent, setIntent] = useState<IntentBreakdownResponse | null>(null);
-  const [trends, setTrends] = useState<TrendsResponse | null>(null);
   const [conversion, setConversion] = useState<ConversionMetricResponse | null>(null);
   const [competitive, setCompetitive] = useState<CompetitiveAnalysisResponse | null>(null);
   const [feedback, setFeedback] = useState<InsightFeedbackRecord[]>([]);
@@ -201,7 +146,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         reasonData,
         heatmapData,
         intentData,
-        trendData,
         conversionData,
         feedbackData,
         competitiveData,
@@ -210,7 +154,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         getRankedReasons(filters),
         getHeatmap(filters),
         getIntentBreakdown(filters),
-        getTrends(),
         getConversionMetric().catch(() => null),
         listInsightFeedback().catch(() => ({ total: 0, feedback: [] as InsightFeedbackRecord[] })),
         getCompetitiveAnalysis().catch(() => null),
@@ -219,7 +162,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       setReasons(reasonData);
       setHeatmap(heatmapData);
       setIntent(intentData);
-      setTrends(trendData);
       setConversion(conversionData);
       setFeedback(feedbackData.feedback);
       setCompetitive(competitiveData);
@@ -383,7 +325,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }, [heatmap, filterIntensity, intentType]);
 
   const maxHeat = Math.max(...(filteredHeatmap?.cells.map((cell) => cell.value) ?? [1]), 1);
-  const timeline = useMemo(() => buildThemeTimeline(trends, filterIntensity), [trends, filterIntensity]);
 
   const categoryOptions = options?.categories?.length
     ? options.categories
@@ -606,14 +547,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             <span>100%</span>
           </div>
         </div>
-
-        <p className="wi-dash-sync-note">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M21 12a9 9 0 0 1-9 9M3 12a9 9 0 0 1 9-9" />
-            <path d="M21 3v6h-6M3 21v-6h6" />
-          </svg>
-          Filters apply to charts <strong>and Ask AI</strong>
-        </p>
       </aside>
 
       <div className="wi-dash-content">
@@ -759,55 +692,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                 )}
               </section>
             </div>
-
-            <section className="wi-dash-card wi-dash-card--timeline">
-              <h2>Emerging Themes Timeline (Last 6 Months)</h2>
-              <div className="wi-timeline-chart">
-                <ResponsiveContainer width="100%" height={260}>
-                  <LineChart data={timeline.data} margin={{ top: 12, right: 16, left: -10, bottom: 8 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                    <XAxis
-                      dataKey="month"
-                      tick={{ fontSize: 12, fill: "#64748b" }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <YAxis tick={{ fontSize: 12, fill: "#64748b" }} axisLine={false} tickLine={false} />
-                    <Tooltip
-                      contentStyle={{
-                        borderRadius: 8,
-                        border: "none",
-                        boxShadow: "0 8px 20px rgba(15,23,42,0.12)",
-                      }}
-                      formatter={(value, name) => {
-                        const match = timeline.series.find((item) => item.key === name);
-                        return [value, match ? match.label : name];
-                      }}
-                    />
-                    <Legend
-                      verticalAlign="bottom"
-                      height={36}
-                      formatter={(value) => {
-                        const match = timeline.series.find((item) => item.key === value);
-                        return match ? `${match.label} ${match.delta}` : value;
-                      }}
-                    />
-                    {timeline.series.map((item) => (
-                      <Line
-                        key={item.key}
-                        type="monotone"
-                        dataKey={item.key}
-                        name={item.key}
-                        stroke={item.color}
-                        strokeWidth={2.5}
-                        dot={{ r: 3, strokeWidth: 0 }}
-                        activeDot={{ r: 5 }}
-                      />
-                    ))}
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </section>
 
             <div className="wi-dash-mid wi-dash-mid--feedback">
               <section className="wi-dash-card">
