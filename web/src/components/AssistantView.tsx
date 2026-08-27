@@ -9,8 +9,6 @@ type ChatMessage =
 const FALLBACK_QUESTIONS = [
   "Why do users add fashion products to their wishlist?",
   "What prevents wishlisted products from eventually being purchased?",
-  "Why do people wishlist on Myntra vs Nykaa or Ajio?",
-  "Which wishlist motives are shared across platforms vs unique to Myntra?",
   "What uncertainties remain after users have identified a product they like?",
   "What causes users to postpone a purchase?",
   "How do users compare multiple shortlisted products?",
@@ -201,8 +199,6 @@ interface AssistantViewProps {
   onClose?: () => void;
   /** Competitor platforms (myntra/nykaa/ajio/other) from the shared filter rail. */
   platforms?: string[];
-  /** Whether the shared "Social" source is selected, to tune suggested questions. */
-  socialSelected?: boolean;
   /** A question to auto-run on mount (e.g. picked from the Explore Questions tab). */
   initialQuestion?: string;
 }
@@ -211,7 +207,6 @@ export default function AssistantView({
   variant = "page",
   onClose,
   platforms,
-  socialSelected = false,
   initialQuestion,
 }: AssistantViewProps) {
   const isWidget = variant === "widget";
@@ -228,23 +223,14 @@ export default function AssistantView({
   const autoAskedRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const decorate = (base: string[]) =>
-      socialSelected
-        ? [
-            "What styling debates or sizing questions do users bring to Reddit?",
-            "How do influencer reviews or visual hauls address sizing uncertainties?",
-            ...base.slice(0, 8),
-          ]
-        : base;
-
     void getKeyQuestions()
       .then((items) => {
-        setQuestions(decorate(items.length ? items : FALLBACK_QUESTIONS));
+        setQuestions(items.length ? items : FALLBACK_QUESTIONS);
       })
       .catch(() => {
-        setQuestions(decorate(FALLBACK_QUESTIONS));
+        setQuestions(FALLBACK_QUESTIONS);
       });
-  }, [socialSelected]);
+  }, []);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });

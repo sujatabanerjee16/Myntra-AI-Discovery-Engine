@@ -472,7 +472,6 @@ export default function App() {
           <AssistantView
             variant="page"
             platforms={sidebar.platforms}
-            socialSelected={sidebar.sources.includes("social")}
             initialQuestion={pendingQuestion}
           />
         </div>

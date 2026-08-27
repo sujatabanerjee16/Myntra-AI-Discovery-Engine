@@ -42,22 +42,6 @@ const QUESTION_GROUPS: QuestionGroup[] = [
     ],
   },
   {
-    id: "competitive",
-    title: "Competitive comparison",
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 3v18" />
-        <path d="m6 8-3 6a3 3 0 0 0 6 0Z" />
-        <path d="m18 8-3 6a3 3 0 0 0 6 0Z" />
-        <path d="M7 6h10" />
-      </svg>
-    ),
-    questions: [
-      "Why do people wishlist on Myntra vs Nykaa or Ajio?",
-      "Which wishlist motives are shared across platforms vs unique to Myntra?",
-    ],
-  },
-  {
     id: "journey",
     title: "Decision journey",
     icon: (

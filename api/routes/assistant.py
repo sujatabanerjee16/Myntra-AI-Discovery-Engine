@@ -24,9 +24,9 @@ router = APIRouter(prefix="/assistant", tags=["assistant"])
 KEY_QUESTIONS = [
     "Why do users add fashion products to their wishlist?",
     "What prevents wishlisted products from eventually being purchased?",
-    "Why do people wishlist on Myntra vs Nykaa or Ajio?",
-    "Which wishlist motives are shared across platforms vs unique to Myntra?",
-    "Where is Myntra stronger or weaker than Nykaa/Ajio on wishlist frictions?",
+    "What uncertainties remain after users have identified a product they like?",
+    "What causes users to postpone a purchase?",
+    "How do users compare multiple shortlisted products?",
     "What information do users seek outside Myntra/AJIO before purchasing?",
     "What role do fit, size, styling, price, reviews, occasion and social validation play?",
     "When do users use the wishlist as genuine purchase intent versus "
