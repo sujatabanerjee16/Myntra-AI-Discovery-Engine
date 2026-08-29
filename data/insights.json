@@ -1,356 +1,14 @@
 {
-  "run_version": "analytics-20260824T120147Z",
-  "exported_at": "2026-08-24T12:01:48.018217+00:00",
+  "run_version": "analytics-20260829T042419Z",
+  "exported_at": "2026-08-29T04:24:19.604986+00:00",
   "stats": {
-    "chunks_analyzed": 133,
-    "insights_created": 76,
+    "chunks_analyzed": 263,
+    "insights_created": 120,
     "reason_aggregates": 9,
-    "theme_clusters": 14,
-    "competitive_aggregates": 34
+    "theme_clusters": 22,
+    "competitive_aggregates": 35
   },
   "insights": [
-    {
-      "reason_category": "passive_bookmarking",
-      "intent_type": "passive_bookmark",
-      "journey_stage": "discovery",
-      "segment": null,
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "1a58af34-4975-5dd0-a9cd-6add71ff1240",
-        "680b473a-a31b-5406-a7f6-10bec6d2a09f",
-        "9f82a6ad-3a7c-5015-9797-2be6f526257c",
-        "373a8b1f-a665-571c-8dee-413e249af9c7",
-        "f8970875-8f08-55fc-9962-c497111508ea",
-        "cc37532d-ec5a-5df8-8e2d-62b0891fdeeb",
-        "fbfd76ea-bcfb-58df-9d06-b9f4acdb6034",
-        "2bb731ac-1a4e-5c38-8b25-63ab06fb4709",
-        "5998f6f0-497f-51e1-b9ca-a8dc2db2c9d2",
-        "f6f6aeca-971b-52ae-867c-c4097607392a",
-        "cedb28c8-f831-5433-a8c6-cfc2c16a088c",
-        "b3ef9c8d-2764-5537-940e-afa2de403d75",
-        "2455e8ee-4e88-502e-a2e4-0cdd98c4a253"
-      ],
-      "evidence_volume": 13,
-      "confidence": 0.905,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "price_sensitivity_waiting",
-      "intent_type": "active_shortlist",
-      "journey_stage": "hesitation",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "price_sale_waiting",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "7605f780-d8b1-5a11-96b5-7619e083cbcc",
-        "e2abadd8-c510-5d4a-9be1-0ceb14fb8278",
-        "57b02e5f-9d38-57a1-b39d-bad06fe7f079",
-        "25efce7c-8796-5cc7-950a-9689ee79924f"
-      ],
-      "evidence_volume": 4,
-      "confidence": 0.695,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "fit_sizing_uncertainty",
-      "intent_type": "active_shortlist",
-      "journey_stage": "discovery",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "067f6685-6ca8-57a7-9ef3-f0f52fbea6e2",
-        "daa3c35b-e97a-5078-a3c7-7e9bca79a1be",
-        "fb6a7613-96cc-5460-8c19-90e9d51a7ec0",
-        "4dd52ea2-bb94-5404-ac26-49944359e811",
-        "acccaea0-26f2-53bf-bd7e-67cfd9596091",
-        "52f75474-ef07-5b9a-868e-13d7c8c93b64",
-        "3033230a-8fae-5feb-9588-9c4b8cc5928d",
-        "912ed104-a6ce-5c00-aa0e-e5c8eb209576"
-      ],
-      "evidence_volume": 8,
-      "confidence": 0.835,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "price_sensitivity_waiting",
-      "intent_type": "active_shortlist",
-      "journey_stage": "discovery",
-      "segment": null,
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "1333845c-c25d-54f8-8e63-66104c0a22ed"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.59,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "fit_sizing_uncertainty",
-      "intent_type": "active_shortlist",
-      "journey_stage": "hesitation",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "price_sale_waiting",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "48fab5ed-cd4a-5e4e-9d62-8c4807b28c01"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.59,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "fit_sizing_uncertainty",
-      "intent_type": "active_shortlist",
-      "journey_stage": "postponement",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "ee206343-e4a7-5c6d-a58d-1731f82762d0",
-        "e820aaa3-92a3-565a-b8fe-75a65e6e3476",
-        "2e9efc89-e5e5-5e6d-9c2a-1b960fe98a04"
-      ],
-      "evidence_volume": 3,
-      "confidence": 0.66,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "passive_bookmarking",
-      "intent_type": "passive_bookmark",
-      "journey_stage": "discovery",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "1f13917c-5412-5465-88a8-e481eb80b2b0"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.59,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "passive_bookmarking",
-      "intent_type": "passive_bookmark",
-      "journey_stage": "discovery",
-      "segment": null,
-      "category": "accessories",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "social_inspiration",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "b2cbb25c-28a5-5d93-81cb-cdce756f79a9",
-        "a4ab31ef-82a1-5631-9990-c93a8aaffea5"
-      ],
-      "evidence_volume": 2,
-      "confidence": 0.614,
-      "sources": [
-        "research",
-        "social"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "price_sensitivity_waiting",
-      "intent_type": "active_shortlist",
-      "journey_stage": "purchase",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "price_sale_waiting",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "81228b66-0fd8-5df8-915a-c3aad2add037",
-        "2e70ad8e-7924-5165-bd97-bb711a26a516"
-      ],
-      "evidence_volume": 2,
-      "confidence": 0.625,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "logistics_friction",
-      "intent_type": "active_shortlist",
-      "journey_stage": "discovery",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "8600809d-1151-580b-bb19-2234a7610d18"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.59,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "passive_bookmarking",
-      "intent_type": "active_shortlist",
-      "journey_stage": "discovery",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "b511cafc-1eaa-53b8-a8fa-ab2b6488d405"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.59,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "price_sensitivity_waiting",
-      "intent_type": "passive_bookmark",
-      "journey_stage": "hesitation",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "a57b0de0-28c4-59dd-bf73-066598d4b4fc"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.484,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "fit_sizing_uncertainty",
-      "intent_type": "passive_bookmark",
-      "journey_stage": "consideration",
-      "segment": "fit_uncertain",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "71df04eb-4eea-5a14-a464-2e6c53dd793c"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.502,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "logistics_friction",
-      "intent_type": "passive_bookmark",
-      "journey_stage": "hesitation",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "a6dba0da-3f10-57d3-aa3f-fdd140527aa6"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.49,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "price_sensitivity_waiting",
-      "intent_type": "passive_bookmark",
-      "journey_stage": "postponement",
-      "segment": "price_sensitive",
-      "category": "clothing",
-      "platforms": [
-        "myntra"
-      ],
-      "wishlist_motive": "assortment_discovery",
-      "comparison_scope": "myntra_only",
-      "evidence_chunk_ids": [
-        "95a06d82-2722-5a98-be2d-0e2b00530456"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.484,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
     {
       "reason_category": "quality_trust_doubt",
       "intent_type": "passive_bookmark",
@@ -386,7 +44,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -407,7 +65,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "logistics_friction",
@@ -429,7 +87,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "quality_trust_doubt",
@@ -450,7 +108,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "quality_trust_doubt",
@@ -472,7 +130,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "logistics_friction",
@@ -493,7 +151,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -514,7 +172,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -535,7 +193,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -556,7 +214,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "logistics_friction",
@@ -577,7 +235,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -600,7 +258,7 @@
         "play_store",
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -621,7 +279,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "quality_trust_doubt",
@@ -644,7 +302,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -665,7 +323,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "logistics_friction",
@@ -686,7 +344,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "quality_trust_doubt",
@@ -707,7 +365,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "passive_bookmarking",
@@ -728,7 +386,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -749,7 +407,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "external_comparison",
@@ -774,7 +432,7 @@
         "reddit",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "quality_trust_doubt",
@@ -799,7 +457,7 @@
         "reddit",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "timing_occasion",
@@ -820,7 +478,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "price_sensitivity_waiting",
@@ -841,7 +499,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -862,7 +520,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "styling_decision_uncertainty",
@@ -883,7 +541,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -906,7 +564,7 @@
         "reddit",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -929,7 +587,7 @@
         "reddit",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "review_trust",
@@ -950,7 +608,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "logistics_friction",
@@ -971,7 +629,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "price_sensitivity_waiting",
@@ -992,7 +650,7 @@
       "sources": [
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "timing_occasion",
@@ -1013,7 +671,7 @@
       "sources": [
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "passive_bookmarking",
@@ -1034,7 +692,7 @@
       "sources": [
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "passive_bookmarking",
@@ -1055,7 +713,7 @@
       "sources": [
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "price_sensitivity_waiting",
@@ -1076,7 +734,7 @@
       "sources": [
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "review_trust",
@@ -1097,7 +755,7 @@
       "sources": [
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -1118,7 +776,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "price_sensitivity_waiting",
@@ -1139,7 +797,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "styling_decision_uncertainty",
@@ -1160,7 +818,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "external_comparison",
@@ -1181,7 +839,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "logistics_friction",
@@ -1202,7 +860,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "review_trust",
@@ -1223,7 +881,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "passive_bookmarking",
@@ -1244,7 +902,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -1268,7 +926,7 @@
         "product_review",
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -1289,7 +947,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "price_sensitivity_waiting",
@@ -1313,7 +971,7 @@
         "product_review",
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -1334,7 +992,7 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "fit_sizing_uncertainty",
@@ -1355,7 +1013,7 @@
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "external_comparison",
@@ -1376,7 +1034,7 @@
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "quality_trust_doubt",
@@ -1397,7 +1055,7 @@
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "styling_decision_uncertainty",
@@ -1419,7 +1077,28 @@
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "discovery",
+      "segment": null,
+      "category": "accessories",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "social_inspiration",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "a4ab31ef-82a1-5631-9990-c93a8aaffea5"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.487,
+      "sources": [
+        "social"
+      ],
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "passive_bookmarking",
@@ -1440,7 +1119,7 @@
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "review_trust",
@@ -1461,51 +1140,7 @@
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "external_comparison",
-      "intent_type": "active_shortlist",
-      "journey_stage": "purchase",
-      "segment": null,
-      "category": "beauty",
-      "platforms": [
-        "myntra",
-        "nykaa"
-      ],
-      "wishlist_motive": "category_strength",
-      "comparison_scope": "multi_platform",
-      "evidence_chunk_ids": [
-        "8f8dfbce-9120-5140-9786-2c7f581d2cd2"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.554,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "external_comparison",
-      "intent_type": "active_shortlist",
-      "journey_stage": "discovery",
-      "segment": null,
-      "category": "clothing",
-      "platforms": [
-        "ajio",
-        "myntra"
-      ],
-      "wishlist_motive": "category_strength",
-      "comparison_scope": "multi_platform",
-      "evidence_chunk_ids": [
-        "916705aa-769e-5588-92ce-271b0a8c8456"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.554,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "passive_bookmarking",
@@ -1527,7 +1162,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "external_comparison",
@@ -1549,7 +1184,7 @@
       "sources": [
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "review_trust",
@@ -1571,7 +1206,7 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "external_comparison",
@@ -1596,7 +1231,7 @@
         "play_store",
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "timing_occasion",
@@ -1618,30 +1253,7 @@
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "external_comparison",
-      "intent_type": "active_shortlist",
-      "journey_stage": "postponement",
-      "segment": null,
-      "category": "beauty",
-      "platforms": [
-        "ajio",
-        "myntra",
-        "nykaa"
-      ],
-      "wishlist_motive": "category_strength",
-      "comparison_scope": "multi_platform",
-      "evidence_chunk_ids": [
-        "a3ff08fe-c4ff-5f07-9aee-df2c850cc3fd"
-      ],
-      "evidence_volume": 1,
-      "confidence": 0.554,
-      "sources": [
-        "research"
-      ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "external_comparison",
@@ -1664,37 +1276,1445 @@
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "reason_category": "external_comparison",
+      "reason_category": "passive_bookmarking",
       "intent_type": "passive_bookmark",
-      "journey_stage": "hesitation",
-      "segment": null,
-      "category": "beauty",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": "clothing",
       "platforms": [
-        "ajio",
-        "myntra",
-        "nykaa"
+        "myntra"
       ],
       "wishlist_motive": "category_strength",
-      "comparison_scope": "multi_platform",
+      "comparison_scope": "myntra_only",
       "evidence_chunk_ids": [
-        "9a179a62-3765-5321-9f96-99360d2b64d6"
+        "1a58af34-4975-5dd0-a9cd-6add71ff1240",
+        "680b473a-a31b-5406-a7f6-10bec6d2a09f",
+        "373a8b1f-a665-571c-8dee-413e249af9c7",
+        "cc37532d-ec5a-5df8-8e2d-62b0891fdeeb",
+        "2bb731ac-1a4e-5c38-8b25-63ab06fb4709",
+        "f6f6aeca-971b-52ae-867c-c4097607392a",
+        "cedb28c8-f831-5433-a8c6-cfc2c16a088c",
+        "b3ef9c8d-2764-5537-940e-afa2de403d75"
       ],
-      "evidence_volume": 1,
-      "confidence": 0.554,
+      "evidence_volume": 8,
+      "confidence": 0.835,
       "sources": [
         "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "active_shortlist",
+      "journey_stage": "hesitation",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "price_sale_waiting",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "7605f780-d8b1-5a11-96b5-7619e083cbcc",
+        "57b02e5f-9d38-57a1-b39d-bad06fe7f079",
+        "25efce7c-8796-5cc7-950a-9689ee79924f"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.66,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "067f6685-6ca8-57a7-9ef3-f0f52fbea6e2",
+        "daa3c35b-e97a-5078-a3c7-7e9bca79a1be",
+        "fb6a7613-96cc-5460-8c19-90e9d51a7ec0",
+        "4dd52ea2-bb94-5404-ac26-49944359e811",
+        "acccaea0-26f2-53bf-bd7e-67cfd9596091",
+        "52f75474-ef07-5b9a-868e-13d7c8c93b64",
+        "3033230a-8fae-5feb-9588-9c4b8cc5928d",
+        "912ed104-a6ce-5c00-aa0e-e5c8eb209576"
+      ],
+      "evidence_volume": 8,
+      "confidence": 0.835,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "1333845c-c25d-54f8-8e63-66104c0a22ed"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "hesitation",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "price_sale_waiting",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "48fab5ed-cd4a-5e4e-9d62-8c4807b28c01",
+        "e2abadd8-c510-5d4a-9be1-0ceb14fb8278"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.625,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "postponement",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "ee206343-e4a7-5c6d-a58d-1731f82762d0",
+        "e820aaa3-92a3-565a-b8fe-75a65e6e3476",
+        "2e9efc89-e5e5-5e6d-9c2a-1b960fe98a04"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.66,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "1f13917c-5412-5465-88a8-e481eb80b2b0",
+        "9f82a6ad-3a7c-5015-9797-2be6f526257c",
+        "f8970875-8f08-55fc-9962-c497111508ea",
+        "fbfd76ea-bcfb-58df-9d06-b9f4acdb6034",
+        "5998f6f0-497f-51e1-b9ca-a8dc2db2c9d2",
+        "449933fc-fcc3-5b68-a7e8-c8cd758c277c",
+        "10060765-9ed2-5d07-b4ff-2f0e8b6dfc38",
+        "732732d1-95d9-5fc8-b537-90a1cf7ac4ff"
+      ],
+      "evidence_volume": 8,
+      "confidence": 0.814,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": "accessories",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "ux_convenience",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "b2cbb25c-28a5-5d93-81cb-cdce756f79a9"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "81228b66-0fd8-5df8-915a-c3aad2add037",
+        "f3deecf1-aa4d-5e4d-82f3-418752150f71"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.619,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "logistics_friction",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "8600809d-1151-580b-bb19-2234a7610d18"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "b511cafc-1eaa-53b8-a8fa-ab2b6488d405"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "styling_decision_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "2e70ad8e-7924-5165-bd97-bb711a26a516"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "hesitation",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "e67b5cbf-b3f1-51ed-9048-8145441bd5da"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.511,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "consideration",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "e8527b1c-080e-5251-a53a-fe34d10d01b3",
+        "fb4c98b4-e4e4-5094-a13f-3371d298696d",
+        "56aa7e2c-1ecd-567e-bae7-f35c9c72f92f"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.597,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "logistics_friction",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "hesitation",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "446d1b55-c290-59b0-8884-3f8955a75335"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.516,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "postponement",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "b908a34f-3e97-53e4-929a-24c7f9953afa",
+        "50cb7a16-6a69-505a-87a5-e12df86dcfa9",
+        "fa633cf9-1e0d-5741-b0cb-fa2a08b2ebf7",
+        "0000ae9d-08d9-51c8-b343-e3828b7d328a"
+      ],
+      "evidence_volume": 4,
+      "confidence": 0.608,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": null,
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "4af9460b-ee72-5a53-bbfa-7384eeae9f54"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.562,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "price_sensitive",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "de62c7d0-de5a-5bc2-a186-3209262bbef3"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.562,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": null,
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "401481c0-d3eb-59f8-919f-afd8215b41bf"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.562,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "9499933d-2cfd-565d-83e1-6c1d689f52a8",
+        "374f9b8a-7319-5bd8-97e9-9b4d37cf5605",
+        "c73dcd97-81d3-5073-bb82-b6f0d80b026d",
+        "6f93a1cb-2b78-5d6b-9d66-341ef38faf5d",
+        "bfcd3eae-6058-538d-88c7-b1faf7ffd9a9",
+        "9b903695-f16a-5cb4-9a55-546549b52e73",
+        "9a1e5c89-0aa0-5061-bd6e-fb2208434c2e",
+        "cb1acd10-acda-5263-8fe0-90c61c56daa2"
+      ],
+      "evidence_volume": 8,
+      "confidence": 0.824,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "timing_occasion",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "11131d22-fe61-5695-945d-1eb202e28c67",
+        "36df93da-832d-5b14-9c35-80390b5e77a4",
+        "44835834-3aba-5ee9-8606-50ff1ed9f743",
+        "05997858-71eb-52fc-8f10-1b62220f04e6",
+        "5dc8123f-f101-577f-9b3f-bc16d3811ed1",
+        "b8193bec-613e-5f4f-8eac-cc9b0344178b",
+        "bab87ecb-f441-56c7-ab7f-f36f8e285763",
+        "aa4d6138-252a-592b-9966-1f28dd869297",
+        "2e9d8244-18e5-5a7f-b658-03a5a030a7bb",
+        "7363a000-6b5e-5d22-b92e-8549d4781d73",
+        "4cda8022-cd5e-5d73-ae6e-448c0e2f3c2d",
+        "e0a74b9a-9e2c-5b5f-9c2c-84ca290d074b"
+      ],
+      "evidence_volume": 12,
+      "confidence": 0.899,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "discovery",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "d1c2b32a-b171-58f4-9953-bf9a79564b0e",
+        "1fc0835e-c1b6-541f-8352-ca9cbfbcd8be",
+        "b497a4e6-ceae-57a9-865a-f4e0e977ed10",
+        "8e7c1793-de4b-5c75-8256-3de32a8505f4",
+        "f0478f72-d5db-5c87-8075-587cf3821399",
+        "f3f52851-37ac-5dfc-8138-8cefa459c3d6"
+      ],
+      "evidence_volume": 6,
+      "confidence": 0.753,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": "clothing",
+      "platforms": [
+        "myntra",
+        "other"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "multi_platform",
+      "evidence_chunk_ids": [
+        "fba55590-b6eb-5682-b126-89f88974b804",
+        "ac70639d-0606-531c-9554-ab9cf64fb2a5",
+        "69c71835-b194-5a21-b341-3b3885a4718e",
+        "f790abfb-c17c-5e6d-ba7c-55b5c01c4b49",
+        "a692d83b-d64e-51d0-a406-37ab39141c76",
+        "cd7c8286-22b7-5460-b2c9-84014db6b19f",
+        "f7065428-8e05-58cf-a650-f3964adebfea",
+        "0fdde0c5-c946-5a54-a538-660483160543",
+        "78817302-7d2b-53b3-97bc-b1817d75265c",
+        "f1e6abde-6886-560c-8497-588f157256e6",
+        "a4171fa2-acee-5996-9fca-6db5b8401864",
+        "f2979438-cbb7-5d6a-ba2c-52841e5c1269",
+        "4d43684e-bcd0-56f4-b6c9-ef0c60f5f785",
+        "e8cdba7f-5143-5c97-b4d6-0a8d86edb601",
+        "f321cbd3-cf0b-5d41-939a-34f5086705ee"
+      ],
+      "evidence_volume": 15,
+      "confidence": 0.891,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "353fe1d8-648a-51d9-80b1-8b0d73531d18",
+        "eba26ca3-d8d1-51c7-8a2c-ba8cd2217775",
+        "4e4009dc-1e02-517d-8108-dbe834975664",
+        "d1ff42d2-ea4c-594d-87db-3100e4f0558a",
+        "40c26ba3-ce24-563d-8087-3e957fc83367",
+        "3c31ab6c-91e5-5920-a786-cfa3124a730c",
+        "2300cd0b-822b-53c7-a855-b92f38895d46",
+        "ef086a7e-41be-510b-beb8-6795a0bf4b2c",
+        "89adb89d-2de5-5f36-8ee0-1043530643c7",
+        "83921e9e-b0f3-5168-a298-3bfc98b01f86",
+        "2f7830fe-12f1-5ee8-9b83-0c3737323331",
+        "e843d822-4f24-5cc6-a72b-b126d714cd86",
+        "d7946ccf-d04a-5c8c-bfb3-77074c3a26a8",
+        "78d858a6-38dc-5920-86a7-97428c2dbd27",
+        "3a763abb-aa83-53c5-8030-fc9b218f313e",
+        "5f14f557-2b66-52d5-82df-960880106531",
+        "1066bce6-c720-5f6d-84aa-4c7fc22faeff"
+      ],
+      "evidence_volume": 17,
+      "confidence": 0.886,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "styling_decision_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "982621e0-7144-529d-8387-8435a990ab92",
+        "3b16252d-175f-505f-bd4a-08721d792384",
+        "e3a4f339-69fb-528a-9e72-3da1abbe6cb6",
+        "7de9f8a6-dc4d-515e-8275-771f7eeca811",
+        "020f9c06-d351-5190-997f-830a1de24d16",
+        "55dfd569-4918-5081-987c-aaf47d71c43e"
+      ],
+      "evidence_volume": 6,
+      "confidence": 0.754,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "active_shortlist",
+      "journey_stage": "consideration",
+      "segment": "age_18_24",
+      "category": "accessories",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "63eeac6f-d1e6-5d5e-8fc8-7b3358d210bd"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "90dcf6e9-2390-502d-8d58-a8a19f8b2a03"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "quality_trust_doubt",
+      "intent_type": "active_shortlist",
+      "journey_stage": "hesitation",
+      "segment": "age_25_35",
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "f3f98b89-963d-5ba1-94f6-c8b9d6ef34e1"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.578,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "review_trust",
+      "intent_type": "active_shortlist",
+      "journey_stage": "hesitation",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "3ed45218-1224-5cd7-8c55-116d2524bc4f",
+        "8f616f47-dfca-52b4-b4c6-47a4bfbe78c1",
+        "db76308e-1e2b-5b53-b190-0de1c6320a07"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.648,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_25_35",
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "c5139e01-0cc2-5a2d-a873-530f7b2fa776",
+        "7f5055ce-5ae5-5342-af38-e80628ccbed3"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.619,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "f14c18a6-b8ab-5192-920c-85fecd81c392"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.578,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "external_comparison",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": "clothing",
+      "platforms": [
+        "ajio",
+        "nykaa"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "competitor_only",
+      "evidence_chunk_ids": [
+        "c4c7058b-00db-5cd5-9653-d2fbcfeb9dbe",
+        "02e7d4a1-96f6-5290-93f0-f31cae44195d",
+        "2bfc6b4d-b2d3-5d4b-9117-9cd45d807690"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.651,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "postponement",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "price_sale_waiting",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "a83f133a-47a6-5449-874d-944be9905dc3",
+        "1be4b998-08c2-5661-aa4a-8bbd80154b58"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.625,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "review_trust",
+      "intent_type": "active_shortlist",
+      "journey_stage": "hesitation",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "trust_quality",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "9c084fa2-1976-52a2-a335-14a11463e9f5",
+        "29026058-3703-5b98-b189-04fd05694a48"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.611,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "review_trust",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "b9b41bcc-cf93-583d-a28d-02bfe16028dd"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.562,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_18_24",
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "85d2d224-60b1-5945-b334-08407f4debeb"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "styling_decision_uncertainty",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "beffabb6-5b1b-5a41-8de6-7e26181e5eb5",
+        "117e5c05-5184-5345-9403-8a8576d23222"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.605,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "f61d584e-1e0c-539f-a9af-2a76f6e2d872",
+        "5399101f-5626-5bcc-b03e-17bb6d33a97c"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.619,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "timing_occasion",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_18_24",
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "4878442c-93b6-5410-81f3-5c55982dc06c"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "consideration",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "d764f2fe-b86f-5726-9d59-2a6f5fb92519"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": "accessories",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "623bfc3c-afaf-5ad1-aeca-0a915e5241a1"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "79b4a584-01ae-5637-853b-02decb5d86ac"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "407b972b-323e-5a19-84cc-f33873a48c13"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "review_trust",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "32260dc8-e9e8-5682-8a1d-61d0d86ceef9"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.578,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "external_comparison",
+      "intent_type": "active_shortlist",
+      "journey_stage": "purchase",
+      "segment": "age_25_35",
+      "category": "clothing",
+      "platforms": [
+        "nykaa"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "competitor_only",
+      "evidence_chunk_ids": [
+        "c1ae441e-889f-5024-88db-0533e4270a0a"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.562,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "502dd56f-4dbc-5b7e-a6ec-f58662f57d4f",
+        "f6aabcfc-6180-5b64-acfc-5344bfe902b1"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.597,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "timing_occasion",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "a55223e9-fb3e-57b0-a00d-8baf9e3dd90a"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.578,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_25_35",
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "category_strength",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "6f262232-8e7a-5922-8471-debdb586669d"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "active_shortlist",
+      "journey_stage": "consideration",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "3732acfb-43e0-50ea-8379-86184a92f552"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.59,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "timing_occasion",
+      "intent_type": "active_shortlist",
+      "journey_stage": "postponement",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "bc4b1a48-5e77-53d7-b5f5-75a360ce9d51",
+        "a12bdc65-2296-5617-818b-9b5ab8c170a5"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.572,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "timing_occasion",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "postponement",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "55884e10-46d4-5169-ac90-c3351a9ab277",
+        "254a96b9-158b-5f53-bc82-3688c620c1a8",
+        "0ba1a14d-3b70-556a-9f3f-61fcde32f84d",
+        "a52b5ee8-7fd7-5985-b505-52ea4935f66f"
+      ],
+      "evidence_volume": 4,
+      "confidence": 0.635,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "postponement",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "53672278-9add-550a-863c-591e112ce624",
+        "3444093e-09c3-53b4-98ac-b04c357e9dc9",
+        "3f7fd462-c260-559e-befd-3a7c85a04602",
+        "eeaa5db7-e01f-5559-86d0-a89aba4f9960"
+      ],
+      "evidence_volume": 4,
+      "confidence": 0.612,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "discovery",
+      "segment": "age_18_24",
+      "category": "clothing",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "57151301-c27f-5fc2-8a1c-275bc74b2e44"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.524,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "price_sensitivity_waiting",
+      "intent_type": "active_shortlist",
+      "journey_stage": "postponement",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "cf94c89f-7194-5e74-afe5-b95057c09149",
+        "cc3793bd-99f3-5cb6-bd89-d3b882b60a95",
+        "81db21b4-a9ef-53b9-8722-a79b9c284e0e"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.583,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "quality_trust_doubt",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "hesitation",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "trust_quality",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "4d36af2a-a369-5ce0-84b0-8732bbae054e",
+        "54fafe11-17ab-530c-b992-d7d709ff54cb"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.555,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "fit_sizing_uncertainty",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "consideration",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "dae94360-b5af-57bf-a3df-143a8908b18f"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.531,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "styling_decision_uncertainty",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "consideration",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "c1795dfe-8b95-5131-959e-0c27168d081d",
+        "a91d8ed3-3bfe-58d9-ab27-215ac994a684",
+        "1e7bd21e-813e-5c05-ab65-93301e24f396"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.591,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "f8250628-4a05-5f68-80ba-e61abdd09848"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.546,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "passive_bookmarking",
+      "intent_type": "active_shortlist",
+      "journey_stage": "discovery",
+      "segment": "age_18_24",
+      "category": "footwear",
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "3b7fb708-585f-5df7-a996-3accd8ee242c"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.533,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "timing_occasion",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "purchase",
+      "segment": "age_18_24",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "2378fa56-bca3-5d65-8cea-aa041b527634"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.54,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "styling_decision_uncertainty",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "consideration",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "2fcc93a7-80a2-560f-ac18-fb36fbe9d864"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.53,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "timing_occasion",
+      "intent_type": "passive_bookmark",
+      "journey_stage": "postponement",
+      "segment": "age_25_35",
+      "category": null,
+      "platforms": [
+        "myntra"
+      ],
+      "wishlist_motive": "assortment_discovery",
+      "comparison_scope": "myntra_only",
+      "evidence_chunk_ids": [
+        "16b7185e-f60d-5383-bc08-4db2223105de"
+      ],
+      "evidence_volume": 1,
+      "confidence": 0.525,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
     }
   ],
   "reasons": [
     {
+      "reason_category": "passive_bookmarking",
+      "evidence_volume": 83,
+      "confidence": 0.848,
+      "sources": [
+        "product_review",
+        "reddit",
+        "research",
+        "social",
+        "youtube"
+      ],
+      "active_shortlist_count": 24,
+      "passive_bookmark_count": 59,
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
       "reason_category": "fit_sizing_uncertainty",
-      "evidence_volume": 34,
-      "confidence": 0.835,
+      "evidence_volume": 47,
+      "confidence": 0.838,
       "sources": [
         "play_store",
         "product_review",
@@ -1703,44 +2723,30 @@
         "social",
         "youtube"
       ],
-      "active_shortlist_count": 27,
-      "passive_bookmark_count": 7,
-      "run_version": "analytics-20260824T120147Z"
+      "active_shortlist_count": 36,
+      "passive_bookmark_count": 11,
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "quality_trust_doubt",
-      "evidence_volume": 27,
-      "confidence": 0.828,
+      "evidence_volume": 30,
+      "confidence": 0.838,
       "sources": [
         "play_store",
         "product_review",
         "reddit",
-        "social",
-        "youtube"
-      ],
-      "active_shortlist_count": 4,
-      "passive_bookmark_count": 23,
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "passive_bookmarking",
-      "evidence_volume": 23,
-      "confidence": 0.839,
-      "sources": [
-        "product_review",
-        "reddit",
         "research",
         "social",
         "youtube"
       ],
-      "active_shortlist_count": 3,
-      "passive_bookmark_count": 20,
-      "run_version": "analytics-20260824T120147Z"
+      "active_shortlist_count": 5,
+      "passive_bookmark_count": 25,
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "price_sensitivity_waiting",
-      "evidence_volume": 16,
-      "confidence": 0.836,
+      "evidence_volume": 28,
+      "confidence": 0.84,
       "sources": [
         "product_review",
         "reddit",
@@ -1748,14 +2754,42 @@
         "social",
         "youtube"
       ],
-      "active_shortlist_count": 14,
-      "passive_bookmark_count": 2,
-      "run_version": "analytics-20260824T120147Z"
+      "active_shortlist_count": 18,
+      "passive_bookmark_count": 10,
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "timing_occasion",
+      "evidence_volume": 25,
+      "confidence": 0.839,
+      "sources": [
+        "reddit",
+        "research",
+        "social",
+        "youtube"
+      ],
+      "active_shortlist_count": 19,
+      "passive_bookmark_count": 6,
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "styling_decision_uncertainty",
+      "evidence_volume": 17,
+      "confidence": 0.844,
+      "sources": [
+        "product_review",
+        "reddit",
+        "research",
+        "social"
+      ],
+      "active_shortlist_count": 11,
+      "passive_bookmark_count": 6,
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "external_comparison",
       "evidence_volume": 12,
-      "confidence": 0.833,
+      "confidence": 0.836,
       "sources": [
         "play_store",
         "product_review",
@@ -1764,9 +2798,25 @@
         "social",
         "youtube"
       ],
-      "active_shortlist_count": 11,
-      "passive_bookmark_count": 1,
-      "run_version": "analytics-20260824T120147Z"
+      "active_shortlist_count": 12,
+      "passive_bookmark_count": 0,
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "reason_category": "review_trust",
+      "evidence_volume": 12,
+      "confidence": 0.836,
+      "sources": [
+        "play_store",
+        "product_review",
+        "reddit",
+        "research",
+        "social",
+        "youtube"
+      ],
+      "active_shortlist_count": 10,
+      "passive_bookmark_count": 2,
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "reason_category": "logistics_friction",
@@ -1780,71 +2830,27 @@
       ],
       "active_shortlist_count": 4,
       "passive_bookmark_count": 5,
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "review_trust",
-      "evidence_volume": 5,
-      "confidence": 0.643,
-      "sources": [
-        "play_store",
-        "product_review",
-        "reddit",
-        "social",
-        "youtube"
-      ],
-      "active_shortlist_count": 4,
-      "passive_bookmark_count": 1,
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "styling_decision_uncertainty",
-      "evidence_volume": 4,
-      "confidence": 0.608,
-      "sources": [
-        "product_review",
-        "reddit",
-        "social"
-      ],
-      "active_shortlist_count": 4,
-      "passive_bookmark_count": 0,
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "reason_category": "timing_occasion",
-      "evidence_volume": 3,
-      "confidence": 0.559,
-      "sources": [
-        "reddit",
-        "social",
-        "youtube"
-      ],
-      "active_shortlist_count": 3,
-      "passive_bookmark_count": 0,
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     }
   ],
   "clusters": [
     {
       "cluster_key": "theme-001",
-      "label": "myntra / wishlist / ajio / before",
+      "label": "wishlist / myntra / ajio / comparison",
       "reason_category": "external_comparison",
       "chunk_ids": [
         "1fb8be6a-cfef-56cd-aed1-1c9a98248438",
         "a7e06479-ed3d-53d4-bdf5-526f4c6d2dd9",
         "23d903d7-09e7-57f3-94ef-f46ed89cdc10",
         "d5b2e14b-e882-5fe6-a2a4-cc14158d47cf",
-        "8f8dfbce-9120-5140-9786-2c7f581d2cd2",
-        "916705aa-769e-5588-92ce-271b0a8c8456",
         "4e29274f-19e5-54fd-b026-2c7b3a6cb8f7",
         "b90dfa11-930c-5182-a582-ce0b22ce620b",
-        "a3ff08fe-c4ff-5f07-9aee-df2c850cc3fd",
         "9f6147af-ffa3-5aa7-9aea-825c8aac971e",
         "33f87b1d-ca6d-55cf-bd0c-90cf3d225526",
-        "9a179a62-3765-5321-9f96-99360d2b64d6"
+        "2bfc6b4d-b2d3-5d4b-9117-9cd45d807690"
       ],
-      "evidence_volume": 12,
-      "confidence": 0.865,
+      "evidence_volume": 9,
+      "confidence": 0.83,
       "sources": [
         "play_store",
         "product_review",
@@ -1853,118 +2859,158 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "cluster_key": "theme-002",
-      "label": "wishlist / size / drop / how",
-      "reason_category": "fit_sizing_uncertainty",
+      "label": "right / online / age / which",
+      "reason_category": "external_comparison",
       "chunk_ids": [
-        "067f6685-6ca8-57a7-9ef3-f0f52fbea6e2",
-        "48fab5ed-cd4a-5e4e-9d62-8c4807b28c01",
-        "ee206343-e4a7-5c6d-a58d-1731f82762d0",
-        "e820aaa3-92a3-565a-b8fe-75a65e6e3476",
-        "daa3c35b-e97a-5078-a3c7-7e9bca79a1be",
-        "fb6a7613-96cc-5460-8c19-90e9d51a7ec0",
-        "4dd52ea2-bb94-5404-ac26-49944359e811",
-        "2e9efc89-e5e5-5e6d-9c2a-1b960fe98a04",
-        "acccaea0-26f2-53bf-bd7e-67cfd9596091",
-        "52f75474-ef07-5b9a-868e-13d7c8c93b64",
-        "3033230a-8fae-5feb-9588-9c4b8cc5928d",
-        "912ed104-a6ce-5c00-aa0e-e5c8eb209576",
-        "02df000e-5eaa-5738-b32a-7ed507a6903d",
-        "38dac03a-f129-55c7-9697-575f24a95883",
-        "39f2de07-e2a4-58f9-8b1b-641d98775550",
-        "dd701741-9ff9-55e8-ade1-00f2e619db84",
-        "4ab8585f-26d6-50dd-a08e-b72824af8546",
-        "43e71e2e-c70d-58a1-8d4d-016a6d470712",
-        "a030ab7b-024d-5d0c-bd07-169eff341dfc",
-        "f97749c2-d2b4-50e0-baaa-77f647e08363",
-        "2a9d67e1-6578-5489-a60d-488a671119d7",
-        "3666b67a-ea92-5493-9fc6-4e9142f5db0a"
+        "c4c7058b-00db-5cd5-9653-d2fbcfeb9dbe",
+        "02e7d4a1-96f6-5290-93f0-f31cae44195d",
+        "c1ae441e-889f-5024-88db-0533e4270a0a"
       ],
-      "evidence_volume": 22,
-      "confidence": 0.865,
+      "evidence_volume": 3,
+      "confidence": 0.6,
       "sources": [
-        "play_store",
-        "product_review",
-        "reddit",
-        "research",
-        "social",
-        "youtube"
+        "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "cluster_key": "theme-003",
-      "label": "size / fit / unsure / about",
+      "label": "not / will / fit / size",
       "reason_category": "fit_sizing_uncertainty",
       "chunk_ids": [
-        "71df04eb-4eea-5a14-a464-2e6c53dd793c",
         "8f24cda1-3970-505c-83d0-8a490ac85ecf",
+        "02df000e-5eaa-5738-b32a-7ed507a6903d",
         "c67edaab-82d1-56a5-89c9-a3ae7d4d50d0",
         "32e3e7c5-192e-57aa-8f6f-a64ef67c1743",
         "f9ff63fd-f912-51c9-8e31-613046f5e7af",
         "ae50cccd-1552-59fa-b737-9e32c398c1f9",
         "b3ae7351-a3c7-52aa-8fcc-5192e45b41c0",
-        "83acdaba-a23a-505b-9406-ee4effa1808f",
         "92435895-97d5-5285-a2ed-4952132c1d54",
-        "2bfe9140-6b59-5952-9262-a51b21fc817d",
-        "68cbd8d6-d830-5a13-8b3a-1ebe184e52bd"
+        "a030ab7b-024d-5d0c-bd07-169eff341dfc",
+        "e8527b1c-080e-5251-a53a-fe34d10d01b3",
+        "dae94360-b5af-57bf-a3df-143a8908b18f",
+        "fb4c98b4-e4e4-5094-a13f-3371d298696d",
+        "56aa7e2c-1ecd-567e-bae7-f35c9c72f92f"
       ],
-      "evidence_volume": 11,
-      "confidence": 0.867,
+      "evidence_volume": 13,
+      "confidence": 0.886,
       "sources": [
         "play_store",
         "product_review",
-        "reddit",
-        "research",
-        "social"
+        "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "cluster_key": "theme-004",
-      "label": "wishlist / delayed / delivery / price",
-      "reason_category": "logistics_friction",
+      "label": "wishlist / size / fit / waiting",
+      "reason_category": "fit_sizing_uncertainty",
       "chunk_ids": [
-        "8600809d-1151-580b-bb19-2234a7610d18",
-        "29eaf75a-241f-5e06-9258-b1b2bfe56baa",
-        "61ec71e3-5e0c-518e-9006-88bb69e5a18a",
-        "7d1b39f8-b912-5171-9749-3022dc359f90",
-        "4079ad6f-0e9b-594a-ad1c-37473815a267"
+        "83acdaba-a23a-505b-9406-ee4effa1808f",
+        "38dac03a-f129-55c7-9697-575f24a95883",
+        "39f2de07-e2a4-58f9-8b1b-641d98775550",
+        "dd701741-9ff9-55e8-ade1-00f2e619db84",
+        "4ab8585f-26d6-50dd-a08e-b72824af8546",
+        "43e71e2e-c70d-58a1-8d4d-016a6d470712",
+        "f97749c2-d2b4-50e0-baaa-77f647e08363",
+        "2bfe9140-6b59-5952-9262-a51b21fc817d",
+        "68cbd8d6-d830-5a13-8b3a-1ebe184e52bd",
+        "2a9d67e1-6578-5489-a60d-488a671119d7",
+        "3666b67a-ea92-5493-9fc6-4e9142f5db0a",
+        "9652ce05-f60a-565c-90e1-74c2b0e57098",
+        "48fab5ed-cd4a-5e4e-9d62-8c4807b28c01",
+        "ee206343-e4a7-5c6d-a58d-1731f82762d0",
+        "e2abadd8-c510-5d4a-9be1-0ceb14fb8278",
+        "fb6a7613-96cc-5460-8c19-90e9d51a7ec0",
+        "4dd52ea2-bb94-5404-ac26-49944359e811",
+        "2e9efc89-e5e5-5e6d-9c2a-1b960fe98a04",
+        "acccaea0-26f2-53bf-bd7e-67cfd9596091",
+        "a83f133a-47a6-5449-874d-944be9905dc3",
+        "1be4b998-08c2-5661-aa4a-8bbd80154b58"
       ],
-      "evidence_volume": 5,
-      "confidence": 0.699,
+      "evidence_volume": 21,
+      "confidence": 0.865,
       "sources": [
-        "play_store",
         "product_review",
         "reddit",
-        "research"
+        "research",
+        "social",
+        "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "cluster_key": "theme-005",
-      "label": "times / delayed / delivery / order",
-      "reason_category": "logistics_friction",
+      "label": "would / price / not / size",
+      "reason_category": "fit_sizing_uncertainty",
       "chunk_ids": [
-        "cc8b9039-d0b2-5517-a12d-9cd8e5995564",
-        "59db6918-089f-584c-95fc-67cee70f2d36",
-        "82418ef5-f0fb-5874-a404-7d7701956a81"
+        "067f6685-6ca8-57a7-9ef3-f0f52fbea6e2",
+        "e820aaa3-92a3-565a-b8fe-75a65e6e3476",
+        "daa3c35b-e97a-5078-a3c7-7e9bca79a1be",
+        "52f75474-ef07-5b9a-868e-13d7c8c93b64",
+        "3033230a-8fae-5feb-9588-9c4b8cc5928d",
+        "912ed104-a6ce-5c00-aa0e-e5c8eb209576",
+        "f61d584e-1e0c-539f-a9af-2a76f6e2d872",
+        "d764f2fe-b86f-5726-9d59-2a6f5fb92519",
+        "5399101f-5626-5bcc-b03e-17bb6d33a97c",
+        "79b4a584-01ae-5637-853b-02decb5d86ac",
+        "407b972b-323e-5a19-84cc-f33873a48c13",
+        "6f262232-8e7a-5922-8471-debdb586669d",
+        "3732acfb-43e0-50ea-8379-86184a92f552"
       ],
-      "evidence_volume": 3,
-      "confidence": 0.55,
+      "evidence_volume": 13,
+      "confidence": 0.845,
       "sources": [
-        "play_store"
+        "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "cluster_key": "theme-006",
-      "label": "wishlist / items / how / myntra",
+      "label": "delayed / delivery / order / times",
+      "reason_category": "logistics_friction",
+      "chunk_ids": [
+        "cc8b9039-d0b2-5517-a12d-9cd8e5995564",
+        "29eaf75a-241f-5e06-9258-b1b2bfe56baa",
+        "59db6918-089f-584c-95fc-67cee70f2d36",
+        "82418ef5-f0fb-5874-a404-7d7701956a81",
+        "61ec71e3-5e0c-518e-9006-88bb69e5a18a",
+        "7d1b39f8-b912-5171-9749-3022dc359f90"
+      ],
+      "evidence_volume": 6,
+      "confidence": 0.682,
+      "sources": [
+        "play_store",
+        "reddit"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "cluster_key": "theme-007",
+      "label": "wishlist / code / shortlisting / conversion",
+      "reason_category": "logistics_friction",
+      "chunk_ids": [
+        "4079ad6f-0e9b-594a-ad1c-37473815a267",
+        "8600809d-1151-580b-bb19-2234a7610d18"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.586,
+      "sources": [
+        "product_review",
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "cluster_key": "theme-008",
+      "label": "you / your / have / not",
       "reason_category": "passive_bookmarking",
       "chunk_ids": [
+        "d57b3345-5bca-5004-8da2-417c5129cca2",
         "1a58af34-4975-5dd0-a9cd-6add71ff1240",
         "680b473a-a31b-5406-a7f6-10bec6d2a09f",
         "1f13917c-5412-5465-88a8-e481eb80b2b0",
@@ -1980,59 +3026,137 @@
         "cedb28c8-f831-5433-a8c6-cfc2c16a088c",
         "b511cafc-1eaa-53b8-a8fa-ab2b6488d405",
         "b3ef9c8d-2764-5537-940e-afa2de403d75",
-        "2455e8ee-4e88-502e-a2e4-0cdd98c4a253",
-        "d57b3345-5bca-5004-8da2-417c5129cca2",
-        "423f28a4-f859-56ad-b88e-39e5374e18aa",
-        "a4ab31ef-82a1-5631-9990-c93a8aaffea5"
+        "4af9460b-ee72-5a53-bbfa-7384eeae9f54",
+        "de62c7d0-de5a-5bc2-a186-3209262bbef3",
+        "401481c0-d3eb-59f8-919f-afd8215b41bf",
+        "9499933d-2cfd-565d-83e1-6c1d689f52a8",
+        "d1c2b32a-b171-58f4-9953-bf9a79564b0e",
+        "374f9b8a-7319-5bd8-97e9-9b4d37cf5605",
+        "fba55590-b6eb-5682-b126-89f88974b804",
+        "353fe1d8-648a-51d9-80b1-8b0d73531d18",
+        "ac70639d-0606-531c-9554-ab9cf64fb2a5",
+        "eba26ca3-d8d1-51c7-8a2c-ba8cd2217775",
+        "4e4009dc-1e02-517d-8108-dbe834975664",
+        "69c71835-b194-5a21-b341-3b3885a4718e",
+        "d1ff42d2-ea4c-594d-87db-3100e4f0558a",
+        "c73dcd97-81d3-5073-bb82-b6f0d80b026d",
+        "1fc0835e-c1b6-541f-8352-ca9cbfbcd8be",
+        "f790abfb-c17c-5e6d-ba7c-55b5c01c4b49",
+        "40c26ba3-ce24-563d-8087-3e957fc83367",
+        "3c31ab6c-91e5-5920-a786-cfa3124a730c",
+        "c5139e01-0cc2-5a2d-a873-530f7b2fa776",
+        "6f93a1cb-2b78-5d6b-9d66-341ef38faf5d",
+        "2300cd0b-822b-53c7-a855-b92f38895d46",
+        "ef086a7e-41be-510b-beb8-6795a0bf4b2c",
+        "a692d83b-d64e-51d0-a406-37ab39141c76",
+        "85d2d224-60b1-5945-b334-08407f4debeb",
+        "b497a4e6-ceae-57a9-865a-f4e0e977ed10",
+        "89adb89d-2de5-5f36-8ee0-1043530643c7",
+        "8e7c1793-de4b-5c75-8256-3de32a8505f4",
+        "cd7c8286-22b7-5460-b2c9-84014db6b19f",
+        "83921e9e-b0f3-5168-a298-3bfc98b01f86",
+        "f7065428-8e05-58cf-a650-f3964adebfea",
+        "2f7830fe-12f1-5ee8-9b83-0c3737323331",
+        "f0478f72-d5db-5c87-8075-587cf3821399",
+        "0fdde0c5-c946-5a54-a538-660483160543",
+        "78817302-7d2b-53b3-97bc-b1817d75265c",
+        "bfcd3eae-6058-538d-88c7-b1faf7ffd9a9",
+        "623bfc3c-afaf-5ad1-aeca-0a915e5241a1",
+        "e843d822-4f24-5cc6-a72b-b126d714cd86",
+        "f1e6abde-6886-560c-8497-588f157256e6",
+        "f3f52851-37ac-5dfc-8138-8cefa459c3d6",
+        "a4171fa2-acee-5996-9fca-6db5b8401864",
+        "9b903695-f16a-5cb4-9a55-546549b52e73",
+        "d7946ccf-d04a-5c8c-bfb3-77074c3a26a8",
+        "f2979438-cbb7-5d6a-ba2c-52841e5c1269",
+        "78d858a6-38dc-5920-86a7-97428c2dbd27",
+        "3a763abb-aa83-53c5-8030-fc9b218f313e",
+        "4d43684e-bcd0-56f4-b6c9-ef0c60f5f785",
+        "5f14f557-2b66-52d5-82df-960880106531",
+        "9a1e5c89-0aa0-5061-bd6e-fb2208434c2e",
+        "7f5055ce-5ae5-5342-af38-e80628ccbed3",
+        "cb1acd10-acda-5263-8fe0-90c61c56daa2",
+        "e8cdba7f-5143-5c97-b4d6-0a8d86edb601",
+        "502dd56f-4dbc-5b7e-a6ec-f58662f57d4f",
+        "f6aabcfc-6180-5b64-acfc-5344bfe902b1",
+        "449933fc-fcc3-5b68-a7e8-c8cd758c277c",
+        "f321cbd3-cf0b-5d41-939a-34f5086705ee",
+        "1066bce6-c720-5f6d-84aa-4c7fc22faeff"
       ],
-      "evidence_volume": 19,
-      "confidence": 0.862,
+      "evidence_volume": 72,
+      "confidence": 0.848,
       "sources": [
         "reddit",
-        "research",
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "cluster_key": "theme-009",
+      "label": "bookmark / return / fashion / passively",
+      "reason_category": "passive_bookmarking",
+      "chunk_ids": [
+        "423f28a4-f859-56ad-b88e-39e5374e18aa",
+        "a4ab31ef-82a1-5631-9990-c93a8aaffea5",
+        "a6f37560-5b61-59c9-a4d3-034cead696b4"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.599,
+      "sources": [
+        "reddit",
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "cluster_key": "theme-007",
-      "label": "bookmarking / wishlist / purchase / passive",
+      "cluster_key": "theme-010",
+      "label": "age / band / wishlist / buy",
       "reason_category": "passive_bookmarking",
       "chunk_ids": [
         "eea4d433-ee00-5511-ad17-0ec23c28ba40",
         "81e60a29-884b-5215-bed8-fd8437119ab7",
-        "e0fe2ccf-f131-52ef-911b-f4145dfc2328"
+        "e0fe2ccf-f131-52ef-911b-f4145dfc2328",
+        "57151301-c27f-5fc2-8a1c-275bc74b2e44",
+        "f8250628-4a05-5f68-80ba-e61abdd09848",
+        "3b7fb708-585f-5df7-a996-3accd8ee242c",
+        "10060765-9ed2-5d07-b4ff-2f0e8b6dfc38",
+        "732732d1-95d9-5fc8-b537-90a1cf7ac4ff"
       ],
-      "evidence_volume": 3,
-      "confidence": 0.612,
+      "evidence_volume": 8,
+      "confidence": 0.801,
       "sources": [
         "product_review",
+        "research",
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "cluster_key": "theme-008",
-      "label": "wishlist / price / purchase / items",
+      "cluster_key": "theme-011",
+      "label": "price / waiting / wishlist / you",
       "reason_category": "price_sensitivity_waiting",
       "chunk_ids": [
-        "7605f780-d8b1-5a11-96b5-7619e083cbcc",
-        "1333845c-c25d-54f8-8e63-66104c0a22ed",
-        "e2abadd8-c510-5d4a-9be1-0ceb14fb8278",
-        "57b02e5f-9d38-57a1-b39d-bad06fe7f079",
-        "81228b66-0fd8-5df8-915a-c3aad2add037",
-        "25efce7c-8796-5cc7-950a-9689ee79924f",
-        "2e70ad8e-7924-5165-bd97-bb711a26a516",
         "aad39e80-944c-5b44-b502-d8fc6a0e2efe",
         "b380b27c-7f16-51e4-8e51-76cd8979ec52",
         "9c8e4deb-33e1-56df-af5d-6e667ad31384",
         "84af4f64-6be9-58f1-9954-b2b2e86c287e",
         "fcce11d8-7b95-5986-a223-b39ac85e3f99",
-        "ff80ef73-8c7b-53d9-8e23-875fb41aafff"
+        "ff80ef73-8c7b-53d9-8e23-875fb41aafff",
+        "7605f780-d8b1-5a11-96b5-7619e083cbcc",
+        "1333845c-c25d-54f8-8e63-66104c0a22ed",
+        "57b02e5f-9d38-57a1-b39d-bad06fe7f079",
+        "81228b66-0fd8-5df8-915a-c3aad2add037",
+        "25efce7c-8796-5cc7-950a-9689ee79924f",
+        "63eeac6f-d1e6-5d5e-8fc8-7b3358d210bd",
+        "90dcf6e9-2390-502d-8d58-a8a19f8b2a03",
+        "f3deecf1-aa4d-5e4d-82f3-418752150f71",
+        "f14c18a6-b8ab-5192-920c-85fecd81c392",
+        "cc3793bd-99f3-5cb6-bd89-d3b882b60a95",
+        "81db21b4-a9ef-53b9-8722-a79b9c284e0e"
       ],
-      "evidence_volume": 13,
+      "evidence_volume": 17,
       "confidence": 0.865,
       "sources": [
         "product_review",
@@ -2041,28 +3165,36 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "cluster_key": "theme-009",
-      "label": "price / too / high / consider",
+      "cluster_key": "theme-012",
+      "label": "age / band / price / budget",
       "reason_category": "price_sensitivity_waiting",
       "chunk_ids": [
-        "a57b0de0-28c4-59dd-bf73-066598d4b4fc",
-        "95a06d82-2722-5a98-be2d-0e2b00530456",
-        "0dbb8a0b-cbf6-5ada-a44f-3afc851b14bd"
+        "0dbb8a0b-cbf6-5ada-a44f-3afc851b14bd",
+        "e67b5cbf-b3f1-51ed-9048-8145441bd5da",
+        "b908a34f-3e97-53e4-929a-24c7f9953afa",
+        "53672278-9add-550a-863c-591e112ce624",
+        "cf94c89f-7194-5e74-afe5-b95057c09149",
+        "3444093e-09c3-53b4-98ac-b04c357e9dc9",
+        "50cb7a16-6a69-505a-87a5-e12df86dcfa9",
+        "fa633cf9-1e0d-5741-b0cb-fa2a08b2ebf7",
+        "0000ae9d-08d9-51c8-b343-e3828b7d328a",
+        "3f7fd462-c260-559e-befd-3a7c85a04602",
+        "eeaa5db7-e01f-5559-86d0-a89aba4f9960"
       ],
-      "evidence_volume": 3,
-      "confidence": 0.621,
+      "evidence_volume": 11,
+      "confidence": 0.866,
       "sources": [
         "product_review",
         "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "cluster_key": "theme-010",
-      "label": "quality / good / myntra / product",
+      "cluster_key": "theme-013",
+      "label": "quality / good / product / myntra",
       "reason_category": "quality_trust_doubt",
       "chunk_ids": [
         "8afee6b0-94e5-52a7-b939-f30b8fcb2065",
@@ -2089,36 +3221,41 @@
         "2ea9fd73-977e-5dd4-990b-efd057ed15de",
         "40b314e6-d69b-5749-aa12-e385c23440db",
         "82e00704-a3ac-5749-a0f8-8199761c1058",
-        "4fdd7cb2-eedd-550b-9608-73afc42d8f45"
+        "4fdd7cb2-eedd-550b-9608-73afc42d8f45",
+        "4d36af2a-a369-5ce0-84b0-8732bbae054e",
+        "54fafe11-17ab-530c-b992-d7d709ff54cb"
       ],
-      "evidence_volume": 25,
-      "confidence": 0.853,
+      "evidence_volume": 27,
+      "confidence": 0.868,
       "sources": [
         "play_store",
+        "research",
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "cluster_key": "theme-011",
-      "label": "make / hesitate / but / quality",
+      "cluster_key": "theme-014",
+      "label": "quality / but / hesitate / make",
       "reason_category": "quality_trust_doubt",
       "chunk_ids": [
         "58aa0a28-b885-5f8a-bb14-56139a7bacb4",
-        "80a76c57-c9df-5064-a997-79721bc9aab2"
+        "80a76c57-c9df-5064-a997-79721bc9aab2",
+        "f3f98b89-963d-5ba1-94f6-c8b9d6ef34e1"
       ],
-      "evidence_volume": 2,
-      "confidence": 0.549,
+      "evidence_volume": 3,
+      "confidence": 0.633,
       "sources": [
         "product_review",
-        "reddit"
+        "reddit",
+        "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "cluster_key": "theme-012",
-      "label": "reviews / trust / still / outside",
+      "cluster_key": "theme-015",
+      "label": "reviews / trust / youtube / still",
       "reason_category": "review_trust",
       "chunk_ids": [
         "e2257372-4e01-5436-814f-5ea2d9376510",
@@ -2136,44 +3273,153 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "cluster_key": "theme-013",
-      "label": "styling / buying / friends / from",
+      "cluster_key": "theme-016",
+      "label": "reason / yet / photos / not",
+      "reason_category": "review_trust",
+      "chunk_ids": [
+        "3ed45218-1224-5cd7-8c55-116d2524bc4f",
+        "8f616f47-dfca-52b4-b4c6-47a4bfbe78c1",
+        "9c084fa2-1976-52a2-a335-14a11463e9f5",
+        "b9b41bcc-cf93-583d-a28d-02bfe16028dd",
+        "32260dc8-e9e8-5682-8a1d-61d0d86ceef9",
+        "db76308e-1e2b-5b53-b190-0de1c6320a07",
+        "29026058-3703-5b98-b189-04fd05694a48"
+      ],
+      "evidence_volume": 7,
+      "confidence": 0.74,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "cluster_key": "theme-017",
+      "label": "not / buying / decide / reason",
       "reason_category": "styling_decision_uncertainty",
       "chunk_ids": [
         "929e6cd8-b4dc-55a1-8d95-64f1f78d4e8a",
         "887c6916-a4ad-58a2-93e0-0a75742d31bd",
         "a5a6e3f6-0f0f-5288-a976-c5a5bd7d5b48",
-        "00fd35ec-1293-5611-b5a6-7e7e5d75acbc"
+        "00fd35ec-1293-5611-b5a6-7e7e5d75acbc",
+        "2e70ad8e-7924-5165-bd97-bb711a26a516",
+        "982621e0-7144-529d-8387-8435a990ab92",
+        "e3a4f339-69fb-528a-9e72-3da1abbe6cb6",
+        "020f9c06-d351-5190-997f-830a1de24d16",
+        "55dfd569-4918-5081-987c-aaf47d71c43e",
+        "117e5c05-5184-5345-9403-8a8576d23222",
+        "c1795dfe-8b95-5131-959e-0c27168d081d",
+        "2fcc93a7-80a2-560f-ac18-fb36fbe9d864"
       ],
-      "evidence_volume": 4,
-      "confidence": 0.643,
+      "evidence_volume": 12,
+      "confidence": 0.868,
       "sources": [
         "product_review",
         "reddit",
+        "research",
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "cluster_key": "theme-014",
-      "label": "wishlist / occasion / timing / wedding",
+      "cluster_key": "theme-018",
+      "label": "what / would / price / reason",
+      "reason_category": "styling_decision_uncertainty",
+      "chunk_ids": [
+        "3b16252d-175f-505f-bd4a-08721d792384",
+        "beffabb6-5b1b-5a41-8de6-7e26181e5eb5",
+        "7de9f8a6-dc4d-515e-8275-771f7eeca811"
+      ],
+      "evidence_volume": 3,
+      "confidence": 0.6,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "cluster_key": "theme-019",
+      "label": "age / band / similar / have",
+      "reason_category": "styling_decision_uncertainty",
+      "chunk_ids": [
+        "a91d8ed3-3bfe-58d9-ab27-215ac994a684",
+        "1e7bd21e-813e-5c05-ab65-93301e24f396"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.565,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "cluster_key": "theme-020",
+      "label": "occasion / not / buying / item",
       "reason_category": "timing_occasion",
       "chunk_ids": [
         "35fd38d5-877e-5336-bc34-6272d60ca212",
         "7cbf4d2b-c6ec-54dc-9396-d88232a4b62e",
-        "3317890d-882d-548b-b651-45d5e666e8ed"
+        "3317890d-882d-548b-b651-45d5e666e8ed",
+        "11131d22-fe61-5695-945d-1eb202e28c67",
+        "36df93da-832d-5b14-9c35-80390b5e77a4",
+        "44835834-3aba-5ee9-8606-50ff1ed9f743",
+        "05997858-71eb-52fc-8f10-1b62220f04e6",
+        "5dc8123f-f101-577f-9b3f-bc16d3811ed1",
+        "4878442c-93b6-5410-81f3-5c55982dc06c",
+        "b8193bec-613e-5f4f-8eac-cc9b0344178b",
+        "bab87ecb-f441-56c7-ab7f-f36f8e285763",
+        "aa4d6138-252a-592b-9966-1f28dd869297",
+        "2e9d8244-18e5-5a7f-b658-03a5a030a7bb",
+        "7363a000-6b5e-5d22-b92e-8549d4781d73",
+        "4cda8022-cd5e-5d73-ae6e-448c0e2f3c2d",
+        "e0a74b9a-9e2c-5b5f-9c2c-84ca290d074b",
+        "a55223e9-fb3e-57b0-a00d-8baf9e3dd90a",
+        "0ba1a14d-3b70-556a-9f3f-61fcde32f84d",
+        "a52b5ee8-7fd7-5985-b505-52ea4935f66f"
       ],
-      "evidence_volume": 3,
-      "confidence": 0.599,
+      "evidence_volume": 19,
+      "confidence": 0.862,
       "sources": [
         "reddit",
+        "research",
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "cluster_key": "theme-021",
+      "label": "waiting / age / band / start",
+      "reason_category": "timing_occasion",
+      "chunk_ids": [
+        "bc4b1a48-5e77-53d7-b5f5-75a360ce9d51",
+        "2378fa56-bca3-5d65-8cea-aa041b527634"
+      ],
+      "evidence_volume": 2,
+      "confidence": 0.565,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "cluster_key": "theme-022",
+      "label": "age / band / occasion / happened",
+      "reason_category": "timing_occasion",
+      "chunk_ids": [
+        "55884e10-46d4-5169-ac90-c3351a9ab277",
+        "254a96b9-158b-5f53-bc82-3688c620c1a8",
+        "a12bdc65-2296-5617-818b-9b5ab8c170a5",
+        "16b7185e-f60d-5383-bc08-4db2223105de"
+      ],
+      "evidence_volume": 4,
+      "confidence": 0.635,
+      "sources": [
+        "research"
+      ],
+      "run_version": "analytics-20260829T042419Z"
     }
   ],
   "competitive": [
@@ -2181,10 +3427,10 @@
       "platform": "ajio",
       "metric_type": "barrier",
       "label": "external_comparison",
-      "count": 8,
-      "share": 0.8889,
-      "evidence_volume": 8,
-      "confidence": 0.83,
+      "count": 6,
+      "share": 0.8571,
+      "evidence_volume": 6,
+      "confidence": 0.756,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store",
@@ -2194,29 +3440,47 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "ajio",
       "metric_type": "barrier",
       "label": "timing_occasion",
       "count": 1,
-      "share": 0.1111,
+      "share": 0.1429,
       "evidence_volume": 1,
       "confidence": 0.486,
       "shared_vs_unique": "shared",
       "sources": [
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "platform": "myntra",
+      "metric_type": "barrier",
+      "label": "passive_bookmarking",
+      "count": 83,
+      "share": 0.3242,
+      "evidence_volume": 83,
+      "confidence": 0.863,
+      "shared_vs_unique": "shared",
+      "sources": [
+        "product_review",
+        "reddit",
+        "research",
+        "social",
+        "youtube"
+      ],
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "barrier",
       "label": "fit_sizing_uncertainty",
-      "count": 34,
-      "share": 0.2615,
-      "evidence_volume": 34,
+      "count": 47,
+      "share": 0.1836,
+      "evidence_volume": 47,
       "confidence": 0.856,
       "shared_vs_unique": "unique_to_platform",
       "sources": [
@@ -2227,52 +3491,35 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "barrier",
       "label": "quality_trust_doubt",
-      "count": 27,
-      "share": 0.2077,
-      "evidence_volume": 27,
-      "confidence": 0.833,
+      "count": 30,
+      "share": 0.1172,
+      "evidence_volume": 30,
+      "confidence": 0.843,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store",
-        "product_review",
-        "reddit",
-        "social",
-        "youtube"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "platform": "myntra",
-      "metric_type": "barrier",
-      "label": "passive_bookmarking",
-      "count": 23,
-      "share": 0.1769,
-      "evidence_volume": 23,
-      "confidence": 0.875,
-      "shared_vs_unique": "shared",
-      "sources": [
         "product_review",
         "reddit",
         "research",
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "barrier",
       "label": "price_sensitivity_waiting",
-      "count": 15,
-      "share": 0.1154,
-      "evidence_volume": 15,
-      "confidence": 0.855,
+      "count": 27,
+      "share": 0.1055,
+      "evidence_volume": 27,
+      "confidence": 0.843,
       "shared_vs_unique": "shared",
       "sources": [
         "product_review",
@@ -2281,16 +3528,50 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "barrier",
-      "label": "external_comparison",
-      "count": 10,
-      "share": 0.0769,
-      "evidence_volume": 10,
-      "confidence": 0.899,
+      "label": "timing_occasion",
+      "count": 25,
+      "share": 0.0977,
+      "evidence_volume": 25,
+      "confidence": 0.849,
+      "shared_vs_unique": "shared",
+      "sources": [
+        "reddit",
+        "research",
+        "social",
+        "youtube"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "platform": "myntra",
+      "metric_type": "barrier",
+      "label": "styling_decision_uncertainty",
+      "count": 17,
+      "share": 0.0664,
+      "evidence_volume": 17,
+      "confidence": 0.85,
+      "shared_vs_unique": "unique_to_platform",
+      "sources": [
+        "product_review",
+        "reddit",
+        "research",
+        "social"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "platform": "myntra",
+      "metric_type": "barrier",
+      "label": "review_trust",
+      "count": 12,
+      "share": 0.0469,
+      "evidence_volume": 12,
+      "confidence": 0.857,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store",
@@ -2300,16 +3581,16 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "barrier",
       "label": "logistics_friction",
       "count": 9,
-      "share": 0.0692,
+      "share": 0.0352,
       "evidence_volume": 9,
-      "confidence": 0.823,
+      "confidence": 0.825,
       "shared_vs_unique": "unique_to_platform",
       "sources": [
         "play_store",
@@ -2317,16 +3598,16 @@
         "reddit",
         "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "barrier",
-      "label": "review_trust",
-      "count": 5,
-      "share": 0.0385,
-      "evidence_volume": 5,
-      "confidence": 0.679,
+      "label": "external_comparison",
+      "count": 6,
+      "share": 0.0234,
+      "evidence_volume": 6,
+      "confidence": 0.748,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store",
@@ -2335,39 +3616,7 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "platform": "myntra",
-      "metric_type": "barrier",
-      "label": "styling_decision_uncertainty",
-      "count": 4,
-      "share": 0.0308,
-      "evidence_volume": 4,
-      "confidence": 0.629,
-      "shared_vs_unique": "unique_to_platform",
-      "sources": [
-        "product_review",
-        "reddit",
-        "social"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "platform": "myntra",
-      "metric_type": "barrier",
-      "label": "timing_occasion",
-      "count": 3,
-      "share": 0.0231,
-      "evidence_volume": 3,
-      "confidence": 0.602,
-      "shared_vs_unique": "shared",
-      "sources": [
-        "reddit",
-        "social",
-        "youtube"
-      ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "nykaa",
@@ -2382,7 +3631,7 @@
         "product_review",
         "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "nykaa",
@@ -2396,7 +3645,7 @@
       "sources": [
         "reddit"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "nykaa",
@@ -2410,14 +3659,14 @@
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "other",
       "metric_type": "barrier",
       "label": "external_comparison",
       "count": 3,
-      "share": 0.6,
+      "share": 0.5,
       "evidence_volume": 3,
       "confidence": 0.603,
       "shared_vs_unique": "shared",
@@ -2425,57 +3674,56 @@
         "reddit",
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "other",
       "metric_type": "barrier",
       "label": "quality_trust_doubt",
       "count": 1,
-      "share": 0.2,
+      "share": 0.1667,
       "evidence_volume": 1,
       "confidence": 0.515,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "other",
       "metric_type": "barrier",
       "label": "price_sensitivity_waiting",
       "count": 1,
-      "share": 0.2,
+      "share": 0.1667,
       "evidence_volume": 1,
       "confidence": 0.52,
       "shared_vs_unique": "shared",
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
-      "platform": "ajio",
-      "metric_type": "motive",
-      "label": "category_strength",
-      "count": 4,
-      "share": 0.4444,
-      "evidence_volume": 4,
-      "confidence": 0.672,
+      "platform": "other",
+      "metric_type": "barrier",
+      "label": "passive_bookmarking",
+      "count": 1,
+      "share": 0.1667,
+      "evidence_volume": 1,
+      "confidence": 0.579,
       "shared_vs_unique": "shared",
       "sources": [
-        "research",
-        "social"
+        "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "ajio",
       "metric_type": "motive",
       "label": "price_sale_waiting",
       "count": 2,
-      "share": 0.2222,
+      "share": 0.2857,
       "evidence_volume": 2,
       "confidence": 0.573,
       "shared_vs_unique": "shared",
@@ -2483,58 +3731,73 @@
         "reddit",
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "platform": "ajio",
+      "metric_type": "motive",
+      "label": "category_strength",
+      "count": 2,
+      "share": 0.2857,
+      "evidence_volume": 2,
+      "confidence": 0.59,
+      "shared_vs_unique": "shared",
+      "sources": [
+        "research",
+        "social"
+      ],
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "ajio",
       "metric_type": "motive",
       "label": "ux_convenience",
       "count": 1,
-      "share": 0.1111,
+      "share": 0.1429,
       "evidence_volume": 1,
       "confidence": 0.52,
       "shared_vs_unique": "shared",
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "ajio",
       "metric_type": "motive",
       "label": "assortment_discovery",
       "count": 1,
-      "share": 0.1111,
+      "share": 0.1429,
       "evidence_volume": 1,
       "confidence": 0.499,
       "shared_vs_unique": "shared",
       "sources": [
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "ajio",
       "metric_type": "motive",
       "label": "brand_exclusive",
       "count": 1,
-      "share": 0.1111,
+      "share": 0.1429,
       "evidence_volume": 1,
       "confidence": 0.511,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "motive",
       "label": "assortment_discovery",
-      "count": 37,
-      "share": 0.2846,
-      "evidence_volume": 37,
-      "confidence": 0.852,
+      "count": 132,
+      "share": 0.5156,
+      "evidence_volume": 132,
+      "confidence": 0.848,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store",
@@ -2544,52 +3807,16 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "platform": "myntra",
-      "metric_type": "motive",
-      "label": "trust_quality",
-      "count": 32,
-      "share": 0.2462,
-      "evidence_volume": 32,
-      "confidence": 0.835,
-      "shared_vs_unique": "shared",
-      "sources": [
-        "play_store",
-        "product_review",
-        "reddit",
-        "social",
-        "youtube"
-      ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "platform": "myntra",
-      "metric_type": "motive",
-      "label": "price_sale_waiting",
-      "count": 27,
-      "share": 0.2077,
-      "evidence_volume": 27,
-      "confidence": 0.866,
-      "shared_vs_unique": "shared",
-      "sources": [
-        "product_review",
-        "reddit",
-        "research",
-        "social",
-        "youtube"
-      ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "motive",
       "label": "category_strength",
-      "count": 21,
-      "share": 0.1615,
-      "evidence_volume": 21,
-      "confidence": 0.876,
+      "count": 48,
+      "share": 0.1875,
+      "evidence_volume": 48,
+      "confidence": 0.874,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store",
@@ -2599,14 +3826,51 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "platform": "myntra",
+      "metric_type": "motive",
+      "label": "trust_quality",
+      "count": 38,
+      "share": 0.1484,
+      "evidence_volume": 38,
+      "confidence": 0.845,
+      "shared_vs_unique": "shared",
+      "sources": [
+        "play_store",
+        "product_review",
+        "reddit",
+        "research",
+        "social",
+        "youtube"
+      ],
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "platform": "myntra",
+      "metric_type": "motive",
+      "label": "price_sale_waiting",
+      "count": 25,
+      "share": 0.0977,
+      "evidence_volume": 25,
+      "confidence": 0.862,
+      "shared_vs_unique": "shared",
+      "sources": [
+        "product_review",
+        "reddit",
+        "research",
+        "social",
+        "youtube"
+      ],
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "motive",
       "label": "ux_convenience",
       "count": 5,
-      "share": 0.0385,
+      "share": 0.0195,
       "evidence_volume": 5,
       "confidence": 0.719,
       "shared_vs_unique": "shared",
@@ -2614,14 +3878,14 @@
         "product_review",
         "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "motive",
       "label": "brand_exclusive",
       "count": 4,
-      "share": 0.0308,
+      "share": 0.0156,
       "evidence_volume": 4,
       "confidence": 0.659,
       "shared_vs_unique": "shared",
@@ -2630,14 +3894,14 @@
         "reddit",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "myntra",
       "metric_type": "motive",
       "label": "social_inspiration",
       "count": 4,
-      "share": 0.0308,
+      "share": 0.0156,
       "evidence_volume": 4,
       "confidence": 0.625,
       "shared_vs_unique": "unique_to_platform",
@@ -2646,7 +3910,7 @@
         "social",
         "youtube"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "nykaa",
@@ -2655,14 +3919,14 @@
       "count": 5,
       "share": 0.8333,
       "evidence_volume": 5,
-      "confidence": 0.732,
+      "confidence": 0.731,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store",
         "reddit",
         "research"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "nykaa",
@@ -2676,14 +3940,14 @@
       "sources": [
         "product_review"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "other",
       "metric_type": "motive",
       "label": "price_sale_waiting",
       "count": 3,
-      "share": 0.6,
+      "share": 0.5,
       "evidence_volume": 3,
       "confidence": 0.645,
       "shared_vs_unique": "shared",
@@ -2692,35 +3956,36 @@
         "reddit",
         "social"
       ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
+    },
+    {
+      "platform": "other",
+      "metric_type": "motive",
+      "label": "category_strength",
+      "count": 2,
+      "share": 0.3333,
+      "evidence_volume": 2,
+      "confidence": 0.606,
+      "shared_vs_unique": "shared",
+      "sources": [
+        "research",
+        "social"
+      ],
+      "run_version": "analytics-20260829T042419Z"
     },
     {
       "platform": "other",
       "metric_type": "motive",
       "label": "trust_quality",
       "count": 1,
-      "share": 0.2,
+      "share": 0.1667,
       "evidence_volume": 1,
       "confidence": 0.515,
       "shared_vs_unique": "shared",
       "sources": [
         "play_store"
       ],
-      "run_version": "analytics-20260824T120147Z"
-    },
-    {
-      "platform": "other",
-      "metric_type": "motive",
-      "label": "category_strength",
-      "count": 1,
-      "share": 0.2,
-      "evidence_volume": 1,
-      "confidence": 0.482,
-      "shared_vs_unique": "shared",
-      "sources": [
-        "social"
-      ],
-      "run_version": "analytics-20260824T120147Z"
+      "run_version": "analytics-20260829T042419Z"
     }
   ],
   "competitive_summary": {
@@ -2734,24 +3999,9 @@
       {
         "platform": "ajio",
         "metric_type": "motive",
-        "label": "category_strength",
-        "count": 4,
-        "share": 0.4444,
-        "evidence_volume": 4,
-        "confidence": 0.672,
-        "shared_vs_unique": "shared",
-        "sources": [
-          "research",
-          "social"
-        ],
-        "run_version": "analytics-20260824T120147Z"
-      },
-      {
-        "platform": "ajio",
-        "metric_type": "motive",
         "label": "price_sale_waiting",
         "count": 2,
-        "share": 0.2222,
+        "share": 0.2857,
         "evidence_volume": 2,
         "confidence": 0.573,
         "shared_vs_unique": "shared",
@@ -2759,58 +4009,73 @@
           "reddit",
           "social"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
+      },
+      {
+        "platform": "ajio",
+        "metric_type": "motive",
+        "label": "category_strength",
+        "count": 2,
+        "share": 0.2857,
+        "evidence_volume": 2,
+        "confidence": 0.59,
+        "shared_vs_unique": "shared",
+        "sources": [
+          "research",
+          "social"
+        ],
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "ajio",
         "metric_type": "motive",
         "label": "ux_convenience",
         "count": 1,
-        "share": 0.1111,
+        "share": 0.1429,
         "evidence_volume": 1,
         "confidence": 0.52,
         "shared_vs_unique": "shared",
         "sources": [
           "product_review"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "ajio",
         "metric_type": "motive",
         "label": "assortment_discovery",
         "count": 1,
-        "share": 0.1111,
+        "share": 0.1429,
         "evidence_volume": 1,
         "confidence": 0.499,
         "shared_vs_unique": "shared",
         "sources": [
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "ajio",
         "metric_type": "motive",
         "label": "brand_exclusive",
         "count": 1,
-        "share": 0.1111,
+        "share": 0.1429,
         "evidence_volume": 1,
         "confidence": 0.511,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "motive",
         "label": "assortment_discovery",
-        "count": 37,
-        "share": 0.2846,
-        "evidence_volume": 37,
-        "confidence": 0.852,
+        "count": 132,
+        "share": 0.5156,
+        "evidence_volume": 132,
+        "confidence": 0.848,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store",
@@ -2820,52 +4085,16 @@
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
-      },
-      {
-        "platform": "myntra",
-        "metric_type": "motive",
-        "label": "trust_quality",
-        "count": 32,
-        "share": 0.2462,
-        "evidence_volume": 32,
-        "confidence": 0.835,
-        "shared_vs_unique": "shared",
-        "sources": [
-          "play_store",
-          "product_review",
-          "reddit",
-          "social",
-          "youtube"
-        ],
-        "run_version": "analytics-20260824T120147Z"
-      },
-      {
-        "platform": "myntra",
-        "metric_type": "motive",
-        "label": "price_sale_waiting",
-        "count": 27,
-        "share": 0.2077,
-        "evidence_volume": 27,
-        "confidence": 0.866,
-        "shared_vs_unique": "shared",
-        "sources": [
-          "product_review",
-          "reddit",
-          "research",
-          "social",
-          "youtube"
-        ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "motive",
         "label": "category_strength",
-        "count": 21,
-        "share": 0.1615,
-        "evidence_volume": 21,
-        "confidence": 0.876,
+        "count": 48,
+        "share": 0.1875,
+        "evidence_volume": 48,
+        "confidence": 0.874,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store",
@@ -2875,14 +4104,51 @@
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
+      },
+      {
+        "platform": "myntra",
+        "metric_type": "motive",
+        "label": "trust_quality",
+        "count": 38,
+        "share": 0.1484,
+        "evidence_volume": 38,
+        "confidence": 0.845,
+        "shared_vs_unique": "shared",
+        "sources": [
+          "play_store",
+          "product_review",
+          "reddit",
+          "research",
+          "social",
+          "youtube"
+        ],
+        "run_version": "analytics-20260829T042419Z"
+      },
+      {
+        "platform": "myntra",
+        "metric_type": "motive",
+        "label": "price_sale_waiting",
+        "count": 25,
+        "share": 0.0977,
+        "evidence_volume": 25,
+        "confidence": 0.862,
+        "shared_vs_unique": "shared",
+        "sources": [
+          "product_review",
+          "reddit",
+          "research",
+          "social",
+          "youtube"
+        ],
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "motive",
         "label": "ux_convenience",
         "count": 5,
-        "share": 0.0385,
+        "share": 0.0195,
         "evidence_volume": 5,
         "confidence": 0.719,
         "shared_vs_unique": "shared",
@@ -2890,14 +4156,14 @@
           "product_review",
           "research"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "motive",
         "label": "brand_exclusive",
         "count": 4,
-        "share": 0.0308,
+        "share": 0.0156,
         "evidence_volume": 4,
         "confidence": 0.659,
         "shared_vs_unique": "shared",
@@ -2906,14 +4172,14 @@
           "reddit",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "motive",
         "label": "social_inspiration",
         "count": 4,
-        "share": 0.0308,
+        "share": 0.0156,
         "evidence_volume": 4,
         "confidence": 0.625,
         "shared_vs_unique": "unique_to_platform",
@@ -2922,7 +4188,7 @@
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "nykaa",
@@ -2931,14 +4197,14 @@
         "count": 5,
         "share": 0.8333,
         "evidence_volume": 5,
-        "confidence": 0.732,
+        "confidence": 0.731,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store",
           "reddit",
           "research"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "nykaa",
@@ -2952,14 +4218,14 @@
         "sources": [
           "product_review"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "other",
         "metric_type": "motive",
         "label": "price_sale_waiting",
         "count": 3,
-        "share": 0.6,
+        "share": 0.5,
         "evidence_volume": 3,
         "confidence": 0.645,
         "shared_vs_unique": "shared",
@@ -2968,35 +4234,36 @@
           "reddit",
           "social"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
+      },
+      {
+        "platform": "other",
+        "metric_type": "motive",
+        "label": "category_strength",
+        "count": 2,
+        "share": 0.3333,
+        "evidence_volume": 2,
+        "confidence": 0.606,
+        "shared_vs_unique": "shared",
+        "sources": [
+          "research",
+          "social"
+        ],
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "other",
         "metric_type": "motive",
         "label": "trust_quality",
         "count": 1,
-        "share": 0.2,
+        "share": 0.1667,
         "evidence_volume": 1,
         "confidence": 0.515,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store"
         ],
-        "run_version": "analytics-20260824T120147Z"
-      },
-      {
-        "platform": "other",
-        "metric_type": "motive",
-        "label": "category_strength",
-        "count": 1,
-        "share": 0.2,
-        "evidence_volume": 1,
-        "confidence": 0.482,
-        "shared_vs_unique": "shared",
-        "sources": [
-          "social"
-        ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       }
     ],
     "barriers": [
@@ -3004,10 +4271,10 @@
         "platform": "ajio",
         "metric_type": "barrier",
         "label": "external_comparison",
-        "count": 8,
-        "share": 0.8889,
-        "evidence_volume": 8,
-        "confidence": 0.83,
+        "count": 6,
+        "share": 0.8571,
+        "evidence_volume": 6,
+        "confidence": 0.756,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store",
@@ -3017,29 +4284,47 @@
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "ajio",
         "metric_type": "barrier",
         "label": "timing_occasion",
         "count": 1,
-        "share": 0.1111,
+        "share": 0.1429,
         "evidence_volume": 1,
         "confidence": 0.486,
         "shared_vs_unique": "shared",
         "sources": [
           "social"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
+      },
+      {
+        "platform": "myntra",
+        "metric_type": "barrier",
+        "label": "passive_bookmarking",
+        "count": 83,
+        "share": 0.3242,
+        "evidence_volume": 83,
+        "confidence": 0.863,
+        "shared_vs_unique": "shared",
+        "sources": [
+          "product_review",
+          "reddit",
+          "research",
+          "social",
+          "youtube"
+        ],
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "barrier",
         "label": "fit_sizing_uncertainty",
-        "count": 34,
-        "share": 0.2615,
-        "evidence_volume": 34,
+        "count": 47,
+        "share": 0.1836,
+        "evidence_volume": 47,
         "confidence": 0.856,
         "shared_vs_unique": "unique_to_platform",
         "sources": [
@@ -3050,52 +4335,35 @@
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "barrier",
         "label": "quality_trust_doubt",
-        "count": 27,
-        "share": 0.2077,
-        "evidence_volume": 27,
-        "confidence": 0.833,
+        "count": 30,
+        "share": 0.1172,
+        "evidence_volume": 30,
+        "confidence": 0.843,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store",
-          "product_review",
-          "reddit",
-          "social",
-          "youtube"
-        ],
-        "run_version": "analytics-20260824T120147Z"
-      },
-      {
-        "platform": "myntra",
-        "metric_type": "barrier",
-        "label": "passive_bookmarking",
-        "count": 23,
-        "share": 0.1769,
-        "evidence_volume": 23,
-        "confidence": 0.875,
-        "shared_vs_unique": "shared",
-        "sources": [
           "product_review",
           "reddit",
           "research",
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "barrier",
         "label": "price_sensitivity_waiting",
-        "count": 15,
-        "share": 0.1154,
-        "evidence_volume": 15,
-        "confidence": 0.855,
+        "count": 27,
+        "share": 0.1055,
+        "evidence_volume": 27,
+        "confidence": 0.843,
         "shared_vs_unique": "shared",
         "sources": [
           "product_review",
@@ -3104,16 +4372,50 @@
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "barrier",
-        "label": "external_comparison",
-        "count": 10,
-        "share": 0.0769,
-        "evidence_volume": 10,
-        "confidence": 0.899,
+        "label": "timing_occasion",
+        "count": 25,
+        "share": 0.0977,
+        "evidence_volume": 25,
+        "confidence": 0.849,
+        "shared_vs_unique": "shared",
+        "sources": [
+          "reddit",
+          "research",
+          "social",
+          "youtube"
+        ],
+        "run_version": "analytics-20260829T042419Z"
+      },
+      {
+        "platform": "myntra",
+        "metric_type": "barrier",
+        "label": "styling_decision_uncertainty",
+        "count": 17,
+        "share": 0.0664,
+        "evidence_volume": 17,
+        "confidence": 0.85,
+        "shared_vs_unique": "unique_to_platform",
+        "sources": [
+          "product_review",
+          "reddit",
+          "research",
+          "social"
+        ],
+        "run_version": "analytics-20260829T042419Z"
+      },
+      {
+        "platform": "myntra",
+        "metric_type": "barrier",
+        "label": "review_trust",
+        "count": 12,
+        "share": 0.0469,
+        "evidence_volume": 12,
+        "confidence": 0.857,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store",
@@ -3123,16 +4425,16 @@
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "barrier",
         "label": "logistics_friction",
         "count": 9,
-        "share": 0.0692,
+        "share": 0.0352,
         "evidence_volume": 9,
-        "confidence": 0.823,
+        "confidence": 0.825,
         "shared_vs_unique": "unique_to_platform",
         "sources": [
           "play_store",
@@ -3140,16 +4442,16 @@
           "reddit",
           "research"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "myntra",
         "metric_type": "barrier",
-        "label": "review_trust",
-        "count": 5,
-        "share": 0.0385,
-        "evidence_volume": 5,
-        "confidence": 0.679,
+        "label": "external_comparison",
+        "count": 6,
+        "share": 0.0234,
+        "evidence_volume": 6,
+        "confidence": 0.748,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store",
@@ -3158,39 +4460,7 @@
           "social",
           "youtube"
         ],
-        "run_version": "analytics-20260824T120147Z"
-      },
-      {
-        "platform": "myntra",
-        "metric_type": "barrier",
-        "label": "styling_decision_uncertainty",
-        "count": 4,
-        "share": 0.0308,
-        "evidence_volume": 4,
-        "confidence": 0.629,
-        "shared_vs_unique": "unique_to_platform",
-        "sources": [
-          "product_review",
-          "reddit",
-          "social"
-        ],
-        "run_version": "analytics-20260824T120147Z"
-      },
-      {
-        "platform": "myntra",
-        "metric_type": "barrier",
-        "label": "timing_occasion",
-        "count": 3,
-        "share": 0.0231,
-        "evidence_volume": 3,
-        "confidence": 0.602,
-        "shared_vs_unique": "shared",
-        "sources": [
-          "reddit",
-          "social",
-          "youtube"
-        ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "nykaa",
@@ -3205,7 +4475,7 @@
           "product_review",
           "research"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "nykaa",
@@ -3219,7 +4489,7 @@
         "sources": [
           "reddit"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "nykaa",
@@ -3233,14 +4503,14 @@
         "sources": [
           "play_store"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "other",
         "metric_type": "barrier",
         "label": "external_comparison",
         "count": 3,
-        "share": 0.6,
+        "share": 0.5,
         "evidence_volume": 3,
         "confidence": 0.603,
         "shared_vs_unique": "shared",
@@ -3248,35 +4518,49 @@
           "reddit",
           "social"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "other",
         "metric_type": "barrier",
         "label": "quality_trust_doubt",
         "count": 1,
-        "share": 0.2,
+        "share": 0.1667,
         "evidence_volume": 1,
         "confidence": 0.515,
         "shared_vs_unique": "shared",
         "sources": [
           "play_store"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
       },
       {
         "platform": "other",
         "metric_type": "barrier",
         "label": "price_sensitivity_waiting",
         "count": 1,
-        "share": 0.2,
+        "share": 0.1667,
         "evidence_volume": 1,
         "confidence": 0.52,
         "shared_vs_unique": "shared",
         "sources": [
           "product_review"
         ],
-        "run_version": "analytics-20260824T120147Z"
+        "run_version": "analytics-20260829T042419Z"
+      },
+      {
+        "platform": "other",
+        "metric_type": "barrier",
+        "label": "passive_bookmarking",
+        "count": 1,
+        "share": 0.1667,
+        "evidence_volume": 1,
+        "confidence": 0.579,
+        "shared_vs_unique": "shared",
+        "sources": [
+          "research"
+        ],
+        "run_version": "analytics-20260829T042419Z"
       }
     ],
     "shared_motives": [
@@ -3295,35 +4579,35 @@
     "top_motive_by_platform": {
       "myntra": {
         "label": "assortment_discovery",
-        "count": 37,
-        "share": 0.2846,
-        "confidence": 0.852
+        "count": 132,
+        "share": 0.5156,
+        "confidence": 0.848
       },
       "nykaa": {
         "label": "category_strength",
         "count": 5,
         "share": 0.8333,
-        "confidence": 0.732
+        "confidence": 0.731
       },
       "ajio": {
-        "label": "category_strength",
-        "count": 4,
-        "share": 0.4444,
-        "confidence": 0.672
+        "label": "price_sale_waiting",
+        "count": 2,
+        "share": 0.2857,
+        "confidence": 0.573
       },
       "other": {
         "label": "price_sale_waiting",
         "count": 3,
-        "share": 0.6,
+        "share": 0.5,
         "confidence": 0.645
       }
     },
     "top_barrier_by_platform": {
       "myntra": {
-        "label": "fit_sizing_uncertainty",
-        "count": 34,
-        "share": 0.2615,
-        "confidence": 0.856
+        "label": "passive_bookmarking",
+        "count": 83,
+        "share": 0.3242,
+        "confidence": 0.863
       },
       "nykaa": {
         "label": "external_comparison",
@@ -3333,22 +4617,22 @@
       },
       "ajio": {
         "label": "external_comparison",
-        "count": 8,
-        "share": 0.8889,
-        "confidence": 0.83
+        "count": 6,
+        "share": 0.8571,
+        "confidence": 0.756
       },
       "other": {
         "label": "external_comparison",
         "count": 3,
-        "share": 0.6,
+        "share": 0.5,
         "confidence": 0.603
       }
     },
     "why_not_purchase": [
-      "Myntra top barrier: fit sizing uncertainty (~26% of tagged evidence) - wishlist interest stalls here before 30-day purchase.",
+      "Myntra top barrier: passive bookmarking (~32% of tagged evidence) - wishlist interest stalls here before 30-day purchase.",
       "Nykaa top barrier: external comparison (~67% of tagged evidence) - wishlist interest stalls here before 30-day purchase.",
-      "Ajio top barrier: external comparison (~89% of tagged evidence) - wishlist interest stalls here before 30-day purchase.",
-      "Other top barrier: external comparison (~60% of tagged evidence) - wishlist interest stalls here before 30-day purchase.",
+      "Ajio top barrier: external comparison (~86% of tagged evidence) - wishlist interest stalls here before 30-day purchase.",
+      "Other top barrier: external comparison (~50% of tagged evidence) - wishlist interest stalls here before 30-day purchase.",
       "Price / sale waiting - users shortlist now and delay until discounts (strong on Myntra and Ajio).",
       "Fit & sizing uncertainty - apparel wishlists stall when size charts feel inconsistent (Myntra-heavy).",
       "Passive bookmarking - inspiration saves never enter a 30-day purchase window.",

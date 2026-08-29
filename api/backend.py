@@ -19,12 +19,16 @@ T = TypeVar("T")
 
 
 def use_json_backend() -> bool:
-    """Prefer exported insights JSON when present so dashboard category data stays in sync."""
+    """Prefer exported insights JSON when present so dashboard data stays in sync.
+
+    Local/demo setups often have a stale or unreachable Postgres instance. If the
+    insights export exists, serve it instead of blocking the UI on a DB timeout.
+    """
+    if json_data_available():
+        return True
     settings = get_settings()
     if not settings.use_json_fallback:
         return False
-    if json_data_available():
-        return True
     return not database_available()
 
 
@@ -43,7 +47,7 @@ def call_with_json_fallback(
     try:
         return db_call(session)
     except SQLAlchemyError as exc:
-        if not get_settings().use_json_fallback or not json_data_available():
+        if not json_data_available():
             raise
         logger.warning("Database error for %s; using JSON fallback: %s", label, exc)
         return json_call()
@@ -73,7 +77,7 @@ def search_with_fallback(
             filters=filters,
         )
     except SQLAlchemyError as exc:
-        if not get_settings().use_json_fallback or not json_data_available():
+        if not json_data_available():
             raise
         logger.warning("Retrieval DB error; using JSON fallback: %s", exc)
         return json_retrieval.search_chunks_json(

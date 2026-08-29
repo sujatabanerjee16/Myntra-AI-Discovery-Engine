@@ -21,7 +21,7 @@ from assistant.guardrails import (
     question_in_scope,
 )
 from assistant.llm import generate_grounded_answer, select_citations
-from assistant.query import understand_query
+from assistant.query import is_age_segment_compare_question, understand_query
 from assistant.rerank import rerank_chunks
 from assistant.schemas import AssistantAskResponse
 from common.config import get_settings
@@ -88,12 +88,20 @@ def answer_question(
         )
 
     with timed_operation(trace, "retrieve", top_k=settings.retrieval_top_k):
-        retrieved = backend.search_with_fallback(
-            session,
-            query_text=parsed.search_query,
-            top_k=settings.retrieval_top_k,
-            filters=parsed.filters,
-        )
+        if is_age_segment_compare_question(parsed.question):
+            retrieved = _retrieve_age_cohorts(
+                session,
+                query_text=parsed.search_query,
+                base_filters=parsed.filters,
+                top_k=settings.retrieval_top_k,
+            )
+        else:
+            retrieved = backend.search_with_fallback(
+                session,
+                query_text=parsed.search_query,
+                top_k=settings.retrieval_top_k,
+                filters=parsed.filters,
+            )
     trace.retrieved_count = len(retrieved)
 
     with timed_operation(trace, "rerank", top_k=settings.rag_rerank_top_k):
@@ -110,6 +118,10 @@ def answer_question(
             if json_mode
             else fetch_relevant_aggregates(session, parsed.reason_categories)
         )
+        if is_age_segment_compare_question(parsed.question):
+            aggregates = aggregates.model_copy(
+                update={"segment_comparisons": _age_segment_comparisons(session, json_mode)}
+            )
 
     context = build_grounded_context(reranked, aggregates)
     assessment = assess_evidence(reranked, question=parsed.question)
@@ -200,6 +212,58 @@ def answer_question(
         retrieved_chunk_count=len(reranked),
         reason_categories=parsed.reason_categories,
     )
+
+
+def _retrieve_age_cohorts(
+    session: Session,
+    *,
+    query_text: str,
+    base_filters: RetrievalFilters | None,
+    top_k: int,
+):
+    """Pull evidence from both primary research age bands, then interleave."""
+    from itertools import zip_longest
+
+    per_cohort = max(3, (top_k + 1) // 2)
+    merged: list = []
+    seen: set = set()
+    young_filters = (base_filters or RetrievalFilters()).model_copy(update={"segment": "age_18_24"})
+    older_filters = (base_filters or RetrievalFilters()).model_copy(update={"segment": "age_25_35"})
+    young = backend.search_with_fallback(
+        session, query_text=query_text, top_k=per_cohort, filters=young_filters
+    )
+    older = backend.search_with_fallback(
+        session, query_text=query_text, top_k=per_cohort, filters=older_filters
+    )
+    for pair in zip_longest(young, older):
+        for item in pair:
+            if item is None or item.chunk_id in seen:
+                continue
+            seen.add(item.chunk_id)
+            merged.append(item)
+            if len(merged) >= top_k:
+                return merged
+    return merged
+
+
+def _age_segment_comparisons(session: Session, json_mode: bool) -> list[dict]:
+    if json_mode:
+        from api.json_dashboard import get_segment_comparisons
+
+        payload = get_segment_comparisons()
+    else:
+        from api.dashboard_queries import get_segment_comparisons
+
+        payload = get_segment_comparisons(session, run_version=None)
+    return [
+        {
+            "dimension": item.dimension,
+            "reason_category": item.reason_category,
+            "evidence_volume": item.evidence_volume,
+        }
+        for item in payload.items
+        if item.dimension in {"age_18_24", "age_25_35"}
+    ]
 
 
 def _persist_trace(

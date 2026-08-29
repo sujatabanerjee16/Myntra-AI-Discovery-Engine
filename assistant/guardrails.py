@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from assistant.query import is_age_segment_compare_question
 from assistant.schemas import Citation
 from common.config import get_settings
 from storage.schemas import RetrievedChunk
@@ -73,7 +74,9 @@ def assess_evidence(
     # Topical similarity is not enough: refuse when the question asserts
     # specific entities/claims that never appear in retrieved evidence
     # (e.g. "left-handed users … on Tuesdays").
-    if question:
+    # Age-cohort compare questions are anaphoric ("these behaviors") and
+    # should be judged on retrieved age-tagged evidence, not those verbs.
+    if question and not is_age_segment_compare_question(question):
         distinctive = distinctive_question_terms(question)
         if distinctive:
             evidence_tokens = _evidence_token_set(chunks)
@@ -205,6 +208,10 @@ _DOMAIN_TERMS: frozenset[str] = frozenset(
         "saree",
         "sari",
         "lehenga",
+        "segment",
+        "segments",
+        "cohort",
+        "cohorts",
     }
 )
 
@@ -386,7 +393,14 @@ _CLAIM_FRAME_TERMS: frozenset[str] = frozenset(
         "pattern",
         "patterns",
         "behavior",
+        "behaviors",
         "behaviour",
+        "behaviours",
+        "differ",
+        "differs",
+        "different",
+        "difference",
+        "differences",
         "reason",
         "reasons",
         "cause",
@@ -536,6 +550,9 @@ def question_in_scope(question: str) -> bool:
     lexical gate ensures we refuse rather than fabricate a wishlist answer.
     """
     lowered = question.lower()
+    # Canned segment Qs are anaphoric ("these behaviors") and omit "wishlist".
+    if is_age_segment_compare_question(question):
+        return True
     if any(" " in term and term in lowered for term in _DOMAIN_TERMS):
         return True
     tokens = set(_WORD_RE.findall(lowered))

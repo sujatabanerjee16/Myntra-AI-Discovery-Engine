@@ -24,6 +24,14 @@ _SOURCE_ALIASES: dict[str, SourceType] = {
 }
 
 _SEGMENT_KEYWORDS: dict[str, str] = {
+    "age 18-24": "age_18_24",
+    "18-24": "age_18_24",
+    "18 to 24": "age_18_24",
+    "younger shoppers": "age_18_24",
+    "age 25-35": "age_25_35",
+    "25-35": "age_25_35",
+    "25-34": "age_25_35",
+    "25 to 35": "age_25_35",
     "price sensitive": "price_sensitive",
     "budget": "price_sensitive",
     "quality focused": "quality_focused",
@@ -56,6 +64,24 @@ _PRICE_BAND_KEYWORDS: dict[str, str] = {
     "sale waiting": "sale_waiting",
     "waiting for sale": "sale_waiting",
 }
+
+
+def is_age_segment_compare_question(question: str) -> bool:
+    """True when the question asks how behaviors differ across the two age cohorts."""
+    lowered = question.lower().replace("–", "-").replace("—", "-")
+    mentions_segments = (
+        "user segment" in lowered
+        or "user segments" in lowered
+        or "age" in lowered
+        or "18-24" in lowered
+        or "25-35" in lowered
+        or "25-34" in lowered
+    )
+    asks_to_compare = any(
+        token in lowered
+        for token in ("differ", "compare", "versus", " vs ", "across", "between")
+    )
+    return mentions_segments and asks_to_compare
 
 
 def _find_alias(text: str, aliases: dict[str, str]) -> str | None:
@@ -104,12 +130,14 @@ def understand_query(
     intent_type = detect_intent(normalized)
     fashion_platforms = _detect_fashion_platforms(normalized)
 
+    compare_ages = is_age_segment_compare_question(normalized)
     inferred = RetrievalFilters(
         source=_find_alias(normalized, _SOURCE_ALIASES),
         category=_find_alias(normalized, _CATEGORY_KEYWORDS),
         occasion=_find_alias(normalized, _OCCASION_KEYWORDS),
         price_band=_find_alias(normalized, _PRICE_BAND_KEYWORDS),
-        segment=_find_alias(normalized, _SEGMENT_KEYWORDS),
+        # A compare-both question must not lock retrieval to a single age band.
+        segment=None if compare_ages else _find_alias(normalized, _SEGMENT_KEYWORDS),
     )
 
     merged = explicit_filters
@@ -144,6 +172,10 @@ def understand_query(
     search_query = normalized
     if fashion_platforms:
         search_query = f"{normalized} wishlist {' '.join(fashion_platforms)}"
+    if compare_ages:
+        search_query = (
+            f"{search_query} age band 18-24 age band 25-35 research survey wishlist"
+        )
 
     return ParsedQuery(
         question=normalized,
@@ -151,5 +183,5 @@ def understand_query(
         filters=filters,
         platforms=fashion_platforms or None,
         reason_categories=reason_categories,
-        intent_hint=intent_type.value,
+        intent_hint="age_segments" if compare_ages else intent_type.value,
     )

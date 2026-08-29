@@ -31,27 +31,22 @@ def test_seed_connectors_return_records():
         assert all(record.text for record in records)
 
 
-def test_research_bundle_fetch(monkeypatch, tmp_path):
-    from ingestion.connectors import registry
+def test_research_bundle_fetch(tmp_path):
+    path = tmp_path / "x.xlsx"
+    import pandas as pd
 
-    def fake_research(excel_path, **_kwargs):
-        assert excel_path.endswith("x.xlsx")
-        return [
-            RawRecord(
-                source=SourceType.research,
-                source_ref="research:test:1",
-                text="Wishlist price waiting for sale discount",
-                matched_signals=["price_sensitivity_waiting"],
-            )
+    pd.DataFrame(
+        [
+            {
+                "Timestamp": "2026-01-01",
+                "Which age range are you in?": "18-24",
+                "Why waiting": "Wishlist price waiting for sale discount",
+            }
         ]
-
-    def fake_open(excel_path, **_kwargs):
-        return []
-
-    monkeypatch.setattr(registry, "fetch_research_records", fake_research)
-    monkeypatch.setattr(registry, "fetch_research_open_text_records", fake_open)
-    records = fetch_source_records("research", research_excel_path=str(tmp_path / "x.xlsx"))
-    assert len(records) == 1
+    ).to_excel(path, index=False)
+    records = fetch_source_records("research", research_excel_path=str(path))
+    assert len(records) >= 1
+    assert records[0].metadata.get("age_band") == "age_18_24"
 
 
 def test_validate_corpus_reports_cross_source_duplicates():

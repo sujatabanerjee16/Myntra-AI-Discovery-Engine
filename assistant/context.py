@@ -125,6 +125,18 @@ def build_grounded_context(
             )
         sections.append("\n".join(lines))
 
+    if aggregates.segment_comparisons:
+        lines = ["## Age cohort comparison (Age 18–24 vs Age 25–35 only)"]
+        for item in aggregates.segment_comparisons[:10]:
+            lines.append(
+                "- {segment}: {reason} volume={volume}".format(
+                    segment=item.get("dimension"),
+                    reason=item.get("reason_category"),
+                    volume=item.get("evidence_volume"),
+                )
+            )
+        sections.append("\n".join(lines))
+
     if aggregates.competitive:
         lines = ["## Competitive wishlist comparison (Myntra vs Nykaa vs Ajio)"]
         for item in aggregates.competitive[:12]:

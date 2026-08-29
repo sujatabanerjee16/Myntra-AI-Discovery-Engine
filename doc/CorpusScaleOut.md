@@ -8,7 +8,7 @@ Phase 7 broadens the ingestion pipeline to **all six source types** with increme
 
 | Source | Connector | Default data |
 | --- | --- | --- |
-| `research` | Excel survey + open-text answers | `Myntra Wishlist.xlsx` |
+| `research` | Dual Excel surveys + open-text answers | `Myntra Wishlist.xlsx` + `Your Wishlist Habits (Responses).xlsx` (age bands → `age_18_24` / `age_25_35`) |
 | `play_store` | Google Play Store scraper | Live scrape (filtered) |
 | `reddit` | Public Reddit search JSON | `data/seeds/reddit.json` |
 | `youtube` | YouTube Data API (optional) | `data/seeds/youtube.json` |

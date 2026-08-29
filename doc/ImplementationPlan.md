@@ -188,6 +188,8 @@
 
 **Tasks**
 - Add remaining connectors: YouTube comments, product reviews, social conversations, primary research inputs.
+- Ingest **dual research Excel workbooks** (`Myntra Wishlist.xlsx` + `Your Wishlist Habits (Responses).xlsx`) with normalized age segments `age_18_24` and `age_25_35`.
+- Prefer survey `age_band` metadata over behavioral segment heuristics during enrichment.
 - Add / expand **competitor app connectors** (e.g. Nykaa, Ajio Play Store reviews) where publicly available and in-scope.
 - Enable **incremental refresh** scheduling per source.
 - Validate dedupe/quality across sources; recompute aggregates, competitive views, and confidence.
@@ -195,6 +197,7 @@
 
 **Deliverables**
 - Full multi-source, multi-platform corpus with scheduled refresh; updated dashboard + assistant coverage.
+- Age-cohort comparisons (18–24 vs 25–35) available in segment filters and suggested Ask AI questions.
 
 **Exit criteria**
 - All six source types flow through the pipeline and appear in insights with source-level evidence; competitive views have sufficient platform-tagged evidence for directional claims.
@@ -257,7 +260,7 @@ Phase 4 (assistant) and Phase 5 (dashboard) both depend on Phase 3 and can proce
 | Assistant hallucination | Loss of trust | Strict grounding guardrails, citation enforcement, eval on faithfulness |
 | Invented competitor metrics | Loss of credibility | Explicit guardrail: no private competitor stats; cite platform-tagged evidence only |
 | Taxonomy drift/instability | Inconsistent categorization | Derive from corpus, review, version the taxonomy (incl. motives) |
-| Segment inference without internal data | Weak segmentation | Treat as directional; validate in Phase 8 with real data |
+| Segment inference without internal data | Weak segmentation | Prefer explicit survey age bands (`age_18_24` / `age_25_35`); treat behavioral segments as directional |
 | Cost of embeddings/LLM | Budget overrun | Caching, batching, model selection per Architecture §6 |
 | Scope creep in Phase 1 | Delivery risk | Thin vertical slice first; defer breadth to Phase 7 |
 

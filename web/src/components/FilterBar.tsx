@@ -1,4 +1,5 @@
 import type { DashboardFilters, FilterState } from "../types";
+import { formatLabel } from "../types";
 
 interface Props {
   filters: FilterState;
@@ -19,7 +20,7 @@ export default function FilterBar({ filters, options, onChange, onClear }: Props
         <select value={filters.segment} onChange={(e) => update("segment", e.target.value)}>
           <option value="">All segments</option>
           {options?.segments.map((value) => (
-            <option key={value} value={value}>{value.replace(/_/g, " ")}</option>
+            <option key={value} value={value}>{formatLabel(value)}</option>
           ))}
         </select>
       </label>
@@ -28,7 +29,7 @@ export default function FilterBar({ filters, options, onChange, onClear }: Props
         <select value={filters.category} onChange={(e) => update("category", e.target.value)}>
           <option value="">All categories</option>
           {options?.categories.map((value) => (
-            <option key={value} value={value}>{value.replace(/_/g, " ")}</option>
+            <option key={value} value={value}>{formatLabel(value)}</option>
           ))}
         </select>
       </label>
@@ -37,7 +38,7 @@ export default function FilterBar({ filters, options, onChange, onClear }: Props
         <select value={filters.occasion} onChange={(e) => update("occasion", e.target.value)}>
           <option value="">All occasions</option>
           {options?.occasions.map((value) => (
-            <option key={value} value={value}>{value.replace(/_/g, " ")}</option>
+            <option key={value} value={value}>{formatLabel(value)}</option>
           ))}
         </select>
       </label>
@@ -46,7 +47,7 @@ export default function FilterBar({ filters, options, onChange, onClear }: Props
         <select value={filters.price_band} onChange={(e) => update("price_band", e.target.value)}>
           <option value="">All price bands</option>
           {options?.price_bands.map((value) => (
-            <option key={value} value={value}>{value.replace(/_/g, " ")}</option>
+            <option key={value} value={value}>{formatLabel(value)}</option>
           ))}
         </select>
       </label>
@@ -58,7 +59,7 @@ export default function FilterBar({ filters, options, onChange, onClear }: Props
         >
           <option value="">All reasons</option>
           {options?.reason_categories.map((value) => (
-            <option key={value} value={value}>{value.replace(/_/g, " ")}</option>
+            <option key={value} value={value}>{formatLabel(value)}</option>
           ))}
         </select>
       </label>

@@ -13,7 +13,7 @@ Load wishlist/funnel events from JSON (sample: `data/seeds/internal_wishlist_eve
 | `user_hash` | Anonymized user identifier |
 | `product_id` | Wishlisted/purchased SKU |
 | `event_type` | `wishlist_add`, `purchase`, `product_view`, … |
-| `segment` | Behavioral segment (price_sensitive, fit_uncertain, …) |
+| `segment` | Age band (`age_18_24`, `age_25_35`) from research surveys when present; else behavioral (price_sensitive, fit_uncertain, …) |
 | `event_at` | Event timestamp (ISO-8601) |
 
 ```bash

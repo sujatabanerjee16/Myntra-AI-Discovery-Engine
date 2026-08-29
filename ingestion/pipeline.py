@@ -79,20 +79,23 @@ def _serialize_chunk(item: EnrichedChunk, vector: list[float] | None) -> dict:
 def prepare_corpus(
     *,
     sources: list[str] | None = None,
-    research_excel_path: str,
+    research_excel_path: str | None = None,
+    research_excel_paths: list[str] | None = None,
     run_version: str | None = None,
     play_store_limit: int | None = None,
     skip_embed: bool = False,
     include_embeddings: bool = False,
 ) -> tuple[dict, PipelineResult]:
     """Collect and process records without persisting to the database."""
-    sources = sources or get_settings().default_source_list
+    settings = get_settings()
+    sources = sources or settings.default_source_list
     run_version = run_version or _default_run_version()
     result = PipelineResult(run_version=run_version)
 
     raw = collect_records(
         sources=sources,
         research_excel_path=research_excel_path,
+        research_excel_paths=research_excel_paths,
         play_store_limit=play_store_limit,
     )
     result.fetched = len(raw)
@@ -152,16 +155,25 @@ def prepare_corpus(
 def collect_records(
     *,
     sources: list[str],
-    research_excel_path: str,
+    research_excel_path: str | None = None,
+    research_excel_paths: list[str] | None = None,
     play_store_limit: int | None = None,
 ) -> list[RawRecord]:
+    settings = get_settings()
+    paths = list(research_excel_paths or [])
+    if not paths:
+        paths = list(settings.research_excel_path_list)
+    if research_excel_path and research_excel_path not in paths:
+        paths = [research_excel_path, *[p for p in paths if p != research_excel_path]]
+
     records: list[RawRecord] = []
 
     for source in sources:
         source = source.strip().lower()
         batch = fetch_source_records(
             source,
-            research_excel_path=research_excel_path,
+            research_excel_path=research_excel_path or (paths[0] if paths else None),
+            research_excel_paths=paths,
             play_store_limit=play_store_limit,
         )
         records.extend(batch)
@@ -225,7 +237,8 @@ def run_pipeline(
     session: Session,
     *,
     sources: list[str] | None = None,
-    research_excel_path: str,
+    research_excel_path: str | None = None,
+    research_excel_paths: list[str] | None = None,
     run_version: str | None = None,
     play_store_limit: int | None = None,
     skip_embed: bool = False,
@@ -246,6 +259,7 @@ def run_pipeline(
         raw = collect_records(
             sources=sources,
             research_excel_path=research_excel_path,
+            research_excel_paths=research_excel_paths,
             play_store_limit=play_store_limit,
         )
         result.fetched = len(raw)

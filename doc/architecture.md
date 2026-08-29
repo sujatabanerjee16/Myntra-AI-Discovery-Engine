@@ -106,7 +106,7 @@ Transforms enriched chunks into structured insight. Runs as batch/offline jobs a
 - **Clustering** — unsupervised grouping of related behaviors/unmet needs to discover emerging themes.
 - **Intent detection** — classify **active shortlist** vs **passive bookmarking**.
 - **Journey-stage mapping** — map conversations to stages in the wishlist→purchase journey.
-- **Segment tagging** — infer category, occasion, price band, and user-segment tags (from conversation context, since no internal data in Phase 1).
+- **Segment tagging** — infer category, occasion, price band, and user-segment tags. Primary research surveys carry an explicit **age band** (`age_18_24`, `age_25_35`); enrichment prefers that metadata over behaviorally inferred segments so dashboard filters and RAG can compare cohorts.
 - **Platform tagging** — detect and normalize platform mentions: `myntra`, `nykaa`, `ajio`, `other` (configurable list).
 - **Wishlist-motive classification** — label *why* users wishlist on a platform (see `context.md` §8.1: assortment, price/sale waiting, brand/exclusive, category strength, trust, UX, social/inspiration).
 - **Competitive comparison aggregation** — build shared vs platform-specific motive/barrier distributions and evidence-backed competitive insight records.
@@ -251,6 +251,34 @@ platform-tagged chunks + motive/barrier labels
 | `citations` | Excerpt references |
 | `confidence` | Overall confidence |
 | `limitations` | Source/coverage/competitive-coverage caveats |
+
+---
+
+## 5.6 Primary research age segments
+
+Research connectors load **two** Excel workbooks by default:
+
+| Workbook | Role |
+| --- | --- |
+| `Myntra Wishlist.xlsx` | Myntra-focused wishlist survey (age column → mostly 25–35) |
+| `Your Wishlist Habits (Responses).xlsx` | Cross-app wishlist habits survey (age column → mostly 18–24) |
+
+Survey age answers normalize to dashboard/RAG segments:
+
+| Survey label | Segment key | UI label |
+| --- | --- | --- |
+| 18–24 | `age_18_24` | Age 18–24 |
+| 25–34 / 25–35 | `age_25_35` | Age 25–35 |
+
+Enrichment **prefers** `metadata.age_band` over behaviorally inferred segments (price/fit/quality), so segment filters and Ask AI questions about age cohorts retrieve the right research evidence.
+
+### Age-band behavior (directional, latest surveys)
+
+**Age 18–24 (n≈27 in habits survey):** Myntra-heavy wishlist use; top blockers are occasion waiting, sale waiting, forgetting, and choice overload among similar saves; strongest decision help is **real customer photos/videos** (many also say nothing would change their mind without a price change).
+
+**Age 25–35 (habits n≈6 + Myntra survey n≈9):** More trust/photo/review doubt, fit uncertainty, and explicit **price too high** as primary non-purchase reason; decision help is more mixed (styling, reminders, fit confidence, other).
+
+Treat volume imbalance as a confidence caveat when comparing cohorts.
 
 ---
 

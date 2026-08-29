@@ -68,6 +68,8 @@ class Settings(BaseSettings):
     # Ingestion
     myntra_play_store_app_id: str = "com.myntra.android"
     research_excel_path: str = "Myntra Wishlist.xlsx"
+    # Additional survey workbook(s), comma-separated. Combined with research_excel_path.
+    research_excel_secondary_paths: str = "Your Wishlist Habits (Responses).xlsx"
     play_store_review_limit: int = 200
     chunk_size: int = 512
     chunk_overlap: int = 64
@@ -117,6 +119,16 @@ class Settings(BaseSettings):
     @property
     def default_source_list(self) -> list[str]:
         return [s.strip() for s in self.default_ingestion_sources.split(",") if s.strip()]
+
+    @property
+    def research_excel_path_list(self) -> list[str]:
+        """Primary + secondary research Excel workbooks (deduped, existing paths preferred at runtime)."""
+        paths: list[str] = []
+        for raw in [self.research_excel_path, *self.research_excel_secondary_paths.split(",")]:
+            path = raw.strip()
+            if path and path not in paths:
+                paths.append(path)
+        return paths
 
     @property
     def sqlalchemy_url(self) -> str:

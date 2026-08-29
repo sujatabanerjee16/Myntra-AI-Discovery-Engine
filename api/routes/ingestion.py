@@ -69,7 +69,7 @@ def ingestion_status(session: Session = Depends(get_session)) -> IngestionStatus
 
     corpus, _result = prepare_corpus(
         sources=list(ALL_SOURCES),
-        research_excel_path=settings.research_excel_path,
+        research_excel_paths=settings.research_excel_path_list,
         play_store_limit=0,
         skip_embed=True,
     )
@@ -101,7 +101,7 @@ def trigger_refresh(
     result = run_pipeline(
         session,
         sources=due,
-        research_excel_path=settings.research_excel_path,
+        research_excel_paths=settings.research_excel_path_list,
         play_store_limit=settings.play_store_review_limit,
         skip_embed=body.skip_embed,
     )

@@ -216,6 +216,8 @@ export function formatLabel(value: string): string {
     "passive bookmarking": "Passive Bookmarking",
     "logistics friction": "Logistics Friction",
     "competitive platform preference": "Competitive Platform Preference",
+    "age 18 24": "Age 18–24",
+    "age 25 35": "Age 25–35",
   };
   if (aliases[normalized]) return aliases[normalized];
   return normalized.replace(/\b\w/g, (char) => char.toUpperCase());

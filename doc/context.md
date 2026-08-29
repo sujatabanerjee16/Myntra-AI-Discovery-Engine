@@ -179,7 +179,7 @@ Default Phase 1 competitor set (configurable): **Nykaa**, **Ajio**, plus an **Ot
 - YouTube comments
 - Product reviews
 - Social conversations
-- Primary user research inputs
+- Primary user research inputs (dual Excel surveys; age bands → `age_18_24` / `age_25_35`)
 - Conversations that explicitly compare or mention multiple fashion/lifestyle platforms
 
 ### 7.2 Priority signals to capture
@@ -249,6 +249,7 @@ These motive tags power **Myntra vs competitor** dashboard charts and competitiv
 6. How do users compare shortlisted products?
 7. What information do users seek outside Myntra before purchasing?
 8. How do behaviors vary across categories, intents, and user segments?
+8a. How do wishlist behaviors differ between **Age 18–24** and **Age 25–35** (primary research)?
 9. What unmet needs appear repeatedly across conversations?
 10. **Why do users wishlist on Myntra vs Nykaa, Ajio, or other competitors?**
 11. **Which wishlist motives are shared across platforms, and which are platform-specific?**

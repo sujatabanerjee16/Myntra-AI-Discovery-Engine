@@ -1303,6 +1303,96 @@ textarea {
   margin-bottom: 1.1rem;
 }
 
+.wi-age-compare {
+  margin-bottom: 1.1rem;
+}
+
+.wi-age-compare-head h2 {
+  margin-bottom: 0.25rem;
+}
+
+.wi-age-contrast {
+  margin: 0.65rem 0 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: #fff1f2;
+  border: 1px solid rgba(190, 24, 93, 0.12);
+  color: #9f1239;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.wi-age-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.wi-age-cohort {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 12px;
+  padding: 0.95rem 1rem;
+  background: #f8fafc;
+}
+
+.wi-age-cohort-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.wi-age-cohort-head h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.wi-age-cohort-vol {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.wi-age-notes {
+  margin: 0 0 0.85rem;
+  padding-left: 1.1rem;
+  color: #334155;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.wi-age-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.wi-age-reason-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: #0f172a;
+  padding: 0.35rem 0.45rem;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.wi-age-reason-row strong {
+  color: #be185d;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .wi-age-compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .wi-dash-card {
   background: linear-gradient(180deg, #ffffff 0%, #fcfcfd 100%);
   border-radius: 14px;

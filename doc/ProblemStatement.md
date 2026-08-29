@@ -46,6 +46,7 @@ Together, these should help Myntra:
 - detect recurring barriers, uncertainties, and postponement triggers
 - **compare wishlist motives and frictions across Myntra and competitors**
 - compare patterns across categories, intents, and user segments
+- **compare age cohorts Age 18–24 vs Age 25–35** using primary research surveys with explicit age fields
 - generate structured, PM-usable insights instead of raw summaries
 
 
@@ -77,6 +78,7 @@ The dashboard should show:
 
 - top reasons for wishlist non-conversion
 - variation by category, occasion, price band, intent type, and user segment
+- **age-band segments** from primary research: `age_18_24` and `age_25_35`
 - recurring uncertainties such as fit, quality, styling, price sensitivity, trust, and timing
 - **competitive wishlist comparison** — motive and barrier distributions for Myntra vs Nykaa, Ajio, and other tagged platforms
 - evidence strength and confidence by source (and by platform where tagged)
@@ -119,7 +121,7 @@ Collect and analyze public and research-based conversations relevant to online f
 
 - Google Play Store reviews (Myntra and, where relevant, competitor apps)
 - Reddit posts and comments
-- Primary user research inputs
+- Primary user research inputs (dual Excel surveys; age bands → `age_18_24` / `age_25_35`)
 - Other public sources that discuss wishlist behavior across fashion/lifestyle platforms
 
 The corpus should prioritize signals related to:
@@ -229,6 +231,15 @@ The system should produce:
 - Competitive claims must show which platforms were mentioned and how strongly evidence supports the comparison
 - The system should avoid overstating conclusions from isolated anecdotes
 - The chatbot must remain grounded in retrieved evidence and structured insight layers
+
+### Primary research corpus (age-aware)
+
+Approved survey inputs currently include:
+
+1. **`Myntra Wishlist.xlsx`** — Myntra wishlist non-conversion questionnaire with an **Age** field (responses predominantly **25–35**). Primary blockers skew toward price too high, changing mind / no longer need, and fit uncertainty; multi-select stops often combine sale waiting with size unavailability.
+2. **`Your Wishlist Habits (Responses).xlsx`** — Cross-platform wishlist habits form with **Which age range are you in?** (predominantly **18–24**, with a smaller **25–34** cohort mapped to **25–35**). Younger respondents more often cite occasion timing, sale waiting, forgetting, and indecision among similar saves; they most often ask for real customer photos/videos to decide.
+
+The ingestion pipeline scrapes **both** workbooks into `source=research`, stamps `age_band` on documents/chunks, and exposes **Age 18–24** / **Age 25–35** as first-class segment filters for the dashboard and Ask AI.
 
 
 

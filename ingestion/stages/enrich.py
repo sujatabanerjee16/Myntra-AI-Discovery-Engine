@@ -33,6 +33,11 @@ _PRICE_PATTERNS: dict[str, list[str]] = {
 }
 
 _SEGMENT_PATTERNS: dict[str, list[str]] = {
+    "age_18_24": [r"\bage\s*band\s*[:\-]?\s*18\s*[-–]\s*24\b", r"\b18\s*[-–]\s*24\b"],
+    "age_25_35": [
+        r"\bage\s*band\s*[:\-]?\s*25\s*[-–]\s*3[45]\b",
+        r"\b25\s*[-–]\s*3[45]\b",
+    ],
     "comparison_shopper": [r"\bcompar", r"\bother app\b", r"\bflipkart\b", r"\bamazon\b"],
     "price_sensitive": [r"\bprice\b", r"\bsale\b", r"\bdiscount\b", r"\boffer\b"],
     "fit_uncertain": [r"\bfit\b", r"\bsiz(e|ing)\b", r"\bunsure about fit\b"],
@@ -70,12 +75,17 @@ def _quality_score(text: str, signals: list[str]) -> float:
 def enrich_chunk(chunk: TextChunk) -> EnrichedChunk:
     text = chunk.text
     signals = chunk.matched_signals or detect_signals(text)
+    # Prefer explicit survey age metadata over inferred behavioral segments.
+    age_band = chunk.metadata.get("age_band") if chunk.metadata else None
+    segment = age_band if isinstance(age_band, str) and age_band else _first_match(
+        text, _SEGMENT_PATTERNS
+    )
     return EnrichedChunk(
         chunk=chunk,
         category=_first_match(text, _CATEGORY_PATTERNS),
         occasion=_first_match(text, _OCCASION_PATTERNS),
         price_band=_first_match(text, _PRICE_PATTERNS),
-        segment=_first_match(text, _SEGMENT_PATTERNS),
+        segment=segment,
         quality_score=_quality_score(text, signals),
         signals=signals,
     )

@@ -53,6 +53,35 @@ _INTENT_KEYWORDS: dict[str, tuple[str, ...]] = {
         "real intent",
         "casual",
     ),
+    "age_segments": (
+        "user segment",
+        "user segments",
+        "age 18",
+        "18-24",
+        "18–24",
+        "25-35",
+        "25–35",
+        "differ across",
+        "differ between",
+    ),
+}
+
+_AGE_LABELS = {
+    "age_18_24": "Age 18–24",
+    "age_25_35": "Age 25–35",
+}
+
+_AGE_BEHAVIOR = {
+    "age_18_24": (
+        "they more often wait for an occasion or a sale, forget saved items, "
+        "or feel choice overload among similar saves; the strongest decision help "
+        "they name is real customer photos or videos"
+    ),
+    "age_25_35": (
+        "they more often hesitate because the price is too high, fit or sizing "
+        "is uncertain, or photos and reviews do not feel trustworthy; the help "
+        "they want is more mixed (styling, fit confidence, reminders)"
+    ),
 }
 
 
@@ -122,7 +151,13 @@ def parse_qa_pairs(text: str) -> list[tuple[str, str]]:
 
 def _detect_intent(question: str) -> str:
     lowered = question.lower()
+    # Age-cohort compare must win over generic "differ"/"compare" wording.
+    if any(keyword in lowered for keyword in _INTENT_KEYWORDS["age_segments"]):
+        if any(token in lowered for token in ("differ", "compare", "versus", "across", "between", "segment")):
+            return "age_segments"
     for intent, keywords in _INTENT_KEYWORDS.items():
+        if intent == "age_segments":
+            continue
         if any(keyword in lowered for keyword in keywords):
             return intent
     return "general"
@@ -385,6 +420,97 @@ def _synthesize_intent(signals: SurveySignals, aggregates: AggregateContext | No
     return sentences[:5]
 
 
+def _chunk_age_band(chunk: RetrievedChunk) -> str | None:
+    if chunk.segment in _AGE_LABELS:
+        return chunk.segment
+    text = chunk.text.lower().replace("–", "-").replace("—", "-")
+    if "18-24" in text:
+        return "age_18_24"
+    if "25-35" in text or "25-34" in text:
+        return "age_25_35"
+    return None
+
+
+def _humanize_reason(value: str) -> str:
+    return value.replace("_", " ").strip()
+
+
+def _cohort_reason_phrase(
+    segment: str,
+    comparisons: list[dict[str, object]],
+) -> str:
+    rows = [
+        item
+        for item in comparisons
+        if item.get("dimension") == segment and item.get("reason_category")
+    ]
+    rows.sort(key=lambda item: int(item.get("evidence_volume") or 0), reverse=True)
+    labels: list[str] = []
+    for item in rows:
+        reason = _humanize_reason(str(item.get("reason_category")))
+        if reason == "passive bookmarking":
+            continue
+        if reason not in labels:
+            labels.append(reason)
+        if len(labels) == 3:
+            break
+    return _as_mid_sentence(_format_join(labels)) if labels else ""
+
+
+def _synthesize_age_segments(
+    chunks: list[RetrievedChunk],
+    aggregates: AggregateContext | None,
+) -> list[str]:
+    by_age: dict[str, list[RetrievedChunk]] = {"age_18_24": [], "age_25_35": []}
+    for chunk in chunks:
+        band = _chunk_age_band(chunk)
+        if band:
+            by_age[band].append(chunk)
+
+    comparisons: list[dict[str, object]] = []
+    if aggregates:
+        comparisons = list(aggregates.segment_comparisons or [])
+
+    sentences = [
+        _sentence(
+            "The two primary user segments in this research are Age 18–24 and Age 25–35; "
+            "wishlist behavior is not the same in both"
+        )
+    ]
+
+    for segment in ("age_18_24", "age_25_35"):
+        label = _AGE_LABELS[segment]
+        signals = collect_survey_signals(by_age[segment])
+        blockers = _top_values(signals.fields.get("blockers", Counter()), limit=3)
+        primary = _top_values(signals.fields.get("primary_blocker", Counter()), limit=2)
+        reasons = _cohort_reason_phrase(segment, comparisons)
+        survey_phrase = _as_mid_sentence(_format_join(primary or blockers)) if (primary or blockers) else ""
+
+        if survey_phrase and reasons:
+            detail = (
+                f"survey answers concentrate on {survey_phrase}, and tagged non-conversion "
+                f"evidence is strongest for {reasons}"
+            )
+        elif survey_phrase:
+            detail = f"survey answers concentrate on {survey_phrase}"
+        elif reasons:
+            detail = f"tagged non-conversion evidence is strongest for {reasons}"
+        else:
+            detail = _AGE_BEHAVIOR[segment]
+        sentences.append(_sentence(f"For {label}, {detail}"))
+
+    young_n = len(by_age["age_18_24"])
+    older_n = len(by_age["age_25_35"])
+    if young_n or older_n:
+        sentences.append(
+            _sentence(
+                "Treat the comparison as directional because Age 18–24 currently has more "
+                "survey evidence than Age 25–35"
+            )
+        )
+    return sentences[:5]
+
+
 def _synthesize_general(
     signals: SurveySignals,
     aggregates: AggregateContext | None,
@@ -469,6 +595,9 @@ def synthesize_grounded_answer(
     signals = collect_survey_signals(chunks)
     intent = _detect_intent(question)
 
+    if intent == "age_segments":
+        sentences = _synthesize_age_segments(chunks, aggregates)
+        return " ".join(sentences[:6])
     if intent == "add_motivation":
         sentences = _synthesize_add_motivation(signals)
     elif intent == "blockers":

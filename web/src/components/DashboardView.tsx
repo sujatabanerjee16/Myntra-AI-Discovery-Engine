@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  getComparisons,
   getCompetitiveAnalysis,
   getConversionMetric,
   getFilters,
@@ -12,6 +13,7 @@ import {
 } from "../api";
 import { PLATFORM_META } from "../types";
 import type {
+  ComparisonResponse,
   CompetitiveAnalysisResponse,
   ConversionMetricResponse,
   DashboardFilters,
@@ -25,6 +27,19 @@ import type {
   SidebarFilters,
   SourceId,
 } from "../types";
+
+const AGE_SEGMENTS = ["age_18_24", "age_25_35"] as const;
+
+const AGE_BEHAVIOR_NOTES: Record<string, string[]> = {
+  age_18_24: [
+    "Often wait for an occasion or a sale; forgetting and choice overload are common",
+    "Strongest decision help: real customer photos / videos",
+  ],
+  age_25_35: [
+    "More price-too-high, photo/review trust doubt, and fit uncertainty",
+    "Decision help is mixed: styling, fit confidence, reminders",
+  ],
+};
 import CompetitiveAnalysisPanel from "./CompetitiveAnalysisPanel";
 import { formatReason } from "./ConfidenceBadge";
 import QuestionsView from "./QuestionsView";
@@ -116,6 +131,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const [intent, setIntent] = useState<IntentBreakdownResponse | null>(null);
   const [conversion, setConversion] = useState<ConversionMetricResponse | null>(null);
   const [competitive, setCompetitive] = useState<CompetitiveAnalysisResponse | null>(null);
+  const [comparisons, setComparisons] = useState<ComparisonResponse | null>(null);
   const [feedback, setFeedback] = useState<InsightFeedbackRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [computing, setComputing] = useState(false);
@@ -149,6 +165,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         conversionData,
         feedbackData,
         competitiveData,
+        comparisonData,
       ] = await Promise.all([
         getFilters(),
         getRankedReasons(filters),
@@ -157,6 +174,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         getConversionMetric().catch(() => null),
         listInsightFeedback().catch(() => ({ total: 0, feedback: [] as InsightFeedbackRecord[] })),
         getCompetitiveAnalysis().catch(() => null),
+        getComparisons({ ...filters, segment: "" }).catch(() => null),
       ]);
       setOptions(filterOptions);
       setReasons(reasonData);
@@ -165,6 +183,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       setConversion(conversionData);
       setFeedback(feedbackData.feedback);
       setCompetitive(competitiveData);
+      setComparisons(comparisonData);
       setReasonCategory((current) => {
         const cats = filterOptions.reason_categories ?? [];
         if (cats.length && !cats.includes(current)) return cats[0];
@@ -321,10 +340,42 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       ...cell,
       value: Math.max(0, Math.round(cell.value * filterIntensity * (intentType === "high" ? 1.1 : 0.9))),
     }));
-    return { ...heatmap, cells };
+    const columns = [...AGE_SEGMENTS];
+    return { ...heatmap, cells, columns };
   }, [heatmap, filterIntensity, intentType]);
 
   const maxHeat = Math.max(...(filteredHeatmap?.cells.map((cell) => cell.value) ?? [1]), 1);
+
+  const ageComparison = useMemo(() => {
+    const items = comparisons?.items ?? [];
+    return AGE_SEGMENTS.map((segment) => {
+      const rows = items
+        .filter((item) => item.dimension === segment)
+        .sort((a, b) => b.evidence_volume - a.evidence_volume)
+        .slice(0, 4);
+      const volume = rows.reduce((sum, row) => sum + row.evidence_volume, 0);
+      return {
+        segment,
+        label: formatReason(segment),
+        volume,
+        reasons: rows,
+        notes: AGE_BEHAVIOR_NOTES[segment] ?? [],
+      };
+    });
+  }, [comparisons]);
+
+  const ageContrast = useMemo(() => {
+    const [young, older] = ageComparison;
+    if (!young || !older) return "";
+    const youngTop = young.reasons[0];
+    const olderTop = older.reasons[0];
+    if (!youngTop && !olderTop) {
+      return "Survey age bands are loaded as filters. Refresh research insights to populate side-by-side reason volumes.";
+    }
+    const youngLabel = youngTop ? formatReason(youngTop.reason_category) : "mixed blockers";
+    const olderLabel = olderTop ? formatReason(olderTop.reason_category) : "mixed blockers";
+    return `${young.label} evidence concentrates on ${youngLabel}; ${older.label} concentrates on ${olderLabel}. Volume is uneven across the two surveys — treat this as directional.`;
+  }, [ageComparison]);
 
   const categoryOptions = options?.categories?.length
     ? options.categories
@@ -347,6 +398,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }, [reasonCategoryOptions, reasonCategory]);
 
   const activeFilterSummary = [
+    filters.segment ? formatReason(filters.segment) : "Age 18–24 + 25–35",
     filters.category ? formatReason(filters.category) : "All categories",
     filters.price_band
       ? `₹${priceMin}–₹${priceMax} · ${formatReason(filters.price_band)}`
@@ -381,8 +433,16 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       confidenceMin: 0.5,
       platforms: ["myntra", "nykaa", "ajio"],
     });
-    onFiltersChange({ ...filters, category: "", price_band: "" });
+    onFiltersChange({ ...filters, category: "", price_band: "", segment: "" });
   };
+
+  useEffect(() => {
+    if (filters.segment && !AGE_SEGMENTS.includes(filters.segment as (typeof AGE_SEGMENTS)[number])) {
+      onFiltersChange({ ...filters, segment: "" });
+    }
+  }, [filters, onFiltersChange]);
+
+  const segmentOptions = AGE_SEGMENTS;
 
   return (
     <div className="wi-dashboard">
@@ -395,6 +455,27 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             </button>
           </div>
           <p className="wi-dash-active-summary">{activeFilterSummary}</p>
+        </div>
+
+        <div className="wi-dash-filter">
+          <span className="wi-dash-label">User segment</span>
+          <div className="wi-dash-pills">
+            {segmentOptions.map((value) => (
+              <button
+                key={value}
+                type="button"
+                className={`wi-dash-pill ${filters.segment === value ? "active" : ""}`}
+                onClick={() =>
+                  onFiltersChange({
+                    ...filters,
+                    segment: filters.segment === value ? "" : value,
+                  })
+                }
+              >
+                {formatReason(value)}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="wi-dash-filter">
@@ -618,6 +699,51 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                 <p className="wi-kpi-sub">Most Common Reason</p>
               </article>
             </div>
+
+            <section className="wi-dash-card wi-age-compare">
+                <div className="wi-age-compare-head">
+                  <h2>Age cohort comparison · 18–24 vs 25–35</h2>
+                  <p className="wi-kpi-sub">
+                    Primary research segments from Myntra Wishlist + Wishlist Habits surveys
+                  </p>
+                  {ageContrast && <p className="wi-age-contrast">{ageContrast}</p>}
+                </div>
+                <div className="wi-age-compare-grid">
+                  {ageComparison.map((cohort) => (
+                    <article key={cohort.segment} className="wi-age-cohort">
+                      <header className="wi-age-cohort-head">
+                        <h3>{cohort.label}</h3>
+                        <span className="wi-age-cohort-vol">{cohort.volume} evidence</span>
+                      </header>
+                      <ul className="wi-age-notes">
+                        {cohort.notes.map((note) => (
+                          <li key={note}>{note}</li>
+                        ))}
+                      </ul>
+                      <div className="wi-age-reasons">
+                        <span className="wi-dash-label">Top non-conversion reasons</span>
+                        {cohort.reasons.length === 0 ? (
+                          <p className="muted">No age-tagged reasons yet — refresh insights.</p>
+                        ) : (
+                          cohort.reasons.map((row) => (
+                            <div key={row.reason_category} className="wi-age-reason-row">
+                              <span>{formatReason(row.reason_category)}</span>
+                              <strong>{row.evidence_volume}</strong>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        className="wi-dash-hint"
+                        onClick={() => onFiltersChange({ ...filters, segment: cohort.segment })}
+                      >
+                        Filter dashboard to {cohort.label}
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              </section>
 
             <div className="wi-dash-mid">
               <section className="wi-dash-card">

@@ -18,7 +18,13 @@ class Base(DeclarativeBase):
 
 _settings = get_settings()
 
-engine = create_engine(_settings.sqlalchemy_url, pool_pre_ping=True, future=True)
+engine = create_engine(
+    _settings.sqlalchemy_url,
+    pool_pre_ping=True,
+    pool_timeout=5,
+    connect_args={"connect_timeout": 5},
+    future=True,
+)
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
 

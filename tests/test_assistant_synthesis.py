@@ -2,6 +2,8 @@
 
 from uuid import uuid4
 
+from assistant.query import is_age_segment_compare_question, understand_query
+from assistant.schemas import AggregateContext
 from assistant.synthesis import (
     _as_mid_sentence,
     _normalize_answer,
@@ -152,6 +154,44 @@ def test_truncate_at_word_does_not_cut_mid_word():
     assert not excerpt.endswith("wee")
     rest = text[len(excerpt) :]
     assert not rest or rest[0].isspace()
+
+
+def test_user_segment_question_compares_age_cohorts():
+    young = _chunk(
+        "Q: Age band\nA: 18-24\n\nQ: What usually stops you from buying wishlist items?\n"
+        "A: I am waiting for a sale, I am waiting for the right occasion"
+    )
+    young.segment = "age_18_24"
+    older = _chunk(
+        "Q: Age band\nA: 25-35\n\nQ: What usually stops you from buying wishlist items?\n"
+        "A: The price is too high, I am unsure about the fit"
+    )
+    older.segment = "age_25_35"
+    aggregates = AggregateContext(
+        run_version="test",
+        segment_comparisons=[
+            {"dimension": "age_18_24", "reason_category": "timing_occasion", "evidence_volume": 20},
+            {"dimension": "age_25_35", "reason_category": "fit_sizing_uncertainty", "evidence_volume": 20},
+            {"dimension": "age_25_35", "reason_category": "price_sensitivity_waiting", "evidence_volume": 12},
+        ],
+    )
+    answer = synthesize_grounded_answer(
+        "How do these behaviors differ across user segments?",
+        [young, older],
+        aggregates,
+    )
+    lowered = answer.lower()
+    assert "18–24" in answer or "18-24" in lowered
+    assert "25–35" in answer or "25-35" in lowered
+    assert "price sensitive" not in lowered
+    assert "quality concerned" not in lowered
+
+
+def test_understand_query_does_not_lock_segment_compare():
+    assert is_age_segment_compare_question("How do these behaviors differ across user segments?")
+    parsed = understand_query("How do these behaviors differ across user segments?")
+    assert parsed.intent_hint == "age_segments"
+    assert parsed.filters is None or parsed.filters.segment is None
 
 
 def test_synthesize_blockers_preserves_capital_i():

@@ -82,6 +82,24 @@ def test_question_in_scope_accepts_hinglish_shopping():
     assert question_in_scope("write me a python function to sort a list") is False
 
 
+def test_question_in_scope_accepts_user_segment_compare():
+    assert question_in_scope("How do these behaviors differ across user segments?") is True
+    assert question_in_scope("How do wishlist behaviors differ between Age 18–24 and Age 25–35?") is True
+
+
+def test_assess_evidence_allows_user_segment_compare_without_claim_words():
+    chunks = [
+        _chunk(0.88, "Age band: 18-24. I am waiting for a sale and the right occasion."),
+        _chunk(0.74, "Age band: 25-35. The price is too high and I am unsure about fit."),
+    ]
+    result = assess_evidence(
+        chunks,
+        question="How do these behaviors differ across user segments?",
+    )
+    assert result.sufficient is True
+    assert result.unsupported_terms == ()
+
+
 def test_understand_query_detects_reason_and_source():
     parsed = understand_query(
         "Why do price sensitive users wait for a sale before buying wishlist items from research?"

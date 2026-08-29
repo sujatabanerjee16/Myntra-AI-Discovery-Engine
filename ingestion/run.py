@@ -79,12 +79,16 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     research_path = args.research_path or settings.research_excel_path
+    research_paths = settings.research_excel_path_list
+    if args.research_path:
+        research_paths = [research_path, *[p for p in research_paths if p != research_path]]
     json_path = args.export_json or settings.scraped_json_path
 
     if args.json_only or args.export_json:
         corpus, result = prepare_corpus(
             sources=sources,
             research_excel_path=research_path,
+            research_excel_paths=research_paths,
             run_version=args.run_version,
             play_store_limit=args.play_store_limit,
             skip_embed=args.skip_embed,
@@ -106,6 +110,7 @@ def main(argv: list[str] | None = None) -> int:
                 session,
                 sources=sources,
                 research_excel_path=research_path,
+                research_excel_paths=research_paths,
                 run_version=args.run_version,
                 play_store_limit=args.play_store_limit,
                 skip_embed=args.skip_embed,

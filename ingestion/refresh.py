@@ -51,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
             result = run_pipeline(
                 session,
                 sources=due,
-                research_excel_path=settings.research_excel_path,
+                research_excel_paths=settings.research_excel_path_list,
                 run_version=args.run_version,
                 play_store_limit=settings.play_store_review_limit,
                 skip_embed=args.skip_embed,

@@ -7,6 +7,7 @@ import logging
 import re
 from dataclasses import dataclass
 
+from assistant.query import is_age_segment_compare_question
 from assistant.schemas import AggregateContext, Citation
 from assistant.synthesis import synthesize_grounded_answer
 from common.config import get_settings
@@ -110,6 +111,9 @@ def generate_grounded_answer(
     aggregates: AggregateContext | None = None,
 ) -> GeneratedAnswer:
     """Generate a grounded answer; fall back to template synthesis without an API key."""
+    # Age-cohort answers must stay in the 18–24 vs 25–35 format even when Groq is on.
+    if is_age_segment_compare_question(question):
+        return _template_generate(question, chunks, aggregates)
     settings = get_settings()
     if settings.groq_api_key:
         try:
