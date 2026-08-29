@@ -63,22 +63,32 @@ textarea {
   padding-top: var(--topbar-height);
 }
 
+.app-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: calc(100vh - var(--topbar-height));
+}
+
 /* ——— Top bar (fixed across all views) ——— */
 .app-topbar {
   height: var(--topbar-height);
-  background: var(--topbar-bg);
+  background: linear-gradient(180deg, #1e2433 0%, #161b27 100%);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 0 1.25rem;
+  padding: 0 1.4rem;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 1px 0 rgba(255, 63, 108, 0.35),
+    0 10px 28px rgba(8, 10, 18, 0.28);
 }
 
 .relative {
@@ -192,11 +202,31 @@ textarea {
   margin: 0;
   font-size: 0.9rem;
 }
-.dropdown-header .badge {
+.dropdown-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.notif-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.35rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.notif-chip--sample {
+  background: #f1f5f9;
+  color: #64748b;
+}
+.notif-chip--new {
   background: rgba(255, 63, 108, 0.1);
   color: var(--myntra-pink);
-  border: none;
-  font-size: 0.7rem;
 }
 .notification-list {
   max-height: 300px;
@@ -422,41 +452,63 @@ textarea {
   margin: 0 0.15rem;
 }
 
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
 .brand-product {
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.brand-sub {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fda4af;
   white-space: nowrap;
 }
 
 .topbar-nav {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  flex: 1;
+  gap: 0.15rem;
+  flex: 0 1 auto;
   justify-content: center;
+  padding: 0.22rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .topbar-nav button {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.68);
   font-size: 0.8125rem;
-  font-weight: 600;
-  padding: 0.5rem 0.875rem;
-  border-radius: var(--radius-md);
+  font-weight: 650;
+  padding: 0.42rem 0.95rem;
+  border-radius: 999px;
   cursor: pointer;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
 .topbar-nav button:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .topbar-nav button.active {
   color: #fff;
-  background: rgba(255, 63, 108, 0.18);
+  background: linear-gradient(180deg, #ff4d79 0%, #e11d48 100%);
+  box-shadow: 0 6px 16px rgba(225, 29, 72, 0.35);
 }
 
 .topbar-actions {
@@ -526,19 +578,12 @@ textarea {
   background: #f1f5f9;
 }
 
-.app-main--unified {
-  padding: 0;
-  max-width: none;
-  height: calc(100vh - var(--topbar-height) - 180px);
-  overflow: hidden;
-  background: #f1f5f9;
-  min-height: 0;
-}
-
+.app-main--unified,
 .app-main--chat {
   padding: 0;
   max-width: none;
-  height: calc(100vh - var(--topbar-height));
+  flex: 1;
+  height: auto;
   overflow: hidden;
   background: #f1f5f9;
   min-height: 0;
@@ -633,133 +678,170 @@ textarea {
 /* ——— Fashion Hero Banner ——— */
 .fashion-hero-banner {
   position: relative;
-  height: 180px;
-  background: linear-gradient(135deg, #191B31 0%, #2A1B38 100%);
+  flex-shrink: 0;
+  min-height: 228px;
+  background:
+    linear-gradient(115deg, #100814 0%, #1b1030 42%, #2a1540 72%, #3a1238 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  padding: 0 3rem;
+  padding: 1.6rem 2.75rem 1.75rem;
   margin-bottom: -1px;
+  border-bottom: 1px solid rgba(255, 63, 108, 0.18);
 }
 
-.fashion-hero-overlay {
+.fashion-hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fashion-hero-glow--pink {
+  width: 340px;
+  height: 340px;
+  right: 18%;
+  top: -120px;
+  background: rgba(255, 63, 108, 0.28);
+}
+
+.fashion-hero-glow--violet {
+  width: 280px;
+  height: 280px;
+  left: -60px;
+  bottom: -140px;
+  background: rgba(124, 58, 237, 0.22);
+}
+
+.fashion-hero-grid {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 70% 50%, rgba(255, 63, 108, 0.15), transparent 60%);
   z-index: 1;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 72%);
 }
 
 .fashion-hero-content {
   position: relative;
   z-index: 2;
   color: #ffffff;
-  max-width: 500px;
+  max-width: 560px;
+}
+
+.fashion-hero-kicker {
+  margin: 0 0 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fda4af;
 }
 
 .fashion-hero-content h1 {
-  margin: 0 0 0.4rem;
-  font-size: 1.8rem;
+  margin: 0 0 0.45rem;
+  font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
-  background: linear-gradient(90deg, #fff, #ffebe6);
+  background: linear-gradient(92deg, #ffffff 10%, #ffe4ec 55%, #ffb4c8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.fashion-hero-content p {
-  margin: 0 0 1.2rem;
+.fashion-hero-lead {
+  margin: 0 0 1rem;
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.82);
   line-height: 1.5;
+  max-width: 34rem;
 }
 
-.fashion-hero-badges {
+.fashion-hero-highlights {
   display: flex;
-  gap: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.fashion-badge {
-  background: var(--myntra-pink);
-  color: white;
-  padding: 0.45rem 1rem;
-  border-radius: 999px;
-  border: none;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(255, 63, 108, 0.3);
-  cursor: pointer;
-  transition: all 0.2s ease;
+.fashion-hero-highlights li {
+  min-width: 9.5rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.fashion-badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 63, 108, 0.4);
+.fashion-hero-highlights strong {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: #fff;
 }
 
-.fashion-badge:active {
-  transform: translateY(1px);
-}
-
-.fashion-badge--outline {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: none;
-}
-
-.fashion-badge--outline:hover {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.fashion-badge--disabled,
-.fashion-badge--disabled:hover,
-.fashion-badge--disabled:active {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.badge--sample {
-  background: rgba(148, 163, 184, 0.25);
-  color: #cbd5e1;
-  font-weight: 500;
+.fashion-hero-highlights span {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .fashion-hero-images {
   position: relative;
   z-index: 2;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  height: 140px;
-  transform: rotate(4deg) translateY(10px);
+  align-items: flex-end;
+  gap: 0;
+  height: 188px;
+  padding-right: 0.4rem;
 }
 
 .fashion-hero-img-wrap {
-  width: 110px;
-  height: 140px;
-  border-radius: 12px;
+  width: 118px;
+  height: 156px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.38);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  transform: rotate(-8deg) translateY(8px);
   transition: transform 0.3s ease;
 }
 
+.fashion-hero-img-wrap + .fashion-hero-img-wrap {
+  margin-left: -1.1rem;
+}
+
 .fashion-hero-img-wrap:hover {
-  transform: translateY(-8px) scale(1.05) rotate(-2deg);
-  border-color: var(--myntra-pink);
+  transform: translateY(-10px) scale(1.04) rotate(-2deg);
+  border-color: rgba(255, 63, 108, 0.7);
   z-index: 5;
 }
 
 .fashion-hero-img-wrap--large {
-  width: 180px;
-  height: 160px;
-  margin-top: -10px;
+  width: 168px;
+  height: 188px;
+  transform: rotate(3deg) translateY(-4px);
+  z-index: 3;
+}
+
+.fashion-hero-img-wrap--large:hover {
+  transform: translateY(-12px) scale(1.04) rotate(1deg);
+}
+
+.fashion-hero-img-wrap:last-child {
+  transform: rotate(9deg) translateY(10px);
+}
+
+.fashion-hero-img-wrap:last-child:hover {
+  transform: translateY(-10px) scale(1.04) rotate(4deg);
 }
 
 .fashion-hero-img-wrap img {
@@ -769,8 +851,22 @@ textarea {
 }
 
 @media (max-width: 900px) {
+  .fashion-hero-banner {
+    min-height: 0;
+    padding: 1.25rem 1.15rem 1.35rem;
+  }
+
   .fashion-hero-images {
     display: none;
+  }
+
+  .fashion-hero-content h1 {
+    font-size: 1.55rem;
+  }
+
+  .fashion-hero-highlights li {
+    min-width: 0;
+    flex: 1 1 8rem;
   }
 }
 
@@ -3001,7 +3097,8 @@ textarea {
     padding: 0 0.65rem;
   }
 
-  .brand-product {
+  .brand-product,
+  .brand-sub {
     display: none;
   }
 

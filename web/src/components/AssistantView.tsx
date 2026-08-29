@@ -219,7 +219,7 @@ export default function AssistantView({
   const [error, setError] = useState<string | null>(null);
   const [evidenceOpen, setEvidenceOpen] = useState(!isCompact);
   const [showAllSuggestions, setShowAllSuggestions] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const autoAskedRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -233,7 +233,9 @@ export default function AssistantView({
   }, []);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const pane = messagesRef.current;
+    if (!pane) return;
+    pane.scrollTop = pane.scrollHeight;
   }, [messages, loading]);
 
   const latestCitations = useMemo(() => {
@@ -353,7 +355,7 @@ export default function AssistantView({
           </div>
         </div>
 
-        <div className="wi-chat-messages">
+        <div className="wi-chat-messages" ref={messagesRef}>
           {messages.length === 0 && !loading && (
             <div className="wi-chat-empty">
               <div className="wi-welcome">
@@ -476,7 +478,6 @@ export default function AssistantView({
             </div>
           )}
 
-          <div ref={chatEndRef} />
         </div>
 
         <div className="wi-chat-input-wrap">

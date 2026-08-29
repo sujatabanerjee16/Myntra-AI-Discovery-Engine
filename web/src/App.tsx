@@ -24,48 +24,47 @@ function MyntraMark() {
 function FashionBanner() {
   return (
     <div className="fashion-hero-banner">
-      <div className="fashion-hero-overlay" />
+      <div className="fashion-hero-glow fashion-hero-glow--pink" aria-hidden="true" />
+      <div className="fashion-hero-glow fashion-hero-glow--violet" aria-hidden="true" />
+      <div className="fashion-hero-grid" aria-hidden="true" />
       <div className="fashion-hero-content">
+        <p className="fashion-hero-kicker">Myntra · Wishlist Intelligence</p>
         <h1>Wishlist Analytics</h1>
-        <p>Uncover why users wait, what they want, and how to convert them.</p>
-        <div className="fashion-hero-badges">
-          <button
-            type="button"
-            className="fashion-badge fashion-badge--disabled"
-            disabled
-            title="Coming soon"
-            aria-disabled="true"
-          >
-            End of Reason Sale Insights
-          </button>
-          <button
-            type="button"
-            className="fashion-badge fashion-badge--outline fashion-badge--disabled"
-            disabled
-            title="Coming soon"
-            aria-disabled="true"
-          >
-            Autumn/Winter &apos;26
-          </button>
-        </div>
+        <p className="fashion-hero-lead">
+          Uncover why shoppers wait, what they want, and how to convert saved items into purchases.
+        </p>
+        <ul className="fashion-hero-highlights">
+          <li>
+            <strong>2 cohorts</strong>
+            <span>Age 18–24 vs 25–35</span>
+          </li>
+          <li>
+            <strong>Primary research</strong>
+            <span>Wishlist + habits surveys</span>
+          </li>
+          <li>
+            <strong>Grounded answers</strong>
+            <span>Cited shopper evidence</span>
+          </li>
+        </ul>
       </div>
-      <div className="fashion-hero-images">
+      <div className="fashion-hero-images" aria-hidden="true">
         <div className="fashion-hero-img-wrap">
           <img
             src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=400&h=400"
-            alt="Fashion"
+            alt=""
           />
         </div>
         <div className="fashion-hero-img-wrap fashion-hero-img-wrap--large">
           <img
             src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&q=80&w=600&h=400"
-            alt="Fashion"
+            alt=""
           />
         </div>
         <div className="fashion-hero-img-wrap">
           <img
             src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=400&h=400"
-            alt="Fashion"
+            alt=""
           />
         </div>
       </div>
@@ -131,7 +130,9 @@ export default function App() {
   const goToChat = () => {
     setActiveNav("chat");
     window.setTimeout(() => {
-      document.querySelector<HTMLInputElement>(".wi-chat-page .wi-chat-input input")?.focus();
+      document
+        .querySelector<HTMLInputElement>(".wi-chat-page .wi-chat-input input")
+        ?.focus({ preventScroll: true });
     }, 60);
   };
 
@@ -145,7 +146,10 @@ export default function App() {
       <header className="app-topbar" onClick={(e) => e.stopPropagation()}>
         <div className="topbar-brand">
           <MyntraMark />
-          <span className="brand-product">Wishlist Intelligence</span>
+          <div className="brand-copy">
+            <span className="brand-product">Wishlist Intelligence</span>
+            <span className="brand-sub">Conversion discovery</span>
+          </div>
         </div>
 
         <nav className="topbar-nav" aria-label="Primary">
@@ -278,12 +282,12 @@ export default function App() {
               <div className="dropdown-menu notifications-menu">
                 <div className="dropdown-header">
                   <h4>Notifications</h4>
-                  <span className="badge badge--sample">Sample data</span>
-                  {unreadCount > 0 && (
-                    <span className="badge">
-                      {unreadCount} New
-                    </span>
-                  )}
+                  <div className="dropdown-header-meta">
+                    <span className="notif-chip notif-chip--sample">Sample</span>
+                    {unreadCount > 0 && (
+                      <span className="notif-chip notif-chip--new">{unreadCount} new</span>
+                    )}
+                  </div>
                 </div>
                 <div className="notification-list">
                   {notifications.map((item) => (
@@ -452,7 +456,8 @@ export default function App() {
         </div>
       </header>
 
-      {activeNav !== "chat" && <FashionBanner />}
+      <div className="app-body">
+      <FashionBanner />
       <main className={`app-main ${activeNav === "chat" ? "app-main--chat" : "app-main--unified"}`}>
         {/* Dashboard + Competitive share one data-driven view; kept mounted so
             switching tabs preserves loaded data and filter state. */}
@@ -476,6 +481,7 @@ export default function App() {
           />
         </div>
       </main>
+      </div>
     </div>
   );
 }
