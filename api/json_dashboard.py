@@ -200,6 +200,22 @@ def get_filtered_reason_ranks(
     ]
 
 
+def research_respondent_counts() -> dict[str, int]:
+    """Count unique survey *rows* per age band (not chunks or open-text extras)."""
+    seen: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
+    for chunk in load_corpus_chunks():
+        if chunk.get("source") != "research":
+            continue
+        segment = chunk.get("segment")
+        if segment not in seen:
+            continue
+        ref = str(chunk.get("source_ref") or "")
+        if ":open:" in ref or ":row:" not in ref:
+            continue
+        seen[segment].add(ref)
+    return {key: len(refs) for key, refs in seen.items()}
+
+
 def get_segment_comparisons(
     *,
     run_version: str | None = None,
@@ -245,7 +261,10 @@ def get_segment_comparisons(
     ]
     items.sort(key=lambda item: item.evidence_volume, reverse=True)
     return ComparisonResponse(
-        run_version=payload.get("run_version"), group_by=group_by, items=items
+        run_version=payload.get("run_version"),
+        group_by=group_by,
+        items=items,
+        respondent_counts=research_respondent_counts() if group_by == "segment" else {},
     )
 
 

@@ -94,6 +94,8 @@ class ComparisonResponse(BaseModel):
     run_version: str | None
     group_by: str
     items: list[ComparisonItem]
+    # Unique survey respondents (research row documents) per segment key.
+    respondent_counts: dict[str, int] = {}
 
 
 class HeatmapCell(BaseModel):

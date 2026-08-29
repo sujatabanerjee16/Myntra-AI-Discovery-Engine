@@ -348,16 +348,18 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
   const ageComparison = useMemo(() => {
     const items = comparisons?.items ?? [];
+    const respondents = comparisons?.respondent_counts ?? {};
     return AGE_SEGMENTS.map((segment) => {
       const rows = items
         .filter((item) => item.dimension === segment)
         .sort((a, b) => b.evidence_volume - a.evidence_volume)
         .slice(0, 4);
-      const volume = rows.reduce((sum, row) => sum + row.evidence_volume, 0);
+      const excerptTotal = rows.reduce((sum, row) => sum + row.evidence_volume, 0);
       return {
         segment,
         label: formatReason(segment),
-        volume,
+        respondents: respondents[segment] ?? 0,
+        excerptTotal,
         reasons: rows,
         notes: AGE_BEHAVIOR_NOTES[segment] ?? [],
       };
@@ -704,7 +706,8 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                 <div className="wi-age-compare-head">
                   <h2>Age cohort comparison · 18–24 vs 25–35</h2>
                   <p className="wi-kpi-sub">
-                    Primary research segments from Myntra Wishlist + Wishlist Habits surveys
+                    Unique survey respondents from Myntra Wishlist + Wishlist Habits. Reason
+                    shares are excerpt mix, not extra people — one response can produce several tags.
                   </p>
                   {ageContrast && <p className="wi-age-contrast">{ageContrast}</p>}
                 </div>
@@ -713,7 +716,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                     <article key={cohort.segment} className="wi-age-cohort">
                       <header className="wi-age-cohort-head">
                         <h3>{cohort.label}</h3>
-                        <span className="wi-age-cohort-vol">{cohort.volume} evidence</span>
+                        <span className="wi-age-cohort-vol">
+                          {cohort.respondents
+                            ? `${cohort.respondents} respondent${cohort.respondents === 1 ? "" : "s"}`
+                            : "No respondents"}
+                        </span>
                       </header>
                       <ul className="wi-age-notes">
                         {cohort.notes.map((note) => (
@@ -728,7 +735,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                           cohort.reasons.map((row) => (
                             <div key={row.reason_category} className="wi-age-reason-row">
                               <span>{formatReason(row.reason_category)}</span>
-                              <strong>{row.evidence_volume}</strong>
+                              <strong>
+                                {cohort.excerptTotal
+                                  ? `${Math.round((row.evidence_volume / cohort.excerptTotal) * 100)}%`
+                                  : "—"}
+                              </strong>
                             </div>
                           ))
                         )}

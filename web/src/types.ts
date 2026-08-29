@@ -34,6 +34,7 @@ export interface ComparisonResponse {
   run_version: string | null;
   group_by: string;
   items: ComparisonItem[];
+  respondent_counts?: Record<string, number>;
 }
 
 export interface HeatmapCell {
