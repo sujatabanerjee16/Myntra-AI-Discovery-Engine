@@ -71,6 +71,7 @@ class Settings(BaseSettings):
     research_excel_path: str = "Myntra Wishlist.xlsx"
     # Additional survey workbook(s), comma-separated. Combined with research_excel_path.
     research_excel_secondary_paths: str = "Your Wishlist Habits (Responses).xlsx"
+    research_interview_docx: str = "All file.docx"
     play_store_review_limit: int = 200
     chunk_size: int = 512
     chunk_overlap: int = 64

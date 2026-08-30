@@ -30,13 +30,81 @@ def _payload() -> dict:
     return load_insights_payload()
 
 
+_SOURCE_ALIASES = {
+    "play_store": {"play_store", "playstore", "google_play", "app"},
+    "youtube": {"youtube", "yt"},
+    "reddit": {"reddit"},
+    "product_review": {"product_review", "product_reviews", "review", "reviews"},
+    "social": {"social", "instagram", "twitter", "x"},
+    "research": {"research", "survey", "interview"},
+}
+
+
+def _parse_csv_param(raw: str | None) -> list[str]:
+    if not raw:
+        return []
+    return [part.strip() for part in raw.split(",") if part.strip()]
+
+
+def _insight_sources(row: dict) -> list[str]:
+    sources = row.get("sources") or []
+    if isinstance(sources, str):
+        return [sources]
+    return [str(item) for item in sources if item]
+
+
+def _matches_sources(row: dict, selected: list[str]) -> bool:
+    if not selected:
+        return True
+    aliases = {alias for key in selected for alias in _SOURCE_ALIASES.get(key, {key})}
+    row_sources = _insight_sources(row)
+    if not row_sources:
+        return True
+    return any(source.lower().replace(" ", "_") in aliases for source in row_sources)
+
+
+def _matches_platforms(row: dict, selected: list[str]) -> bool:
+    if not selected:
+        return True
+    wanted = {item.lower() for item in selected}
+    platforms = [str(item).lower() for item in (row.get("platforms") or [])]
+    if not platforms:
+        return "other" in wanted
+    return any(item in wanted for item in platforms)
+
+
+def _chunk_price_bands() -> dict[str, str]:
+    index: dict[str, str] = {}
+    for chunk in load_corpus_chunks():
+        band = chunk.get("price_band")
+        chunk_id = chunk.get("chunk_id")
+        if band and chunk_id:
+            index[str(chunk_id)] = str(band)
+    return index
+
+
+def _matches_price_band(row: dict, price_band: str | None, price_index: dict[str, str]) -> bool:
+    if not price_band:
+        return True
+    for raw_id in row.get("evidence_chunk_ids") or []:
+        if price_index.get(str(raw_id)) == price_band:
+            return True
+    return False
+
+
 def _insights(
     *,
     segment: str | None = None,
     category: str | None = None,
     reason_category: str | None = None,
+    min_confidence: float | None = None,
+    sources: list[str] | None = None,
+    platforms: list[str] | None = None,
+    intent: str | None = None,
+    price_band: str | None = None,
 ) -> list[dict]:
     rows = _payload().get("insights", [])
+    price_index = _chunk_price_bands() if price_band else {}
     filtered: list[dict] = []
     for row in rows:
         if segment and row.get("segment") != segment:
@@ -44,6 +112,18 @@ def _insights(
         if category and row.get("category") != category:
             continue
         if reason_category and row.get("reason_category") != reason_category:
+            continue
+        if min_confidence is not None:
+            conf = row.get("confidence")
+            if conf is None or float(conf) < min_confidence:
+                continue
+        if not _matches_sources(row, sources or []):
+            continue
+        if not _matches_platforms(row, platforms or []):
+            continue
+        if intent and row.get("intent_type") != intent:
+            continue
+        if not _matches_price_band(row, price_band, price_index):
             continue
         filtered.append(row)
     return filtered
@@ -147,6 +227,11 @@ def rank_reasons_for_dashboard(
     segment: str | None = None,
     category: str | None = None,
     reason_category: str | None = None,
+    min_confidence: float | None = None,
+    sources: list[str] | None = None,
+    platforms: list[str] | None = None,
+    intent: str | None = None,
+    price_band: str | None = None,
 ) -> tuple[list[ReasonRankItem], str | None]:
     """Rank reasons; if age+category is empty, fall back to category-only excerpts."""
     items = get_filtered_reason_ranks(
@@ -154,6 +239,11 @@ def rank_reasons_for_dashboard(
         segment=segment,
         category=category,
         reason_category=reason_category,
+        min_confidence=min_confidence,
+        sources=sources,
+        platforms=platforms,
+        intent=intent,
+        price_band=price_band,
     )
     if items:
         return items, None
@@ -162,6 +252,11 @@ def rank_reasons_for_dashboard(
             run_version=run_version,
             category=category,
             reason_category=reason_category,
+            min_confidence=min_confidence,
+            sources=sources,
+            platforms=platforms,
+            intent=intent,
+            price_band=price_band,
         )
         if loosened:
             age = segment.replace("age_", "").replace("_", "–")
@@ -178,71 +273,77 @@ def get_filtered_reason_ranks(
     segment: str | None = None,
     category: str | None = None,
     reason_category: str | None = None,
+    min_confidence: float | None = None,
+    sources: list[str] | None = None,
+    platforms: list[str] | None = None,
+    intent: str | None = None,
+    price_band: str | None = None,
 ) -> list[ReasonRankItem]:
-    payload = _payload()
-    if segment or category or reason_category:
-        groups: dict[str, dict] = defaultdict(
-            lambda: {
-                "evidence_volume": 0,
-                "confidences": [],
-                "sources": set(),
-                "active_shortlist_count": 0,
-                "passive_bookmark_count": 0,
-            }
-        )
-        for row in _insights(segment=segment, category=category, reason_category=reason_category):
-            reason = row["reason_category"]
-            bucket = groups[reason]
+    groups: dict[str, dict] = defaultdict(
+        lambda: {
+            "evidence_volume": 0,
+            "confidences": [],
+            "sources": set(),
+            "active_shortlist_count": 0,
+            "passive_bookmark_count": 0,
+        }
+    )
+    for row in _insights(
+        segment=segment,
+        category=category,
+        reason_category=reason_category,
+        min_confidence=min_confidence,
+        sources=sources,
+        platforms=platforms,
+        intent=intent,
+        price_band=price_band,
+    ):
+        reason = row.get("reason_category")
+        if not reason:
+            continue
+        bucket = groups[reason]
+        try:
             bucket["evidence_volume"] += int(row.get("evidence_volume") or 0)
+        except (TypeError, ValueError):
+            bucket["evidence_volume"] += 0
+        try:
             if row.get("confidence") is not None:
                 bucket["confidences"].append(float(row["confidence"]))
-            bucket["sources"].update(row.get("sources") or [])
-            if row.get("intent_type") == "active_shortlist":
-                bucket["active_shortlist_count"] += int(row.get("evidence_volume") or 0)
-            else:
-                bucket["passive_bookmark_count"] += int(row.get("evidence_volume") or 0)
+        except (TypeError, ValueError):
+            pass
+        row_sources = row.get("sources") or []
+        if isinstance(row_sources, str):
+            row_sources = [row_sources]
+        if isinstance(row_sources, list):
+            bucket["sources"].update(str(item) for item in row_sources if item is not None)
+        try:
+            volume = int(row.get("evidence_volume") or 0)
+        except (TypeError, ValueError):
+            volume = 0
+        if row.get("intent_type") == "active_shortlist":
+            bucket["active_shortlist_count"] += volume
+        else:
+            bucket["passive_bookmark_count"] += volume
 
-        items = [
-            ReasonRankItem(
-                reason_category=reason,
-                evidence_volume=bucket["evidence_volume"],
-                confidence=round(sum(bucket["confidences"]) / len(bucket["confidences"]), 3)
-                if bucket["confidences"]
-                else None,
-                sources=sorted(bucket["sources"]),
-                active_shortlist_count=bucket["active_shortlist_count"],
-                passive_bookmark_count=bucket["passive_bookmark_count"],
-            )
-            for reason, bucket in groups.items()
-        ]
-        items.sort(key=lambda item: item.evidence_volume, reverse=True)
-        return items
-
-    return [
+    items = [
         ReasonRankItem(
-            reason_category=row["reason_category"],
-            evidence_volume=row["evidence_volume"],
-            confidence=row.get("confidence"),
-            sources=row.get("sources") or [],
-            active_shortlist_count=row.get("active_shortlist_count", 0),
-            passive_bookmark_count=row.get("passive_bookmark_count", 0),
+            reason_category=reason,
+            evidence_volume=bucket["evidence_volume"],
+            confidence=round(sum(bucket["confidences"]) / len(bucket["confidences"]), 3)
+            if bucket["confidences"]
+            else None,
+            sources=sorted(bucket["sources"]),
+            active_shortlist_count=bucket["active_shortlist_count"],
+            passive_bookmark_count=bucket["passive_bookmark_count"],
         )
-        for row in payload.get("reasons", [])
+        for reason, bucket in groups.items()
     ]
+    items.sort(key=lambda item: item.evidence_volume, reverse=True)
+    return items
 
 
 def research_respondent_counts() -> dict[str, int]:
     """Count unique survey *rows* per age band (not chunks or open-text extras)."""
-    stored = _payload().get("respondent_counts")
-    if isinstance(stored, dict):
-        baked = {
-            key: int(stored[key])
-            for key in ("age_18_24", "age_25_35")
-            if stored.get(key) not in (None, "")
-        }
-        if any(baked.values()):
-            return {key: baked.get(key, 0) for key in ("age_18_24", "age_25_35")}
-
     seen: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
     for chunk in load_corpus_chunks():
         source = chunk.get("source")

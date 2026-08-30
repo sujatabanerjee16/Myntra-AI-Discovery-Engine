@@ -210,4 +210,7 @@ def fetch_all_research_records(excel_paths: list[str | Path]) -> list[RawRecord]
             continue
         records.extend(fetch_research_records(path))
         records.extend(fetch_research_open_text_records(path))
+    from ingestion.connectors.research_interviews import fetch_interview_docx_records
+
+    records.extend(fetch_interview_docx_records())
     return records

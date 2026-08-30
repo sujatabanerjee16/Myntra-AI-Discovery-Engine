@@ -10,6 +10,9 @@ import type {
   EvidenceSummaryResponse,
   FilterState,
   HeatmapResponse,
+  IntentType,
+  PlatformId,
+  SourceId,
   InsightFeedbackListResponse,
   InsightFeedbackRecord,
   IntentBreakdownResponse,
@@ -47,7 +50,14 @@ function filterParams(filters: FilterState): Record<string, string | undefined> 
 async function fetchJson<T>(path: string): Promise<T> {
   const resp = await fetch(path);
   if (!resp.ok) {
-    throw new Error(`${resp.status} ${resp.statusText}`);
+    let detail = `${resp.status} ${resp.statusText}`;
+    try {
+      const body = (await resp.json()) as { detail?: unknown };
+      if (body.detail) detail = `${detail}: ${typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)}`;
+    } catch {
+      /* keep status text */
+    }
+    throw new Error(detail);
   }
   return resp.json() as Promise<T>;
 }
@@ -56,8 +66,37 @@ export async function getFilters(): Promise<DashboardFilters> {
   return fetchJson(apiUrl("/insights/filters"));
 }
 
-export async function getRankedReasons(filters: FilterState): Promise<ReasonRankResponse> {
-  return fetchJson(apiUrl(`/insights/reasons${buildQuery(filterParams(filters))}`));
+export interface ReasonQuery {
+  minConfidence?: number;
+  sources?: SourceId[];
+  platforms?: PlatformId[];
+  intentType?: IntentType;
+}
+
+export async function getRankedReasons(
+  filters: FilterState,
+  query: number | ReasonQuery = {},
+): Promise<ReasonRankResponse> {
+  const options: ReasonQuery = typeof query === "number" ? { minConfidence: query } : query;
+  const intent =
+    options.intentType === "high"
+      ? "active_shortlist"
+      : options.intentType === "low"
+        ? "passive_bookmark"
+        : undefined;
+  const sourceList = options.sources ?? [];
+  const platformList = options.platforms ?? [];
+  return fetchJson(
+    apiUrl(
+      `/insights/reasons${buildQuery({
+        ...filterParams(filters),
+        min_confidence: options.minConfidence != null ? String(options.minConfidence) : undefined,
+        sources: sourceList.length > 0 ? sourceList.join(",") : undefined,
+        platforms: platformList.length > 0 ? platformList.join(",") : undefined,
+        intent,
+      })}`,
+    ),
+  );
 }
 
 export async function getComparisons(filters: FilterState): Promise<ComparisonResponse> {

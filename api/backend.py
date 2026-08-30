@@ -46,7 +46,7 @@ def call_with_json_fallback(
 
     try:
         return db_call(session)
-    except SQLAlchemyError as exc:
+    except Exception as exc:
         if not json_data_available():
             raise
         logger.warning("Database error for %s; using JSON fallback: %s", label, exc)

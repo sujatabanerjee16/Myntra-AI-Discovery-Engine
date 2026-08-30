@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   getComparisons,
   getCompetitiveAnalysis,
@@ -41,19 +41,20 @@ const SOURCE_SCRAPE_LABELS: Record<string, string> = {
 /** Last-resort survey sizes when the API omits respondent_counts. */
 const AGE_RESPONDENT_FALLBACK: Record<(typeof AGE_SEGMENTS)[number], number> = {
   age_18_24: 27,
-  age_25_35: 15,
+  age_25_35: 21,
 };
 
-const AGE_BEHAVIOR_NOTES: Record<string, string[]> = {
-  age_18_24: [
-    "Often wait for an occasion or a sale; forgetting and choice overload are common",
-    "Strongest decision help: real customer photos / videos",
-  ],
-  age_25_35: [
-    "More price-too-high, photo/review trust doubt, and fit uncertainty",
-    "Decision help is mixed: styling, fit confidence, reminders",
-  ],
+const AGE_FOCUS: Record<string, string> = {
+  age_18_24: "Leads on photos + occasion / forgetting",
+  age_25_35: "Leads on price-too-high + fit",
 };
+
+const SHARED_PAINS = [
+  { id: "price", label: "Price / sale" },
+  { id: "fit", label: "Fit / size" },
+  { id: "proof", label: "Proof / photos" },
+  { id: "timing", label: "Timing / forget" },
+] as const;
 import CompetitiveAnalysisPanel from "./CompetitiveAnalysisPanel";
 import { formatReason } from "./ConfidenceBadge";
 import QuestionsView from "./QuestionsView";
@@ -78,15 +79,6 @@ const SOURCES: { id: SourceId; label: string }[] = [
   { id: "research", label: "Research" },
 ];
 
-const SOURCE_ALIASES: Record<SourceId, string[]> = {
-  play_store: ["play_store", "playstore", "google_play", "app"],
-  youtube: ["youtube", "yt"],
-  reddit: ["reddit"],
-  product_review: ["product_review", "product_reviews", "review", "reviews"],
-  social: ["social", "instagram", "twitter", "x"],
-  research: ["research", "survey"],
-};
-
 function confidenceTier(confidence: number | null): "high" | "medium" | "low" {
   if (confidence === null) return "low";
   if (confidence >= 0.75) return "high";
@@ -94,48 +86,13 @@ function confidenceTier(confidence: number | null): "high" | "medium" | "low" {
   return "low";
 }
 
-function confidenceLabel(tier: "high" | "medium" | "low"): string {
-  if (tier === "high") return "High Confidence";
-  if (tier === "medium") return "Medium Confidence";
-  return "Low Confidence";
-}
-
-// Map the numeric ₹ range onto the corpus's semantic price bands
-// (budget / mid / premium). The backend filters price_band by exact string
-// match, so we only emit a band that actually exists in the data — otherwise
-// we send "" (All prices) rather than a numeric bucket the corpus never
-// contains (which previously made the price filter a silent no-op).
-function resolvePriceBand(min: number, max: number, available: string[]): string {
-  const mid = (min + max) / 2;
-  const desired = mid < 1500 ? "budget" : mid < 4000 ? "mid" : "premium";
-  return available.includes(desired) ? desired : "";
-}
-
-function matchesSelectedSources(itemSources: string[], selected: SourceId[]): boolean {
-  if (selected.length === 0) return false;
-  if (itemSources.length === 0) return true; // keep untagged rows visible
-  const aliases = new Set(selected.flatMap((id) => SOURCE_ALIASES[id]));
-  return itemSources.some((source) => {
-    const key = source.toLowerCase().replace(/\s+/g, "_");
-    return aliases.has(key) || selected.some((id) => key.includes(id));
-  });
-}
-
-function matchesIntent(
-  item: { active_shortlist_count: number; passive_bookmark_count: number },
-  intentType: IntentType,
-): boolean {
-  if (intentType === "medium") return true;
-  const active = item.active_shortlist_count;
-  const passive = item.passive_bookmark_count;
-  if (intentType === "high") return active >= passive;
-  return passive > active;
+function confidencePillText(confidence: number | null): string {
+  if (confidence === null) return "No score";
+  return `${Math.round(confidence * 100)}%`;
 }
 
 export default function DashboardView({ filters, onFiltersChange, sidebar, onSidebarChange, onAskQuestion, view = "dashboard" }: Props) {
-  const { priceMin, priceMax, intentType, sources, confidenceMin, platforms } = sidebar;
-  const setPriceMin = (value: number) => onSidebarChange({ ...sidebar, priceMin: value });
-  const setPriceMax = (value: number) => onSidebarChange({ ...sidebar, priceMax: value });
+  const { intentType, sources, confidenceMin, platforms } = sidebar;
   const setIntentType = (value: IntentType) => onSidebarChange({ ...sidebar, intentType: value });
   const setConfidenceMin = (value: number) => onSidebarChange({ ...sidebar, confidenceMin: value });
 
@@ -157,15 +114,14 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const [feedbackSubmitting, setFeedbackSubmitting] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState<string | null>(null);
 
-  // Sync price-band filter into API filter state (drives reload).
+  const [appliedConfidence, setAppliedConfidence] = useState(confidenceMin);
+  const confidenceRef = useRef(appliedConfidence);
+  confidenceRef.current = appliedConfidence;
+  const skipConfidenceReload = useRef(true);
   useEffect(() => {
-    const nextBand = resolvePriceBand(priceMin, priceMax, options?.price_bands ?? []);
-    if (filters.price_band === nextBand) return;
-    const timer = window.setTimeout(() => {
-      onFiltersChange({ ...filters, price_band: nextBand });
-    }, 250);
+    const timer = window.setTimeout(() => setAppliedConfidence(confidenceMin), 180);
     return () => window.clearTimeout(timer);
-  }, [priceMin, priceMax, filters, onFiltersChange, options]);
+  }, [confidenceMin]);
 
   const loadDashboard = useCallback(async () => {
     setLoading(true);
@@ -181,8 +137,19 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         habitsData,
         scrapeData,
       ] = await Promise.all([
-        getFilters(),
-        getRankedReasons(filters),
+        getFilters().catch((err) => {
+          setError(String(err));
+          return null;
+        }),
+        getRankedReasons(filters, {
+          minConfidence: confidenceRef.current,
+          sources,
+          platforms,
+          intentType,
+        }).catch((err) => {
+          setError(String(err));
+          return null;
+        }),
         getConversionMetric().catch(() => null),
         listInsightFeedback().catch(() => ({ total: 0, feedback: [] as InsightFeedbackRecord[] })),
         getCompetitiveAnalysis().catch(() => null),
@@ -190,29 +157,61 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         getSurveyHabits(filters.segment || undefined).catch(() => null),
         getCorpusStats().catch(() => null),
       ]);
-      setOptions(filterOptions);
-      setReasons(reasonData);
+      if (filterOptions) {
+        setOptions(filterOptions);
+        setReasonCategory((current) => {
+          const cats = filterOptions.reason_categories ?? [];
+          if (cats.length && !cats.includes(current)) return cats[0];
+          return current;
+        });
+      }
+      setReasons(reasonData ?? { run_version: null, reasons: [], scope_note: null });
       setConversion(conversionData);
       setFeedback(feedbackData.feedback);
       setCompetitive(competitiveData);
       setComparisons(comparisonData);
       setSurveyHabits(habitsData);
       setCorpusStats(scrapeData);
-      setReasonCategory((current) => {
-        const cats = filterOptions.reason_categories ?? [];
-        if (cats.length && !cats.includes(current)) return cats[0];
-        return current;
-      });
     } catch (err) {
       setError(String(err));
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, sources, platforms, intentType]);
 
   useEffect(() => {
     void loadDashboard();
   }, [loadDashboard]);
+
+  useEffect(() => {
+    if (skipConfidenceReload.current) {
+      skipConfidenceReload.current = false;
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    void getRankedReasons(filters, {
+      minConfidence: appliedConfidence,
+      sources,
+      platforms,
+      intentType,
+    })
+      .then((reasonData) => {
+        if (!cancelled) {
+          setReasons(reasonData);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) setError(String(err));
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [appliedConfidence, filters, sources, platforms, intentType]);
 
   async function handleCompute() {
     setComputing(true);
@@ -253,25 +252,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     }
   }
 
-  const sourceFilteredReasons = useMemo(() => {
-    return (reasons?.reasons ?? [])
-      .filter((item) => {
-        if (item.confidence !== null && item.confidence < confidenceMin) return false;
-        if (!matchesSelectedSources(item.sources, sources)) return false;
-        return true;
-      })
-      .sort((a, b) => b.evidence_volume - a.evidence_volume);
-  }, [reasons, confidenceMin, sources]);
-
-  const intentMatchedReasons = useMemo(
-    () => sourceFilteredReasons.filter((item) => matchesIntent(item, intentType)),
-    [sourceFilteredReasons, intentType],
-  );
-
-  const intentFallback =
-    intentType !== "medium" && intentMatchedReasons.length === 0 && sourceFilteredReasons.length > 0;
-
-  const filteredReasons = intentFallback ? sourceFilteredReasons : intentMatchedReasons;
+  const filteredReasons = useMemo(() => {
+    return (reasons?.reasons ?? []).slice().sort((a, b) => b.evidence_volume - a.evidence_volume);
+  }, [reasons]);
 
   const totalVolume = useMemo(
     () => filteredReasons.reduce((sum, item) => sum + item.evidence_volume, 0) || 1,
@@ -312,6 +295,15 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     [filteredReasons],
   );
 
+  const visibleCorpus = useMemo(() => {
+    if (!corpusStats) return null;
+    const selected = new Set(sources);
+    const activeRows = corpusStats.by_source.filter((row) => selected.has(row.source as SourceId));
+    const documents = activeRows.reduce((sum, row) => sum + row.documents, 0);
+    const chunks = activeRows.reduce((sum, row) => sum + row.chunks, 0);
+    return { documents, chunks, by_source: corpusStats.by_source };
+  }, [corpusStats, sources]);
+
   const topFriction =
     reasonBars.find((item) => item.reason_category !== "passive_bookmarking") ?? reasonBars[0];
   // Seed file data/seeds/internal_wishlist_events.json is 16 rows (10 wishlist users).
@@ -321,24 +313,15 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const wishlistRate = conversionReady
     ? `${(conversion!.conversion_rate * 100).toFixed(1)}%`
     : surveyHabits
-      ? `${surveyHabits.respondents} respondents`
+      ? `${surveyHabits.respondents} people surveyed`
       : "No rate";
-  const excerptScopeNote = [
-    reasons?.scope_note,
-    intentFallback
-      ? intentType === "high"
-        ? "No high-intent excerpts in this slice — showing all intents"
-        : "No low-intent excerpts in this slice — showing all intents"
-      : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  const excerptScopeNote = [reasons?.scope_note].filter(Boolean).join(" · ");
 
   const excerptFilterLabel = [
     filters.segment ? formatReason(filters.segment) : null,
     filters.category ? formatReason(filters.category) : null,
-    intentType === "high" && !intentFallback ? "High intent" : null,
-    intentType === "low" && !intentFallback ? "Low intent" : null,
+    intentType === "high" ? "High intent" : null,
+    intentType === "low" ? "Low intent" : null,
   ]
     .filter(Boolean)
     .join(" + ");
@@ -359,7 +342,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       const rows = items
         .filter((item) => item.dimension === segment)
         .sort((a, b) => b.evidence_volume - a.evidence_volume)
-        .slice(0, 4);
+        .slice(0, 3);
       const excerptTotal = rows.reduce((sum, row) => sum + row.evidence_volume, 0);
       const fromApi = Number(respondents[segment] ?? 0);
       return {
@@ -368,23 +351,10 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         respondents: fromApi || (rows.length ? AGE_RESPONDENT_FALLBACK[segment] : 0),
         excerptTotal,
         reasons: rows,
-        notes: AGE_BEHAVIOR_NOTES[segment] ?? [],
+        focus: AGE_FOCUS[segment] ?? "",
       };
     });
   }, [comparisons]);
-
-  const ageContrast = useMemo(() => {
-    const [young, older] = ageComparison;
-    if (!young || !older) return "";
-    const youngTop = young.reasons[0];
-    const olderTop = older.reasons[0];
-    if (!youngTop && !olderTop) {
-      return "Survey age bands are loaded as filters. Refresh research insights to populate side-by-side reason volumes.";
-    }
-    const youngLabel = youngTop ? formatReason(youngTop.reason_category) : "mixed blockers";
-    const olderLabel = olderTop ? formatReason(olderTop.reason_category) : "mixed blockers";
-    return `${young.label} evidence concentrates on ${youngLabel}; ${older.label} concentrates on ${olderLabel}. Volume is uneven across the two surveys — treat this as directional.`;
-  }, [ageComparison]);
 
   const categoryOptions = options?.categories?.length
     ? options.categories
@@ -409,9 +379,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const activeFilterSummary = [
     filters.segment ? formatReason(filters.segment) : "Age 18–24 + 25–35",
     filters.category ? formatReason(filters.category) : "All categories",
-    filters.price_band
-      ? `₹${priceMin}–₹${priceMax} · ${formatReason(filters.price_band)}`
-      : `₹${priceMin}–₹${priceMax}`,
+    filters.price_band ? formatReason(filters.price_band) : "All prices",
     intentType === "high" ? "High intent" : intentType === "low" ? "Low intent" : "Medium intent",
     `${sources.length} source${sources.length === 1 ? "" : "s"}`,
     `≥${Math.round(confidenceMin * 100)}% conf.`,
@@ -440,7 +408,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       intentType: "medium",
       sources: ["play_store", "youtube", "reddit", "product_review", "social", "research"],
       confidenceMin: 0.5,
-      platforms: ["myntra", "nykaa", "ajio"],
+      platforms: ["myntra", "nykaa", "ajio", "other"],
     });
     onFiltersChange({ ...filters, category: "", price_band: "", segment: "" });
   };
@@ -524,42 +492,33 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         </div>
 
         <div className="wi-dash-filter">
-          <div className="wi-dash-label-row">
-            <span className="wi-dash-label">Price Band</span>
-            <span className="wi-dash-range-text">₹0 — ₹10,000+</span>
-          </div>
-          <input
-            type="range"
-            className="wi-dash-slider"
-            min={0}
-            max={10000}
-            step={100}
-            value={priceMax}
-            onChange={(e) => setPriceMax(Number(e.target.value))}
-            aria-label="Maximum price"
-          />
-          <div className="wi-dash-price-inputs">
-            <label>
-              <span className="sr-only">Min price</span>
-              <input
-                type="number"
-                value={priceMin}
-                min={0}
-                max={priceMax}
-                onChange={(e) => setPriceMin(Number(e.target.value))}
-              />
-            </label>
-            <span className="wi-dash-price-sep">to</span>
-            <label>
-              <span className="sr-only">Max price</span>
-              <input
-                type="number"
-                value={priceMax}
-                min={priceMin}
-                max={10000}
-                onChange={(e) => setPriceMax(Number(e.target.value))}
-              />
-            </label>
+          <span className="wi-dash-label">Price talk</span>
+          <div className="wi-dash-pills">
+            <button
+              type="button"
+              className={`wi-dash-pill ${filters.price_band === "" ? "active" : ""}`}
+              onClick={() => onFiltersChange({ ...filters, price_band: "" })}
+            >
+              All
+            </button>
+            {(options?.price_bands?.length
+              ? options.price_bands
+              : ["budget", "premium", "sale_waiting"]
+            ).map((value) => (
+              <button
+                key={value}
+                type="button"
+                className={`wi-dash-pill ${filters.price_band === value ? "active" : ""}`}
+                onClick={() =>
+                  onFiltersChange({
+                    ...filters,
+                    price_band: filters.price_band === value ? "" : value,
+                  })
+                }
+              >
+                {formatReason(value)}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -641,6 +600,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             <span>0%</span>
             <span>100%</span>
           </div>
+          <p className="wi-dash-filter-hint">
+            Keeps excerpts at or above this score, then re-ranks. Most sit at 45–63%. Above 65% the list shrinks; above ~80% it can empty.
+          </p>
         </div>
       </aside>
 
@@ -660,27 +622,29 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
           <>
             {onAskQuestion && <QuestionsView onAsk={onAskQuestion} />}
 
-            {corpusStats && (
+            {visibleCorpus && (
               <section className="wi-scrape-panel" aria-label="Scraped corpus volume by source">
                 <div className="wi-scrape-totals">
                   <p className="wi-scrape-kicker">Corpus</p>
-                  <div className="wi-scrape-total-pair">
-                    <div>
-                      <p className="wi-scrape-hero">{corpusStats.documents.toLocaleString()}</p>
-                      <p className="wi-scrape-hero-label">Items scraped</p>
-                    </div>
-                    <div>
-                      <p className="wi-scrape-hero">{corpusStats.chunks.toLocaleString()}</p>
-                      <p className="wi-scrape-hero-label">Items classified</p>
-                    </div>
-                  </div>
+                  <p className="wi-scrape-hero">{visibleCorpus.documents.toLocaleString()}</p>
+                  <p className="wi-scrape-hero-label">
+                    {sources.length < 6 ? "Posts in selected sources" : "Posts collected"}
+                  </p>
+                  <p className="wi-scrape-split-note">
+                    {evidenceTotal.toLocaleString()} excerpts match the left filters
+                    {visibleCorpus.chunks > visibleCorpus.documents
+                      ? ` · ${visibleCorpus.chunks.toLocaleString()} text pieces in those posts`
+                      : ""}
+                    .
+                  </p>
                 </div>
                 <ul className="wi-scrape-sources">
-                  {corpusStats.by_source.map((row) => {
+                  {visibleCorpus.by_source.map((row) => {
                     const active = sources.includes(row.source as SourceId);
-                    const share = corpusStats.documents
-                      ? Math.round((row.documents / corpusStats.documents) * 100)
-                      : 0;
+                    const share =
+                      active && visibleCorpus.documents
+                        ? Math.round((row.documents / visibleCorpus.documents) * 100)
+                        : 0;
                     return (
                       <li
                         key={row.source}
@@ -732,7 +696,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                     {surveyHabits.workbooks.map((book) => (
                       <li key={book.file}>
                         <strong>
-                          {book.file.replace(/\.xlsx$/i, "")} · n={book.n}
+                          {book.file.replace(/\.xlsx$/i, "")} · {book.n} people
                         </strong>
                         <span>
                           {book.answers
@@ -747,20 +711,22 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
               <div className="wi-insight-metrics">
                 <article className="wi-kpi-card">
                   <h3>User intent</h3>
-                  <p className="wi-kpi-value">
-                    {intentSum ? `${activePct}% / ${passivePct}%` : "—"}
-                  </p>
-                  <p className="wi-kpi-sub">
-                    {intentSum
-                      ? excerptScopeNote || `${activeTotal} buy-soon · ${passiveTotal} bookmark-later excerpts`
-                      : excerptFilterLabel
+                  {intentSum ? (
+                    <>
+                      <div className="wi-intent-pair">
+                        <span>Buy soon</span>
+                        <span>Save later</span>
+                        <strong>{activePct}%</strong>
+                        <strong>{passivePct}%</strong>
+                      </div>
+                      {excerptScopeNote ? <p className="wi-kpi-sub">{excerptScopeNote}</p> : null}
+                    </>
+                  ) : (
+                    <p className="wi-kpi-sub">
+                      {excerptFilterLabel
                         ? `No tagged excerpts for ${excerptFilterLabel}`
                         : "No tagged excerpts in this filter"}
-                  </p>
-                  {intentSum > 0 && (
-                    <div className="wi-intent-track" aria-hidden="true">
-                      <div className="wi-intent-fill" style={{ width: `${activePct}%` }} />
-                    </div>
+                    </p>
                   )}
                 </article>
                 <article className="wi-kpi-card">
@@ -768,10 +734,10 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                   <p className="wi-kpi-value">{evidenceTotal.toLocaleString()}</p>
                   <p className="wi-kpi-sub">
                   {evidenceTotal
-                    ? excerptScopeNote || "Tagged chunks in the current filter — not people"
+                    ? excerptScopeNote || "Chunks in this filter, not people"
                     : excerptFilterLabel
                       ? `No tagged chunks for ${excerptFilterLabel}`
-                      : "Tagged chunks in the current filter — not people"}
+                      : "Chunks in this filter, not people"}
                 </p>
                 </article>
                 <article className="wi-kpi-card">
@@ -787,23 +753,25 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             </div>
 
             <section className="wi-dash-card wi-age-compare">
-                <div className="wi-age-compare-head">
-                  <h2>Age cohort comparison · 18–24 vs 25–35</h2>
-                  <p className="wi-age-scope-note">
-                    Always compares both age bands. The User segment filter scopes KPIs, reasons,
-                    and the heatmap — not this card.
-                  </p>
-                  <p className="wi-kpi-sub">
-                    Unique survey respondents from Myntra Wishlist + Wishlist Habits. Reason
-                    shares are excerpt mix, not extra people — one response can produce several tags.
-                  </p>
-                  {ageContrast && <p className="wi-age-contrast">{ageContrast}</p>}
-                </div>
-                <div className="wi-age-compare-grid">
-                  {ageComparison.map((cohort) => {
-                    const selected = filters.segment === cohort.segment;
-                    const otherSelected = Boolean(filters.segment) && !selected;
-                    return (
+              <div className="wi-age-compare-head">
+                <h2>18–24 vs 25–35</h2>
+                <p className="wi-age-lead">Same four pains. Different order.</p>
+              </div>
+
+              <ul className="wi-shared-pains">
+                {SHARED_PAINS.map((pain) => (
+                  <li key={pain.id}>{pain.label}</li>
+                ))}
+              </ul>
+              <p className="wi-age-takeaway">
+                v1 opportunity: real photos + one price-drop reminder
+              </p>
+
+              <div className="wi-age-compare-grid">
+                {ageComparison.map((cohort) => {
+                  const selected = filters.segment === cohort.segment;
+                  const otherSelected = Boolean(filters.segment) && !selected;
+                  return (
                     <article
                       key={cohort.segment}
                       className={`wi-age-cohort${selected ? " wi-age-cohort--active" : ""}${otherSelected ? " wi-age-cohort--muted" : ""}`}
@@ -811,21 +779,13 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                       <header className="wi-age-cohort-head">
                         <h3>{cohort.label}</h3>
                         <span className="wi-age-cohort-vol">
-                          {selected ? "Sidebar filter · " : ""}
-                          {cohort.respondents
-                            ? `${cohort.respondents} respondent${cohort.respondents === 1 ? "" : "s"}`
-                            : "No respondents"}
+                          {cohort.respondents ? `${cohort.respondents} people` : "No survey"}
                         </span>
                       </header>
-                      <ul className="wi-age-notes">
-                        {cohort.notes.map((note) => (
-                          <li key={note}>{note}</li>
-                        ))}
-                      </ul>
+                      {cohort.focus && <p className="wi-age-focus">{cohort.focus}</p>}
                       <div className="wi-age-reasons">
-                        <span className="wi-dash-label">Top non-conversion reasons</span>
                         {cohort.reasons.length === 0 ? (
-                          <p className="muted">No age-tagged reasons yet — refresh insights.</p>
+                          <p className="muted">No reasons yet</p>
                         ) : (
                           cohort.reasons.map((row) => (
                             <div key={row.reason_category} className="wi-age-reason-row">
@@ -849,20 +809,18 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                           })
                         }
                       >
-                        {selected
-                          ? `Clear ${cohort.label} filter`
-                          : `Filter dashboard to ${cohort.label}`}
+                        {selected ? "Clear filter" : `View ${cohort.label}`}
                       </button>
                     </article>
-                    );
-                  })}
-                </div>
-              </section>
+                  );
+                })}
+              </div>
+            </section>
 
             <section className="wi-dash-card">
               <h2>Why wishlists do not convert</h2>
               <p className="wi-kpi-sub" style={{ marginTop: "-0.55rem", marginBottom: "0.9rem" }}>
-                Top reasons from scraped reviews, social posts, and survey answers
+                Top reasons from excerpts at ≥{Math.round(appliedConfidence * 100)}% confidence
               </p>
               <div className="wi-reason-bars">
                 {reasonBars.map((item) => (
@@ -876,12 +834,15 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                       <span className="wi-reason-bar-pct">{item.pct}%</span>
                     </div>
                     <span className={`wi-conf-pill wi-conf-pill--${item.tier}`}>
-                      {confidenceLabel(item.tier)}
+                      {confidencePillText(item.confidence)}
                     </span>
                   </div>
                 ))}
                 {reasonBars.length === 0 && (
-                  <p className="muted">No reasons match the current filters.</p>
+                  <p className="wi-reason-empty">
+                    Nothing in the current filters is at ≥{Math.round(appliedConfidence * 100)}%
+                    confidence. Lower the slider or clear a source — most scores sit at 45–63%.
+                  </p>
                 )}
               </div>
             </section>

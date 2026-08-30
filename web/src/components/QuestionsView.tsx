@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 interface QuestionsViewProps {
   /** Called when a user picks a question; parent forwards it to the Ask AI dock. */
@@ -78,13 +78,8 @@ const QUESTION_GROUPS: QuestionGroup[] = [
  * PM immediately sees what they can ask; clicking a question runs it in the Ask AI dock.
  */
 export default function QuestionsView({ onAsk }: QuestionsViewProps) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string>(QUESTION_GROUPS[0].id);
-
-  const totalQuestions = useMemo(
-    () => QUESTION_GROUPS.reduce((sum, group) => sum + group.questions.length, 0),
-    [],
-  );
 
   const current = QUESTION_GROUPS.find((group) => group.id === activeGroup) ?? QUESTION_GROUPS[0];
 
@@ -100,11 +95,8 @@ export default function QuestionsView({ onAsk }: QuestionsViewProps) {
             </svg>
           </span>
           <div>
-            <h3>Not sure what to ask? Explore these questions</h3>
-            <p>
-              {totalQuestions} ready-made questions answered from real shopper feedback — click any
-              one to get an instant, evidence-backed answer from Discovery Chat.
-            </p>
+            <h3>Explore questions</h3>
+            <p>Click one to open Discovery Chat</p>
           </div>
         </div>
         <button

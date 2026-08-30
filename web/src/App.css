@@ -1025,6 +1025,13 @@ textarea {
   color: #64748b;
 }
 
+.wi-dash-filter-hint {
+  margin: 0.45rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #94a3b8;
+}
+
 .wi-dash-pills {
   display: flex;
   flex-direction: column;
@@ -1186,11 +1193,6 @@ textarea {
   color: #facc15;
 }
 
-.wi-scrape-total-pair {
-  display: flex;
-  gap: 1.6rem;
-}
-
 .wi-scrape-hero {
   margin: 0;
   font-size: 2.15rem;
@@ -1204,6 +1206,14 @@ textarea {
   margin: 0.35rem 0 0;
   font-size: 0.78rem;
   color: #cbd5e1;
+}
+
+.wi-scrape-split-note {
+  margin: 0.55rem 0 0;
+  max-width: 22rem;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: #94a3b8;
 }
 
 .wi-scrape-sources {
@@ -1267,7 +1277,7 @@ textarea {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 .wi-kpi-row {
@@ -1278,6 +1288,9 @@ textarea {
 }
 
 .wi-kpi-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   background: linear-gradient(180deg, #ffffff 0%, #fcfcfd 100%);
   border-radius: 14px;
   padding: 1.15rem 1.25rem;
@@ -1292,7 +1305,8 @@ textarea {
 }
 
 .wi-kpi-card h3 {
-  margin: 0 0 0.65rem;
+  margin: 0;
+  padding: 0;
   font-size: 0.75rem;
   font-weight: 600;
   color: #64748b;
@@ -1386,17 +1400,28 @@ textarea {
   margin-bottom: 1rem;
 }
 
-.wi-intent-track {
-  margin-top: 0.7rem;
-  height: 8px;
-  border-radius: 999px;
-  background: #e2e8f0;
-  overflow: hidden;
+.wi-intent-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 0.85rem;
+  row-gap: 0.2rem;
+  margin-top: 0.45rem;
 }
 
-.wi-intent-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #be185d, #db2777);
+.wi-intent-pair span {
+  min-width: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.wi-intent-pair strong {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
 }
 
 .wi-pm-calibrate {
@@ -1529,7 +1554,8 @@ textarea {
 }
 
 .wi-kpi-value {
-  margin: 0;
+  margin: 0.4rem 0 0;
+  padding: 0;
   font-size: 1.75rem;
   font-weight: 800;
   color: #0f172a;
@@ -1542,7 +1568,8 @@ textarea {
 }
 
 .wi-kpi-sub {
-  margin: 0.45rem 0 0;
+  margin: 0.35rem 0 0;
+  padding: 0;
   font-size: 0.75rem;
   color: #64748b;
   font-weight: 500;
@@ -1589,27 +1616,52 @@ textarea {
   margin-bottom: 1.1rem;
 }
 
+.wi-age-compare-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+
 .wi-age-compare-head h2 {
-  margin-bottom: 0.25rem;
+  margin: 0;
+  font-size: 1.15rem;
 }
 
-.wi-age-scope-note {
-  margin: 0.15rem 0 0.45rem;
-  color: #9f1239;
-  font-size: 0.78rem;
+.wi-age-lead {
+  margin: 0;
+  font-size: 0.95rem;
   font-weight: 600;
-  line-height: 1.4;
+  color: #be185d;
 }
 
-.wi-age-contrast {
-  margin: 0.65rem 0 0;
-  padding: 0.65rem 0.75rem;
-  border-radius: 10px;
+.wi-shared-pains {
+  list-style: none;
+  margin: 0 0 0.65rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.wi-shared-pains li {
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: #0f172a;
   background: #fff1f2;
-  border: 1px solid rgba(190, 24, 93, 0.12);
-  color: #9f1239;
-  font-size: 0.8rem;
-  line-height: 1.45;
+  border: 1px solid rgba(190, 24, 93, 0.14);
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+}
+
+.wi-age-takeaway {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.4;
 }
 
 .wi-age-compare-grid {
@@ -1656,21 +1708,29 @@ textarea {
 
 .wi-age-cohort-head h3 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   color: #0f172a;
 }
 
 .wi-age-cohort-vol {
-  font-size: 0.72rem;
+  font-size: 0.88rem;
   color: #64748b;
   font-weight: 600;
+}
+
+.wi-age-focus {
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #9f1239;
+  line-height: 1.35;
 }
 
 .wi-age-notes {
   margin: 0 0 0.85rem;
   padding-left: 1.1rem;
   color: #334155;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   line-height: 1.45;
 }
 
@@ -1685,9 +1745,9 @@ textarea {
   display: flex;
   justify-content: space-between;
   gap: 0.75rem;
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   color: #0f172a;
-  padding: 0.35rem 0.45rem;
+  padding: 0.45rem 0.55rem;
   border-radius: 8px;
   background: #fff;
   border: 1px solid rgba(15, 23, 42, 0.05);
@@ -1731,6 +1791,16 @@ textarea {
   gap: 0.85rem;
 }
 
+.wi-reason-empty {
+  margin: 0.35rem 0 0;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
 .wi-reason-bar-row {
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr) auto;
@@ -1772,7 +1842,7 @@ textarea {
 
 .wi-conf-pill {
   justify-self: start;
-  min-width: 132px;
+  min-width: 3.25rem;
   text-align: center;
   font-size: 0.625rem;
   font-weight: 700;
@@ -3753,14 +3823,14 @@ textarea {
 
 .wi-ql-card-title h3 {
   margin: 0 0 0.2rem;
-  font-size: 0.98rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .wi-ql-card-title p {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   line-height: 1.45;
   color: var(--text-secondary);
   max-width: 60ch;

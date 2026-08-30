@@ -118,7 +118,47 @@ def test_research_respondent_counts_from_corpus():
 
     counts = research_respondent_counts()
     assert counts["age_18_24"] == 27
-    assert counts["age_25_35"] == 15
+    assert counts["age_25_35"] >= 15
+
+
+def test_reasons_http_source_and_confidence_filters():
+    from fastapi.testclient import TestClient
+
+    from api.main import app
+
+    client = TestClient(app)
+    all_rows = client.get("/insights/reasons").json()["reasons"]
+    research = client.get("/insights/reasons", params={"sources": "research"}).json()["reasons"]
+    high = client.get("/insights/reasons", params={"min_confidence": 0.6}).json()["reasons"]
+    empty = client.get("/insights/reasons", params={"min_confidence": 0.95}).json()["reasons"]
+    assert all_rows and research and high
+    assert research[0]["evidence_volume"] != all_rows[0]["evidence_volume"] or research[0][
+        "reason_category"
+    ] != all_rows[0]["reason_category"]
+    assert sum(row["evidence_volume"] for row in high) < sum(row["evidence_volume"] for row in all_rows)
+    assert empty == []
+
+
+def test_reason_ranks_change_when_source_filter_applied():
+    from api.json_dashboard import get_filtered_reason_ranks
+
+    all_rows = get_filtered_reason_ranks()
+    play = get_filtered_reason_ranks(sources=["play_store"])
+    research = get_filtered_reason_ranks(sources=["research"])
+    assert all_rows and play and research
+    assert play[0].evidence_volume != research[0].evidence_volume or play[0].reason_category != research[0].reason_category
+
+
+def test_reason_ranks_change_when_min_confidence_rises():
+    from api.json_dashboard import get_filtered_reason_ranks
+
+    baseline = get_filtered_reason_ranks()
+    mid = get_filtered_reason_ranks(min_confidence=0.65)
+    empty = get_filtered_reason_ranks(min_confidence=0.95)
+    assert baseline
+    assert mid
+    assert mid[0].reason_category != baseline[0].reason_category or mid[0].evidence_volume != baseline[0].evidence_volume
+    assert empty == []
 
 
 def test_reason_rank_falls_back_to_category_when_age_combo_empty():

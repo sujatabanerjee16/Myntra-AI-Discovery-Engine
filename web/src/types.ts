@@ -197,7 +197,7 @@ export const DEFAULT_SIDEBAR: SidebarFilters = {
   intentType: "medium",
   sources: ["play_store", "youtube", "reddit", "product_review", "social", "research"],
   confidenceMin: 0.5,
-  platforms: ["myntra", "nykaa", "ajio"],
+  platforms: ["myntra", "nykaa", "ajio", "other"],
 };
 
 export const PLATFORM_META: { id: PlatformId; label: string; color: string }[] = [

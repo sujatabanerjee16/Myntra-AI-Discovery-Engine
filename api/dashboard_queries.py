@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from collections import defaultdict
 
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from analytics.confidence import compute_confidence
@@ -24,7 +24,16 @@ from analytics.schemas import (
     ThemeClusterItem,
     TrendsResponse,
 )
-from common.models import Chunk, Document, Insight, ReasonAggregate, SourceType, ThemeCluster
+from common.models import Chunk, Document, Insight, IntentType, ReasonAggregate, SourceType, ThemeCluster
+
+_SOURCE_ALIASES = {
+    "play_store": {"play_store", "playstore", "google_play", "app"},
+    "youtube": {"youtube", "yt"},
+    "reddit": {"reddit"},
+    "product_review": {"product_review", "product_reviews", "review", "reviews"},
+    "social": {"social", "instagram", "twitter", "x"},
+    "research": {"research", "survey", "interview"},
+}
 
 
 def resolve_insight_run_version(session: Session, run_version: str | None) -> str | None:
@@ -46,6 +55,11 @@ def _insight_filters(
     occasion: str | None = None,
     price_band: str | None = None,
     reason_category: str | None = None,
+    min_confidence: float | None = None,
+    sources: list[str] | None = None,
+    platforms: list[str] | None = None,
+    intent: str | None = None,
+    price_chunk_ids: list | None = None,
 ):
     if run_version:
         stmt = stmt.where(Insight.run_version == run_version)
@@ -55,6 +69,25 @@ def _insight_filters(
         stmt = stmt.where(Insight.category == category)
     if reason_category:
         stmt = stmt.where(Insight.reason_category == reason_category)
+    if min_confidence is not None:
+        stmt = stmt.where(Insight.confidence >= min_confidence)
+    if sources:
+        aliases = [alias for key in sources for alias in _SOURCE_ALIASES.get(key, {key})]
+        stmt = stmt.where(Insight.sources.overlap(aliases))
+    if platforms:
+        wanted = [item.lower() for item in platforms]
+        platform_match = Insight.platforms.overlap(wanted)
+        if "other" in wanted:
+            stmt = stmt.where(or_(platform_match, Insight.platforms.is_(None)))
+        else:
+            stmt = stmt.where(platform_match)
+    if intent:
+        try:
+            stmt = stmt.where(Insight.intent_type == IntentType(intent))
+        except ValueError:
+            stmt = stmt.where(Insight.intent_type.is_(None))
+    if price_chunk_ids:
+        stmt = stmt.where(Insight.evidence_chunk_ids.overlap(price_chunk_ids))
     return stmt
 
 
@@ -65,21 +98,38 @@ def get_filtered_reason_ranks(
     segment: str | None = None,
     category: str | None = None,
     reason_category: str | None = None,
+    min_confidence: float | None = None,
+    sources: list[str] | None = None,
+    platforms: list[str] | None = None,
+    intent: str | None = None,
+    price_band: str | None = None,
 ) -> list[ReasonRankItem]:
     """Aggregate reason ranks from insights when dashboard filters are applied."""
     run_version = resolve_insight_run_version(session, run_version)
+    price_chunk_ids = None
+    if price_band:
+        price_chunk_ids = list(
+            session.scalars(select(Chunk.id).where(Chunk.price_band == price_band)).all()
+        )
+        if not price_chunk_ids:
+            return []
+    filter_kwargs = dict(
+        run_version=run_version,
+        segment=segment,
+        category=category,
+        reason_category=reason_category,
+        min_confidence=min_confidence,
+        sources=sources,
+        platforms=platforms,
+        intent=intent,
+        price_chunk_ids=price_chunk_ids,
+    )
     stmt = select(
         Insight.reason_category,
         func.sum(Insight.evidence_volume),
         func.avg(Insight.confidence),
     ).group_by(Insight.reason_category)
-    stmt = _insight_filters(
-        stmt,
-        run_version=run_version,
-        segment=segment,
-        category=category,
-        reason_category=reason_category,
-    )
+    stmt = _insight_filters(stmt, **filter_kwargs)
 
     rows = session.execute(stmt).all()
     intent_stmt = select(
@@ -87,13 +137,7 @@ def get_filtered_reason_ranks(
         Insight.intent_type,
         func.sum(Insight.evidence_volume),
     ).group_by(Insight.reason_category, Insight.intent_type)
-    intent_stmt = _insight_filters(
-        intent_stmt,
-        run_version=run_version,
-        segment=segment,
-        category=category,
-        reason_category=reason_category,
-    )
+    intent_stmt = _insight_filters(intent_stmt, **filter_kwargs)
     intent_rows = session.execute(intent_stmt).all()
 
     intent_map: dict[str, dict[str, int]] = defaultdict(
@@ -102,13 +146,7 @@ def get_filtered_reason_ranks(
     source_map: dict[str, set[str]] = defaultdict(set)
 
     source_stmt = select(Insight.reason_category, Insight.sources)
-    source_stmt = _insight_filters(
-        source_stmt,
-        run_version=run_version,
-        segment=segment,
-        category=category,
-        reason_category=reason_category,
-    )
+    source_stmt = _insight_filters(source_stmt, **filter_kwargs)
     for reason, sources in session.execute(source_stmt).all():
         if reason and sources:
             source_map[str(reason)].update(sources)

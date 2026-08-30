@@ -187,7 +187,7 @@ def _run_apify_actor(client: httpx.Client, actor_id: str, headers: dict[str, str
     if not run_id:
         raise RuntimeError("Apify start response missing run id")
     status = run.get("status")
-    deadline = time.time() + 300
+    deadline = time.time() + 720
     while status in {None, "READY", "RUNNING", "TIMING-OUT"} and time.time() < deadline:
         logger.info("Apify Reddit run %s status=%s", run_id, status or "READY")
         time.sleep(8)
@@ -197,8 +197,10 @@ def _run_apify_actor(client: httpx.Client, actor_id: str, headers: dict[str, str
         body = poll.json().get("data") or {}
         status = body.get("status")
         dataset_id = body.get("defaultDatasetId") or dataset_id
-    if status != "SUCCEEDED":
+    if status != "SUCCEEDED" and not dataset_id:
         raise RuntimeError(f"Apify run {run_id} ended with status={status}")
+    if status != "SUCCEEDED":
+        logger.warning("Apify run %s still %s; reading partial dataset", run_id, status)
     if not dataset_id:
         raise RuntimeError(f"Apify run {run_id} has no dataset")
     response = client.get(

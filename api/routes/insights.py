@@ -132,6 +132,11 @@ def ranked_reasons(
     segment: str | None = None,
     category: str | None = None,
     reason_category: str | None = None,
+    min_confidence: float | None = Query(default=None, ge=0, le=1),
+    sources: str | None = Query(default=None),
+    platforms: str | None = Query(default=None),
+    intent: str | None = Query(default=None, pattern="^(active_shortlist|passive_bookmark)$"),
+    price_band: str | None = Query(default=None),
     session: Session = Depends(get_session),
 ) -> ReasonRankResponse:
     """Return ranked non-conversion reason categories for the dashboard."""
@@ -142,6 +147,11 @@ def ranked_reasons(
             segment=segment,
             category=category,
             reason_category=reason_category,
+            min_confidence=min_confidence,
+            sources=json_dash._parse_csv_param(sources),
+            platforms=json_dash._parse_csv_param(platforms),
+            intent=intent,
+            price_band=price_band,
         )
         return ReasonRankResponse(
             run_version=json_dash._payload().get("run_version"),
@@ -160,6 +170,11 @@ def ranked_reasons(
             segment=segment,
             category=category,
             reason_category=reason_category,
+            min_confidence=min_confidence,
+            sources=json_dash._parse_csv_param(sources),
+            platforms=json_dash._parse_csv_param(platforms),
+            intent=intent,
+            price_band=price_band,
         ),
         json_call=_from_json,
         label="ranked_reasons",
@@ -173,8 +188,14 @@ def _ranked_reasons_db(
     segment: str | None,
     category: str | None,
     reason_category: str | None,
+    min_confidence: float | None = None,
+    sources: list[str] | None = None,
+    platforms: list[str] | None = None,
+    intent: str | None = None,
+    price_band: str | None = None,
 ) -> ReasonRankResponse:
-    if segment or category or reason_category:
+    sidebar_active = bool(sources or platforms or intent or price_band)
+    if segment or category or reason_category or min_confidence is not None or sidebar_active:
         resolved = resolve_insight_run_version(session, run_version)
         reasons = db_get_filtered_reason_ranks(
             session,
@@ -182,6 +203,11 @@ def _ranked_reasons_db(
             segment=segment,
             category=category,
             reason_category=reason_category,
+            min_confidence=min_confidence,
+            sources=sources,
+            platforms=platforms,
+            intent=intent,
+            price_band=price_band,
         )
         scope_note = None
         if not reasons and category and segment:
@@ -190,6 +216,11 @@ def _ranked_reasons_db(
                 run_version=resolved,
                 category=category,
                 reason_category=reason_category,
+                min_confidence=min_confidence,
+                sources=sources,
+                platforms=platforms,
+                intent=intent,
+                price_band=price_band,
             )
             if reasons:
                 age = segment.replace("age_", "").replace("_", "–")
