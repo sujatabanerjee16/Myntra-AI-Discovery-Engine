@@ -9,10 +9,40 @@ from ingestion.filters.relevance import detect_signals
 from ingestion.stages.chunk import TextChunk
 
 _CATEGORY_PATTERNS: dict[str, list[str]] = {
-    "clothing": [r"\bcloth", r"\bdress\b", r"\bshirt\b", r"\bkurta\b"],
-    "footwear": [r"\bshoe", r"\bsneaker", r"\bfootwear\b"],
-    "accessories": [r"\baccessor", r"\bbag\b", r"\bwatch\b"],
-    "beauty": [r"\bbeauty\b", r"\bmakeup\b", r"\bskin ?care\b"],
+    "clothing": [
+        r"\bcloth",
+        r"\bdress\b",
+        r"\bshirt\b",
+        r"\bkurta\b",
+        r"\bkurti\b",
+        r"\bjeans\b",
+        r"\bsaree\b",
+        r"\btop\b",
+        r"\bethnic\b",
+    ],
+    "footwear": [
+        r"\bshoe",
+        r"\bsneaker",
+        r"\bfootwear\b",
+        r"\bsandal",
+        r"\bheel",
+        r"\bloafer",
+        r"\bboot",
+        r"\bslipper",
+        r"\bflip[- ]?flop",
+    ],
+    "accessories": [r"\baccessor", r"\bbag\b", r"\bwatch\b", r"\bjewell?ery\b", r"\bearing"],
+    "beauty": [
+        r"\bbeauty\b",
+        r"\bmakeup\b",
+        r"\bskin ?care\b",
+        r"\blipstick\b",
+        r"\bkajal\b",
+        r"\bfoundation\b",
+        r"\bserum\b",
+        r"\bmoisturizer\b",
+        r"\beyeliner\b",
+    ],
 }
 
 _OCCASION_PATTERNS: dict[str, list[str]] = {

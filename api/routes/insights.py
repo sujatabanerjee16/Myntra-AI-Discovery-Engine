@@ -12,6 +12,7 @@ from analytics.schemas import (
     AnalyticsRunResult,
     ComparisonResponse,
     CompetitiveAnalysisResponse,
+    CorpusScrapeStats,
     DashboardFiltersResponse,
     EvidenceSummaryResponse,
     HeatmapResponse,
@@ -21,6 +22,7 @@ from analytics.schemas import (
     ReasonRankItem,
     ReasonRankResponse,
     ThemeClusterItem,
+    SurveyHabitsResponse,
     ThemeClusterResponse,
     TrendsResponse,
 )
@@ -135,14 +137,16 @@ def ranked_reasons(
     """Return ranked non-conversion reason categories for the dashboard."""
 
     def _from_json() -> ReasonRankResponse:
+        reasons, scope_note = json_dash.rank_reasons_for_dashboard(
+            run_version=run_version,
+            segment=segment,
+            category=category,
+            reason_category=reason_category,
+        )
         return ReasonRankResponse(
             run_version=json_dash._payload().get("run_version"),
-            reasons=json_dash.get_filtered_reason_ranks(
-                run_version=run_version,
-                segment=segment,
-                category=category,
-                reason_category=reason_category,
-            ),
+            reasons=reasons,
+            scope_note=scope_note,
         )
 
     if backend.use_json_backend():
@@ -172,16 +176,28 @@ def _ranked_reasons_db(
 ) -> ReasonRankResponse:
     if segment or category or reason_category:
         resolved = resolve_insight_run_version(session, run_version)
-        return ReasonRankResponse(
+        reasons = db_get_filtered_reason_ranks(
+            session,
             run_version=resolved,
-            reasons=db_get_filtered_reason_ranks(
+            segment=segment,
+            category=category,
+            reason_category=reason_category,
+        )
+        scope_note = None
+        if not reasons and category and segment:
+            reasons = db_get_filtered_reason_ranks(
                 session,
                 run_version=resolved,
-                segment=segment,
                 category=category,
                 reason_category=reason_category,
-            ),
-        )
+            )
+            if reasons:
+                age = segment.replace("age_", "").replace("_", "–")
+                label = category.replace("_", " ")
+                scope_note = (
+                    f"No excerpts match Age {age} + {label} — showing all {label} excerpts"
+                )
+        return ReasonRankResponse(run_version=resolved, reasons=reasons, scope_note=scope_note)
 
     stmt = select(ReasonAggregate).order_by(ReasonAggregate.evidence_volume.desc())
     if run_version:
@@ -269,6 +285,22 @@ def dashboard_filters(
         json_call=lambda: json_dash.get_dashboard_filters(run_version),
         label="dashboard_filters",
     )
+
+
+@router.get("/insights/corpus-stats", response_model=CorpusScrapeStats)
+def corpus_scrape_stats() -> CorpusScrapeStats:
+    """Document and chunk counts by source from the scraped corpus export."""
+    from api.json_store import load_corpus_scrape_stats
+
+    return CorpusScrapeStats.model_validate(load_corpus_scrape_stats())
+
+
+@router.get("/insights/survey-habits", response_model=SurveyHabitsResponse)
+def survey_purchase_habits(segment: str | None = None) -> SurveyHabitsResponse:
+    """Self-reported buy-habit counts from the two survey Excel files."""
+    from api.survey_habits import get_survey_purchase_habits
+
+    return SurveyHabitsResponse.model_validate(get_survey_purchase_habits(segment=segment))
 
 
 @router.get("/insights/comparisons", response_model=ComparisonResponse)

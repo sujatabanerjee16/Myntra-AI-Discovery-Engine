@@ -3,6 +3,7 @@ import type {
   ComparisonResponse,
   CompetitiveAnalysisResponse,
   ConversionMetricResponse,
+  CorpusScrapeStats,
   CorroborationResponse,
   CostControlsResponse,
   DashboardFilters,
@@ -14,6 +15,7 @@ import type {
   IntentBreakdownResponse,
   QualityDashboardResponse,
   ReasonRankResponse,
+  SurveyHabitsResponse,
   TrendsResponse,
 } from "./types";
 
@@ -60,6 +62,14 @@ export async function getRankedReasons(filters: FilterState): Promise<ReasonRank
 
 export async function getComparisons(filters: FilterState): Promise<ComparisonResponse> {
   return fetchJson(apiUrl(`/insights/comparisons${buildQuery({ group_by: "segment", ...filterParams(filters) })}`));
+}
+
+export async function getSurveyHabits(segment?: string): Promise<SurveyHabitsResponse> {
+  return fetchJson(apiUrl(`/insights/survey-habits${buildQuery({ segment })}`));
+}
+
+export async function getCorpusStats(): Promise<CorpusScrapeStats> {
+  return fetchJson(apiUrl("/insights/corpus-stats"));
 }
 
 export async function getHeatmap(filters: FilterState): Promise<HeatmapResponse> {

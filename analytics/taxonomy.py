@@ -104,8 +104,11 @@ SIGNAL_TO_REASON: dict[str, str] = {
     "external_comparison_seeking": "external_comparison",
     "purchase_hesitation": "styling_decision_uncertainty",
     "delayed_decision": "timing_occasion",
-    "wishlist_usage": "passive_bookmarking",
+    # wishlist_usage is the corpus inclusion signal, not a non-conversion reason.
 }
+
+# Intent-mix bucket — not a purchase friction (fit/price/trust/etc.).
+NON_FRICTION_REASONS = frozenset({"passive_bookmarking"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -137,5 +140,11 @@ def classify_reason(text: str, *, signals: list[str] | None = None) -> ReasonCla
     if not scores:
         return ReasonClassification(primary=None, scores={}, matched=[])
 
-    primary = max(scores, key=lambda k: scores[k])
+    best = max(scores.values())
+    winners = [key for key, value in scores.items() if value == best]
+    if len(winners) == 1:
+        primary = winners[0]
+    else:
+        specific = [key for key in winners if key not in NON_FRICTION_REASONS]
+        primary = specific[0] if specific else winners[0]
     return ReasonClassification(primary=primary, scores=scores, matched=matched)

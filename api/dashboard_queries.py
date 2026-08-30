@@ -24,7 +24,7 @@ from analytics.schemas import (
     ThemeClusterItem,
     TrendsResponse,
 )
-from common.models import Chunk, Document, Insight, ReasonAggregate, ThemeCluster
+from common.models import Chunk, Document, Insight, ReasonAggregate, SourceType, ThemeCluster
 
 
 def resolve_insight_run_version(session: Session, run_version: str | None) -> str | None:
@@ -168,6 +168,38 @@ def get_dashboard_filters(session: Session, run_version: str | None) -> Dashboar
     )
 
 
+def _db_research_respondent_counts(session: Session) -> dict[str, int]:
+    """Count unique research survey rows per age band from stored documents."""
+    stmt = (
+        select(Document.source_ref, Chunk.segment)
+        .join(Chunk, Chunk.document_id == Document.id)
+        .where(Document.source == SourceType.research)
+        .where(Document.source_ref.isnot(None))
+        .where(~Document.source_ref.contains(":open:"))
+        .where(Chunk.segment.in_(("age_18_24", "age_25_35")))
+    )
+    seen: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
+    for ref, segment in session.execute(stmt):
+        if not ref or segment not in seen:
+            continue
+        if ":row:" not in str(ref) and ":open:" in str(ref):
+            continue
+        seen[str(segment)].add(str(ref))
+    return {key: len(refs) for key, refs in seen.items()}
+
+
+def _research_respondent_counts(session: Session) -> dict[str, int]:
+    try:
+        from api.json_dashboard import research_respondent_counts
+
+        counts = research_respondent_counts()
+        if any(counts.values()):
+            return counts
+    except Exception:
+        pass
+    return _db_research_respondent_counts(session)
+
+
 def get_segment_comparisons(
     session: Session,
     *,
@@ -240,7 +272,15 @@ def get_segment_comparisons(
         )
 
     items.sort(key=lambda item: item.evidence_volume, reverse=True)
-    return ComparisonResponse(run_version=run_version, group_by=group_by, items=items)
+    respondent_counts: dict[str, int] = {}
+    if group_by == "segment":
+        respondent_counts = _research_respondent_counts(session)
+    return ComparisonResponse(
+        run_version=run_version,
+        group_by=group_by,
+        items=items,
+        respondent_counts=respondent_counts,
+    )
 
 
 def get_friction_heatmap(

@@ -1,6 +1,6 @@
 {
-  "run_version": "run-20260829T042417Z",
-  "exported_at": "2026-08-29T04:24:19.021282+00:00",
+  "run_version": "run-20260830T070417Z",
+  "exported_at": "2026-08-30T07:30:15.588732+00:00",
   "sources": [
     "play_store",
     "product_review",
@@ -13,14 +13,14 @@
     "fetched": 168,
     "after_filter": 168,
     "documents": 168,
-    "chunks": 263,
+    "chunks": 281,
     "by_source": {
       "play_store": 37,
-      "reddit": 14,
       "youtube": 11,
       "product_review": 13,
       "social": 14,
-      "research": 79
+      "research": 79,
+      "reddit": 14
     },
     "research_refresh": {
       "fetched": 108,
@@ -157,7 +157,8 @@
             "platform": "android_play_store"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "play_store",
@@ -465,7 +466,8 @@
             "platform": "android_play_store"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "play_store",
@@ -773,7 +775,8 @@
             "platform": "android_play_store"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "play_store",
@@ -849,7 +852,8 @@
             "platform": "android_play_store"
           }
         }
-      ]
+      ],
+      "category": "footwear"
     },
     {
       "source": "play_store",
@@ -925,7 +929,8 @@
             "platform": "android_play_store"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "play_store",
@@ -1383,467 +1388,8 @@
             "platform": "android_play_store"
           }
         }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/IndianFashionAddicts:wishlist-sale-001",
-      "text": "Anyone else have a Myntra wishlist of 40+ items and still buy nothing? I keep waiting for End of Reason Sale / discount and then the price barely drops. Price sensitivity is real — wishlist feels like shopping therapy not purchase intent.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-05-10T18:00:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "delayed_decision",
-        "price_sensitivity_waiting"
       ],
-      "metadata": {
-        "subreddit": "IndianFashionAddicts",
-        "theme": "price_sensitivity_waiting"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Anyone else have a Myntra wishlist of 40+ items and still buy nothing? I keep waiting for End of Reason Sale / discount and then the price barely drops. Price sensitivity is real — wishlist feels like shopping therapy not purchase intent.",
-          "matched_signals": [
-            "wishlist_usage",
-            "delayed_decision",
-            "price_sensitivity_waiting"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": "price_sensitive",
-          "quality_score": 0.94,
-          "metadata": {
-            "subreddit": "IndianFashionAddicts",
-            "theme": "price_sensitivity_waiting"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/indiangirlsontinder:fit-size-002",
-      "text": "Shortlisted 3 pairs of jeans on Myntra. Still unsure about sizing because every brand runs different. Comparing size charts and Reddit fit threads before I purchase. Delayed decision for weeks.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-05-16T09:30:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "purchase_hesitation",
-        "delayed_decision",
-        "fit_size_styling_quality_trust_occasion",
-        "external_comparison_seeking"
-      ],
-      "metadata": {
-        "subreddit": "indiangirlsontinder",
-        "theme": "fit_sizing_uncertainty"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Shortlisted 3 pairs of jeans on Myntra. Still unsure about sizing because every brand runs different. Comparing size charts and Reddit fit threads before I purchase. Delayed decision for weeks.",
-          "matched_signals": [
-            "purchase_hesitation",
-            "delayed_decision",
-            "fit_size_styling_quality_trust_occasion",
-            "external_comparison_seeking"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": "comparison_shopper",
-          "quality_score": 1.0,
-          "metadata": {
-            "subreddit": "indiangirlsontinder",
-            "theme": "fit_sizing_uncertainty"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/india:compare-platforms-003",
-      "text": "I save dresses on Myntra wishlist then check AJIO and Amazon for the same style. If another site is cheaper or has better reviews I abandon the wishlist. External comparison is my default.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-05-22T13:10:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "fit_size_styling_quality_trust_occasion",
-        "external_comparison_seeking"
-      ],
-      "metadata": {
-        "subreddit": "india",
-        "theme": "external_comparison"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "I save dresses on Myntra wishlist then check AJIO and Amazon for the same style. If another site is cheaper or has better reviews I abandon the wishlist. External comparison is my default.",
-          "matched_signals": [
-            "wishlist_usage",
-            "fit_size_styling_quality_trust_occasion",
-            "external_comparison_seeking"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": "comparison_shopper",
-          "quality_score": 0.94,
-          "metadata": {
-            "subreddit": "india",
-            "theme": "external_comparison"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/fashionindia:quality-doubt-004",
-      "text": "Wishlisted a blazer but reviews mention poor fabric and stitching. Quality trust issues make me hesitate — I bookmark and wait, then never buy. Need more reliable material info.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-05-28T20:45:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "purchase_hesitation",
-        "fit_size_styling_quality_trust_occasion"
-      ],
-      "metadata": {
-        "subreddit": "fashionindia",
-        "theme": "quality_trust_doubt"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Wishlisted a blazer but reviews mention poor fabric and stitching. Quality trust issues make me hesitate — I bookmark and wait, then never buy. Need more reliable material info.",
-          "matched_signals": [
-            "wishlist_usage",
-            "purchase_hesitation",
-            "fit_size_styling_quality_trust_occasion"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": "quality_concerned",
-          "quality_score": 0.94,
-          "metadata": {
-            "subreddit": "fashionindia",
-            "theme": "quality_trust_doubt"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/IndianGaming:occasion-wait-005",
-      "text": "Not gaming related but — saved ethnic wear for a cousin's wedding. Occasion is in 6 weeks so I'm postponing purchase. Wishlist is genuine intent but timing delays conversion.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-06-03T11:00:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "delayed_decision",
-        "fit_size_styling_quality_trust_occasion"
-      ],
-      "metadata": {
-        "subreddit": "india",
-        "theme": "timing_occasion"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Not gaming related but — saved ethnic wear for a cousin's wedding. Occasion is in 6 weeks so I'm postponing purchase. Wishlist is genuine intent but timing delays conversion.",
-          "matched_signals": [
-            "wishlist_usage",
-            "delayed_decision",
-            "fit_size_styling_quality_trust_occasion"
-          ],
-          "category": "footwear",
-          "occasion": "wedding",
-          "price_band": null,
-          "segment": null,
-          "quality_score": 0.94,
-          "metadata": {
-            "subreddit": "india",
-            "theme": "timing_occasion"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/Frugal_Ind:budget-wishlist-006",
-      "text": "Myntra wishlist is my budget planner. I add items, track price drops, use coupons. Without a strong offer I put off buying. Frugal shoppers treat wishlist as a waiting room.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-06-11T07:25:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "delayed_decision",
-        "price_sensitivity_waiting"
-      ],
-      "metadata": {
-        "subreddit": "Frugal_Ind",
-        "theme": "price_sensitivity_waiting"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Myntra wishlist is my budget planner. I add items, track price drops, use coupons. Without a strong offer I put off buying. Frugal shoppers treat wishlist as a waiting room.",
-          "matched_signals": [
-            "wishlist_usage",
-            "delayed_decision",
-            "price_sensitivity_waiting"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": "budget",
-          "segment": "price_sensitive",
-          "quality_score": 0.94,
-          "metadata": {
-            "subreddit": "Frugal_Ind",
-            "theme": "price_sensitivity_waiting"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/AskIndia:return-policy-007",
-      "text": "Hesitate to convert wishlist footwear because return windows and pickup hassles worry me. Logistics friction + size uncertainty = items sitting saved forever.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-06-17T16:40:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "purchase_hesitation",
-        "fit_size_styling_quality_trust_occasion"
-      ],
-      "metadata": {
-        "subreddit": "AskIndia",
-        "theme": "logistics_friction"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Hesitate to convert wishlist footwear because return windows and pickup hassles worry me. Logistics friction + size uncertainty = items sitting saved forever.",
-          "matched_signals": [
-            "wishlist_usage",
-            "purchase_hesitation",
-            "fit_size_styling_quality_trust_occasion"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": "fit_uncertain",
-          "quality_score": 0.94,
-          "metadata": {
-            "subreddit": "AskIndia",
-            "theme": "logistics_friction"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/IndianFashionAddicts:styling-unsure-008",
-      "text": "I shortlist tops then overthink styling — will it match my wardrobe? Ask friends on Instagram before buying. Styling decision uncertainty keeps wishlist from converting.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-06-24T12:15:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "purchase_hesitation",
-        "fit_size_styling_quality_trust_occasion",
-        "external_comparison_seeking"
-      ],
-      "metadata": {
-        "subreddit": "IndianFashionAddicts",
-        "theme": "styling_decision_uncertainty"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "I shortlist tops then overthink styling — will it match my wardrobe? Ask friends on Instagram before buying. Styling decision uncertainty keeps wishlist from converting.",
-          "matched_signals": [
-            "wishlist_usage",
-            "purchase_hesitation",
-            "fit_size_styling_quality_trust_occasion",
-            "external_comparison_seeking"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": null,
-          "quality_score": 1.0,
-          "metadata": {
-            "subreddit": "IndianFashionAddicts",
-            "theme": "styling_decision_uncertainty"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/bangalore:stock-oos-009",
-      "text": "Finally ready to buy from wishlist after waiting for salary. Size sold out in my city warehouse. Availability killed the purchase after weeks of consideration.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-07-02T08:50:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "delayed_decision",
-        "fit_size_styling_quality_trust_occasion"
-      ],
-      "metadata": {
-        "subreddit": "bangalore",
-        "theme": "availability_stock"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Finally ready to buy from wishlist after waiting for salary. Size sold out in my city warehouse. Availability killed the purchase after weeks of consideration.",
-          "matched_signals": [
-            "wishlist_usage",
-            "delayed_decision",
-            "fit_size_styling_quality_trust_occasion"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": "fit_uncertain",
-          "quality_score": 0.94,
-          "metadata": {
-            "subreddit": "bangalore",
-            "theme": "availability_stock"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/IndianFashionAddicts:passive-save-010",
-      "text": "Be honest — half my Myntra wishlist is just moodboard bookmarking. Passive saves with zero purchase intent. The other half is active shortlist waiting for fit confirmation.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-07-08T21:05:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "delayed_decision",
-        "fit_size_styling_quality_trust_occasion"
-      ],
-      "metadata": {
-        "subreddit": "IndianFashionAddicts",
-        "theme": "passive_bookmarking"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Be honest — half my Myntra wishlist is just moodboard bookmarking. Passive saves with zero purchase intent. The other half is active shortlist waiting for fit confirmation.",
-          "matched_signals": [
-            "wishlist_usage",
-            "delayed_decision",
-            "fit_size_styling_quality_trust_occasion"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": "fit_uncertain",
-          "quality_score": 0.94,
-          "metadata": {
-            "subreddit": "IndianFashionAddicts",
-            "theme": "passive_bookmarking"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/india:review-trust-011",
-      "text": "Before purchasing wishlisted sneakers I google reviews and watch YouTube hauls. Still not sure I trust in-app ratings. Outside research delays the buy.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-07-14T10:35:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "purchase_hesitation",
-        "delayed_decision",
-        "fit_size_styling_quality_trust_occasion",
-        "external_comparison_seeking"
-      ],
-      "metadata": {
-        "subreddit": "india",
-        "theme": "review_trust"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Before purchasing wishlisted sneakers I google reviews and watch YouTube hauls. Still not sure I trust in-app ratings. Outside research delays the buy.",
-          "matched_signals": [
-            "purchase_hesitation",
-            "delayed_decision",
-            "fit_size_styling_quality_trust_occasion",
-            "external_comparison_seeking"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": null,
-          "quality_score": 1.0,
-          "metadata": {
-            "subreddit": "india",
-            "theme": "review_trust"
-          }
-        }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:r/mumbai:delivery-expect-012",
-      "text": "Wishlist conversion dies when delivery shows 7+ days. Faster delivery expectations — if I wanted to wait I would shop offline. Delayed shipping = postponed purchase.",
-      "author_hash": null,
-      "language": "en",
-      "created_at": "2026-07-20T14:00:00+00:00",
-      "run_version": "run-20260823T134542Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "delayed_decision"
-      ],
-      "metadata": {
-        "subreddit": "mumbai",
-        "theme": "logistics_friction"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Wishlist conversion dies when delivery shows 7+ days. Faster delivery expectations — if I wanted to wait I would shop offline. Delayed shipping = postponed purchase.",
-          "matched_signals": [
-            "wishlist_usage",
-            "delayed_decision"
-          ],
-          "category": "footwear",
-          "occasion": null,
-          "price_band": null,
-          "segment": null,
-          "quality_score": 0.86,
-          "metadata": {
-            "subreddit": "mumbai",
-            "theme": "logistics_friction"
-          }
-        }
-      ]
+      "category": "clothing"
     },
     {
       "source": "youtube",
@@ -1919,7 +1465,8 @@
             "theme": "fit_sizing_uncertainty"
           }
         }
-      ]
+      ],
+      "category": "footwear"
     },
     {
       "source": "youtube",
@@ -2031,7 +1578,8 @@
             "theme": "timing_occasion"
           }
         }
-      ]
+      ],
+      "category": "accessories"
     },
     {
       "source": "youtube",
@@ -2217,7 +1765,8 @@
             "theme": "review_trust"
           }
         }
-      ]
+      ],
+      "category": "accessories"
     },
     {
       "source": "product_review",
@@ -2293,7 +1842,8 @@
             "theme": "price_sensitivity_waiting"
           }
         }
-      ]
+      ],
+      "category": "footwear"
     },
     {
       "source": "product_review",
@@ -2587,7 +2137,7 @@
             "delayed_decision",
             "fit_size_styling_quality_trust_occasion"
           ],
-          "category": "accessories",
+          "category": "clothing",
           "occasion": null,
           "price_band": null,
           "segment": "fit_uncertain",
@@ -2597,7 +2147,8 @@
             "theme": "availability_stock"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "product_review",
@@ -3118,43 +2669,6 @@
       ]
     },
     {
-      "source": "reddit",
-      "source_ref": "reddit:competitive:wishlist-habit",
-      "text": "Honestly I bookmark inspiration on Myntra and Nykaa all the time. Nykaa for skincare and makeup trust/authenticity, Myntra for fashion discovery and assortment. Most items never get bought — passive bookmarking and waiting for End of Reason Sale.",
-      "language": "en",
-      "created_at": "2026-07-18T09:30:00Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "external_comparison_seeking",
-        "purchase_hesitation",
-        "external_comparison_seeking"
-      ],
-      "metadata": {
-        "platforms": [
-          "myntra",
-          "nykaa"
-        ],
-        "theme": "passive"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "Honestly I bookmark inspiration on Myntra and Nykaa all the time. Nykaa for skincare and makeup trust/authenticity, Myntra for fashion discovery and assortment. Most items never get bought — passive bookmarking and waiting for End of Reason Sale.",
-          "matched_signals": [
-            "wishlist_usage",
-            "external_comparison_seeking",
-            "purchase_hesitation",
-            "external_comparison_seeking"
-          ],
-          "category": "clothing",
-          "occasion": null,
-          "price_band": null,
-          "segment": null,
-          "quality_score": 0.82
-        }
-      ]
-    },
-    {
       "source": "youtube",
       "source_ref": "youtube:competitive:ajio-vs-myntra",
       "text": "In this haul I show Ajio vs Myntra wishlists. Ajio wins on price and sale waiting; Myntra wins on brand exclusives and wider fashion assortment. Returns and delivery friction still make me hesitate before buying either.",
@@ -3226,7 +2740,8 @@
           "segment": null,
           "quality_score": 0.82
         }
-      ]
+      ],
+      "category": "beauty"
     },
     {
       "source": "play_store",
@@ -3300,41 +2815,8 @@
           "segment": null,
           "quality_score": 0.82
         }
-      ]
-    },
-    {
-      "source": "reddit",
-      "source_ref": "reddit:competitive:myntra-only-hesitation",
-      "text": "On Myntra I wishlist dresses then never buy because size charts feel inconsistent across brands and I am unsure about fit. Also waiting for a price drop during sale season. Not switching apps — just stuck in hesitation.",
-      "language": "en",
-      "created_at": "2026-07-29T14:00:00Z",
-      "matched_signals": [
-        "wishlist_usage",
-        "external_comparison_seeking",
-        "purchase_hesitation"
       ],
-      "metadata": {
-        "platforms": [
-          "myntra"
-        ],
-        "theme": "fit_price"
-      },
-      "chunks": [
-        {
-          "chunk_index": 0,
-          "text": "On Myntra I wishlist dresses then never buy because size charts feel inconsistent across brands and I am unsure about fit. Also waiting for a price drop during sale season. Not switching apps — just stuck in hesitation.",
-          "matched_signals": [
-            "wishlist_usage",
-            "external_comparison_seeking",
-            "purchase_hesitation"
-          ],
-          "category": "clothing",
-          "occasion": null,
-          "price_band": null,
-          "segment": null,
-          "quality_score": 0.82
-        }
-      ]
+      "category": "clothing"
     },
     {
       "source": "product_review",
@@ -3365,13 +2847,14 @@
             "purchase_hesitation",
             "external_comparison_seeking"
           ],
-          "category": "clothing",
+          "category": "beauty",
           "occasion": null,
           "price_band": null,
           "segment": null,
           "quality_score": 0.82
         }
-      ]
+      ],
+      "category": "beauty"
     },
     {
       "source": "social",
@@ -3516,7 +2999,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -3628,7 +3112,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -3735,7 +3220,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "accessories"
     },
     {
       "source": "research",
@@ -3847,7 +3333,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -3959,7 +3446,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4071,7 +3559,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4178,7 +3667,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4285,7 +3775,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4371,7 +3862,8 @@
             "workbook": "myntra-wishlist"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4611,7 +4103,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4718,7 +4211,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4796,7 +4290,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4878,7 +4373,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -4960,7 +4456,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5067,7 +4564,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5149,7 +4647,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5227,7 +4726,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5309,7 +4809,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5399,7 +4900,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5477,7 +4979,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5555,7 +5058,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5620,7 +5124,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5717,7 +5222,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5799,7 +5305,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5877,7 +5384,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -5942,7 +5450,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6028,7 +5537,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6081,7 +5591,7 @@
             "fit_size_styling_quality_trust_occasion",
             "price_sensitivity_waiting"
           ],
-          "category": null,
+          "category": "clothing",
           "occasion": null,
           "price_band": null,
           "segment": "age_18_24",
@@ -6114,7 +5624,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6179,7 +5690,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6286,7 +5798,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6388,7 +5901,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6474,7 +5988,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6556,7 +6071,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6634,7 +6150,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6716,7 +6233,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6798,7 +6316,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6884,7 +6403,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -6966,7 +6486,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -7048,7 +6569,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -7126,7 +6648,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -7208,7 +6731,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -7294,7 +6818,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -7359,7 +6884,8 @@
             "workbook": "your-wishlist-habits-responses"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -7519,7 +7045,8 @@
             "sheet": "Your Wishlist Habits (Responses).xlsx"
           }
         }
-      ]
+      ],
+      "category": "clothing"
     },
     {
       "source": "research",
@@ -8127,7 +7654,8 @@
             "sheet": "Your Wishlist Habits (Responses).xlsx"
           }
         }
-      ]
+      ],
+      "category": "footwear"
     },
     {
       "source": "research",
@@ -8653,6 +8181,941 @@
             "age_band": "age_18_24",
             "workbook": "your-wishlist-habits-responses",
             "sheet": "Your Wishlist Habits (Responses).xlsx"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:SurveyExchange:t3_1vu66r4",
+      "text": "Myntra Shopping & Wishlist Habits — Quick Survey form Hey! 👋 I&#39;m working on a research project on online fashion shopping (Myntra + Wishlist habits) and would really appreciate your help! It&#39;s a quick survey — takes only 5-8 mins. No right/wrong answers, just your honest experience 🙏 🔗 [url] Would mean a lot if you could fill it out and maybe share with 1-2 friends too! Thanks so much 🫶 &#32; submitted by &#32; /u/Electrical-Sea2733 [link] &#32; [comments]",
+      "author_hash": "4dfbd68b462b18ec399c3136c638e9cd",
+      "language": "en",
+      "created_at": "2026-08-21T04:31:22+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "subreddit": "SurveyExchange",
+        "permalink": "https://www.reddit.com/r/SurveyExchange/comments/1vu66r4/myntra_shopping_wishlist_habits_quick_survey_form/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra Shopping & Wishlist Habits — Quick Survey form Hey! 👋 I&#39;m working on a research project on online fashion shopping (Myntra + Wishlist habits) and would really appreciate your help! It&#39;s a quick survey — takes only 5-8 mins. No right/wrong answers, just your honest experience 🙏 🔗 [url] Would mean a lot if you could fill it out and maybe share with 1-2 friends too! Thanks so much 🫶 &#32; submitted by &#32; /u/Electrical-Sea2733 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "external_comparison_seeking"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "subreddit": "SurveyExchange",
+            "permalink": "https://www.reddit.com/r/SurveyExchange/comments/1vu66r4/myntra_shopping_wishlist_habits_quick_survey_form/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:SurveyZone:t3_1vu67j8",
+      "text": "Myntra Shopping & Wishlist Habits — Quick Survey form &#32; submitted by &#32; /u/Electrical-Sea2733 [link] &#32; [comments]",
+      "author_hash": "4dfbd68b462b18ec399c3136c638e9cd",
+      "language": "en",
+      "created_at": "2026-08-21T04:32:33+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage"
+      ],
+      "metadata": {
+        "subreddit": "SurveyZone",
+        "permalink": "https://www.reddit.com/r/SurveyZone/comments/1vu67j8/myntra_shopping_wishlist_habits_quick_survey_form/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra Shopping & Wishlist Habits — Quick Survey form &#32; submitted by &#32; /u/Electrical-Sea2733 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.778,
+          "metadata": {
+            "subreddit": "SurveyZone",
+            "permalink": "https://www.reddit.com/r/SurveyZone/comments/1vu67j8/myntra_shopping_wishlist_habits_quick_survey_form/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:indianbeautyhauls:t3_1roso7w",
+      "text": "Myntra and nykaa man haul ❤️this bag was on my wishlist for long time and able to grab it before it went oos🫶 &#32; submitted by &#32; /u/Away_Preference8638 [link] &#32; [comments]",
+      "author_hash": "3ccd64b2ff56e9f0ee5e1ee3f162332b",
+      "language": "en",
+      "created_at": "2026-03-09T06:27:00+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage"
+      ],
+      "metadata": {
+        "subreddit": "indianbeautyhauls",
+        "permalink": "https://www.reddit.com/r/indianbeautyhauls/comments/1roso7w/myntra_and_nykaa_man_haul_this_bag_was_on_my/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra and nykaa man haul ❤️this bag was on my wishlist for long time and able to grab it before it went oos🫶 &#32; submitted by &#32; /u/Away_Preference8638 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.78,
+          "metadata": {
+            "subreddit": "indianbeautyhauls",
+            "permalink": "https://www.reddit.com/r/indianbeautyhauls/comments/1roso7w/myntra_and_nykaa_man_haul_this_bag_was_on_my/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ],
+      "category": "accessories"
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:Myntradiscount:t3_1pemu0k",
+      "text": "Myntra doesn’t want me to wishlist the products 🙄 &#32; submitted by &#32; /u/MotorBat7953 [link] &#32; [comments]",
+      "author_hash": "b73ba4bc9ddcbc8f9743b33fa58f6d14",
+      "language": "en",
+      "created_at": "2025-12-05T05:23:49+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage"
+      ],
+      "metadata": {
+        "subreddit": "Myntradiscount",
+        "permalink": "https://www.reddit.com/r/Myntradiscount/comments/1pemu0k/myntra_doesnt_want_me_to_wishlist_the_products/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra doesn’t want me to wishlist the products 🙄 &#32; submitted by &#32; /u/MotorBat7953 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.758,
+          "metadata": {
+            "subreddit": "Myntradiscount",
+            "permalink": "https://www.reddit.com/r/Myntradiscount/comments/1pemu0k/myntra_doesnt_want_me_to_wishlist_the_products/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:SneakersIndia:t3_1ktecow",
+      "text": "Myntra Sale: Sneaker Wishlist & Telegram Deal Groups? Planning for the Myntra sale. Suggest some cool sneakers to target. Also, any good Telegram groups for real-time deal updates? thanks! &#32; submitted by &#32; /u/SiuSheesh [link] &#32; [comments]",
+      "author_hash": "c1fee4a501f666a88c7955edc83c5a6f",
+      "language": "en",
+      "created_at": "2025-05-23T08:22:33+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "subreddit": "SneakersIndia",
+        "permalink": "https://www.reddit.com/r/SneakersIndia/comments/1ktecow/myntra_sale_sneaker_wishlist_telegram_deal_groups/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra Sale: Sneaker Wishlist & Telegram Deal Groups? Planning for the Myntra sale. Suggest some cool sneakers to target. Also, any good Telegram groups for real-time deal updates? thanks! &#32; submitted by &#32; /u/SiuSheesh [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "price_sensitivity_waiting"
+          ],
+          "category": "footwear",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.86,
+          "metadata": {
+            "subreddit": "SneakersIndia",
+            "permalink": "https://www.reddit.com/r/SneakersIndia/comments/1ktecow/myntra_sale_sneaker_wishlist_telegram_deal_groups/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ],
+      "category": "footwear"
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:IndianBeautySale:t3_1tzcn58",
+      "text": "Drop your Savana hauls here!! 🛍️ \"What we ordered\" vs \"What we got\" Savana ₹1 sale edition Hey guys, so the packages from the absolute chaos that was the Savana Re 1 sale are finally arriving, and we should talk about the quality. Some of my stuff is still stuck in shipping (hope it ends up actually showing up fr 😭), but some users already posted their hauls and it was quite something, so I added some of theirs too till mine come. Cardigan Sweater: Honestly a 10/10 win. It was exactly as shown on the app and the quality is actually quite good fr. The Pants: Terrible Terrible Quality. Many has seen this already on many posts by Witty-Morning12, but Savana took the return and gave 100 back. But what will happen to hours wasted. The Glasses: Surprisingly good for the price! The quality doesn&#39;t look too bad at all. They look cute on me and my mumma too... The black pair deadass looks like the glasses they gave to me right after my Lasik surgery lmao 😭 but I’ll definitely be using them to just rest on my head as an aesthetic photo prop ig. Bags: Tthe best one from the lot! 10/10. Just need to figure out how to remove the &#39;fashion&#39; over it Please post your hauls too and let us know how it went! Drop your screenshots, your real-life pictures, and your brutally honest quality checks in the comments. We need to see what to blacklist and what to wishlist if they ever drop a crazy sale like this again. 👇 🎁 BTW giveaway that was started is still on in case you guys didn&#39;t participate [url] Drop your updates below! Let’s see what y&#39;all managed to secure against 20 Lakh people 👇🥳 &#32; submitted by &#32; /u/TotalSea6477 [link] &#32; [comments]",
+      "author_hash": "b32dfb08f0487eaf5fafdf2a109fd090",
+      "language": "en",
+      "created_at": "2026-06-07T13:48:33+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "subreddit": "IndianBeautySale",
+        "permalink": "https://www.reddit.com/r/IndianBeautySale/comments/1tzcn58/drop_your_savana_hauls_here_what_we_ordered_vs/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Drop your Savana hauls here!! 🛍️ \"What we ordered\" vs \"What we got\" Savana ₹1 sale edition Hey guys, so the packages from the absolute chaos that was the Savana Re 1 sale are finally arriving, and we should talk about the quality. Some of my stuff is still stuck in shipping (hope it ends up actually showing up fr 😭), but some users already posted their hauls and it was quite something, so I added some of theirs too till mine come. Cardigan Sweater: Honestly a 10/10 win. It was exactly as shown on the app an",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "IndianBeautySale",
+            "permalink": "https://www.reddit.com/r/IndianBeautySale/comments/1tzcn58/drop_your_savana_hauls_here_what_we_ordered_vs/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "ter: Honestly a 10/10 win. It was exactly as shown on the app and the quality is actually quite good fr. The Pants: Terrible Terrible Quality. Many has seen this already on many posts by Witty-Morning12, but Savana took the return and gave 100 back. But what will happen to hours wasted. The Glasses: Surprisingly good for the price! The quality doesn&#39;t look too bad at all. They look cute on me and my mumma too... The black pair deadass looks like the glasses they gave to me right after my Lasik surgery l",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "IndianBeautySale",
+            "permalink": "https://www.reddit.com/r/IndianBeautySale/comments/1tzcn58/drop_your_savana_hauls_here_what_we_ordered_vs/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "like the glasses they gave to me right after my Lasik surgery lmao 😭 but I’ll definitely be using them to just rest on my head as an aesthetic photo prop ig. Bags: Tthe best one from the lot! 10/10. Just need to figure out how to remove the &#39;fashion&#39; over it Please post your hauls too and let us know how it went! Drop your screenshots, your real-life pictures, and your brutally honest quality checks in the comments. We need to see what to blacklist and what to wishlist if they ever drop a crazy sal",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "quality_concerned",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "IndianBeautySale",
+            "permalink": "https://www.reddit.com/r/IndianBeautySale/comments/1tzcn58/drop_your_savana_hauls_here_what_we_ordered_vs/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "to blacklist and what to wishlist if they ever drop a crazy sale like this again. 👇 🎁 BTW giveaway that was started is still on in case you guys didn&#39;t participate [url] Drop your updates below! Let’s see what y&#39;all managed to secure against 20 Lakh people 👇🥳 &#32; submitted by &#32; /u/TotalSea6477 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "IndianBeautySale",
+            "permalink": "https://www.reddit.com/r/IndianBeautySale/comments/1tzcn58/drop_your_savana_hauls_here_what_we_ordered_vs/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:CreditCardsIndia:t3_1qmnjqx",
+      "text": "Jupiter Edge+ best LTF card for low spenders My experience with the Jupiter Edge+ (CSB Bank) Credit Card? ​Hey everyone, I’ve been using the Jupiter Edge+ (CSB Bank) RuPay Credit Card for a month now. ​The Basics: What is it? ​The Edge+ is an upgrade to the original Jupiter Edge card. It’s a RuPay card, which means you can link it to UPI. I got it LTF with free Jio hotstar subscription (which I am yet to get 🙁) ​Key Benefits (The &quot;Meat&quot;) ​The rewards are paid out in Jewels, where 5 Jewels = ₹1. You can redeem these for cash (statement credit), gold, or brand vouchers. ​10% Cashback on &quot;Wishlist&quot; Brands: This is the headline feature. You get 10% back on Amazon, Flipkart, Myntra, Ajio, Nykaa, Zara, Croma, and Reliance Digital (photo above shows all applicable brands). ​The Catch: There is a cap of ₹500 per merchant per month and a total shopping cap of ₹1,500 per month. ​5% Cashback on Travel: Valid on MMT, EaseMyTrip, Yatra, and Cleartrip. ​The Catch: Capped at ₹1,000 per month. ​1% Flat Cashback on Everything Else: This includes all other online/offline spends and UPI transactions. ​User Experience: The app has a &quot;Cashback Tracker&quot; that shows exactly how much of your ₹500 merchant limit you’ve used. No more manual calculations to see if you’ll still get 10% on that second Amazon order. ​Instant Onboarding: The V-KYC and digital card generation usually take less than 15 minutes. ​ ​UPI Integration: Since it’s RuPay, scanning any QR code and paying via credit is seamless and gives 1% back. ​The &quot;Real-World&quot; Catch (User Feedback) ​Jewel Redemption: While the math says 10%, you have to wait for the &quot;return period&quot; of your purchase to expire before the Jewels become redeemable. ​The &quot;Merchant Category&quot; Game: Sometimes, a purchase at a physical &quot;Zudio&quot; or &quot;Reliance&quot; store might not trigger the 10% if the POS machine is registered under a different category (MCC). It’s always safer for online spends. ​Customer Support: It’s mostly chat-based. It’s fast, but if you have a complex dispute, it can feel a bit &quot;fintech-y&quot; compared to talking to a bank manager. ​Verdict: Who is this for? ​If you are an active online shopper who spends around ₹5,000–₹15,000 a month across Amazon, Flipkart, or Myntra, this is a &quot;no-brainer.&quot; You are effectively getting a 10% discount on your monthly shopping. ​Pro-Tip: I use this card to buy Amazon Gift Cards (up to ₹5,000) to get the ₹500 cashback, then use that Amazon Pay balance for utility bills. It beats almost every dedicated utility Ltf card out there. Used a bit of AI to improve the language 🙂 &#32; submitted by &#32; /u/Nikhil86 [link] &#32; [comments]",
+      "author_hash": "c3c48456a617b3ffc391abf089005bc7",
+      "language": "en",
+      "created_at": "2026-01-25T16:22:35+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting",
+        "external_comparison_seeking"
+      ],
+      "metadata": {
+        "subreddit": "CreditCardsIndia",
+        "permalink": "https://www.reddit.com/r/CreditCardsIndia/comments/1qmnjqx/jupiter_edge_best_ltf_card_for_low_spenders/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Jupiter Edge+ best LTF card for low spenders My experience with the Jupiter Edge+ (CSB Bank) Credit Card? ​Hey everyone, I’ve been using the Jupiter Edge+ (CSB Bank) RuPay Credit Card for a month now. ​The Basics: What is it? ​The Edge+ is an upgrade to the original Jupiter Edge card. It’s a RuPay card, which means you can link it to UPI. I got it LTF with free Jio hotstar subscription (which I am yet to get 🙁) ​Key Benefits (The &quot;Meat&quot;) ​The rewards are paid out in Jewels, where 5 Jewels = ₹1. Yo",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "CreditCardsIndia",
+            "permalink": "https://www.reddit.com/r/CreditCardsIndia/comments/1qmnjqx/jupiter_edge_best_ltf_card_for_low_spenders/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "t;) ​The rewards are paid out in Jewels, where 5 Jewels = ₹1. You can redeem these for cash (statement credit), gold, or brand vouchers. ​10% Cashback on &quot;Wishlist&quot; Brands: This is the headline feature. You get 10% back on Amazon, Flipkart, Myntra, Ajio, Nykaa, Zara, Croma, and Reliance Digital (photo above shows all applicable brands). ​The Catch: There is a cap of ₹500 per merchant per month and a total shopping cap of ₹1,500 per month. ​5% Cashback on Travel: Valid on MMT, EaseMyTrip, Yatra, an",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "CreditCardsIndia",
+            "permalink": "https://www.reddit.com/r/CreditCardsIndia/comments/1qmnjqx/jupiter_edge_best_ltf_card_for_low_spenders/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "nth. ​5% Cashback on Travel: Valid on MMT, EaseMyTrip, Yatra, and Cleartrip. ​The Catch: Capped at ₹1,000 per month. ​1% Flat Cashback on Everything Else: This includes all other online/offline spends and UPI transactions. ​User Experience: The app has a &quot;Cashback Tracker&quot; that shows exactly how much of your ₹500 merchant limit you’ve used. No more manual calculations to see if you’ll still get 10% on that second Amazon order. ​Instant Onboarding: The V-KYC and digital card generation usually take",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "CreditCardsIndia",
+            "permalink": "https://www.reddit.com/r/CreditCardsIndia/comments/1qmnjqx/jupiter_edge_best_ltf_card_for_low_spenders/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "t Onboarding: The V-KYC and digital card generation usually take less than 15 minutes. ​ ​UPI Integration: Since it’s RuPay, scanning any QR code and paying via credit is seamless and gives 1% back. ​The &quot;Real-World&quot; Catch (User Feedback) ​Jewel Redemption: While the math says 10%, you have to wait for the &quot;return period&quot; of your purchase to expire before the Jewels become redeemable. ​The &quot;Merchant Category&quot; Game: Sometimes, a purchase at a physical &quot;Zudio&quot; or &quot;",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "CreditCardsIndia",
+            "permalink": "https://www.reddit.com/r/CreditCardsIndia/comments/1qmnjqx/jupiter_edge_best_ltf_card_for_low_spenders/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 4,
+          "text": "Sometimes, a purchase at a physical &quot;Zudio&quot; or &quot;Reliance&quot; store might not trigger the 10% if the POS machine is registered under a different category (MCC). It’s always safer for online spends. ​Customer Support: It’s mostly chat-based. It’s fast, but if you have a complex dispute, it can feel a bit &quot;fintech-y&quot; compared to talking to a bank manager. ​Verdict: Who is this for? ​If you are an active online shopper who spends around ₹5,000–₹15,000 a month across Amazon, Flipkart,",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "CreditCardsIndia",
+            "permalink": "https://www.reddit.com/r/CreditCardsIndia/comments/1qmnjqx/jupiter_edge_best_ltf_card_for_low_spenders/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 5,
+          "text": "ho spends around ₹5,000–₹15,000 a month across Amazon, Flipkart, or Myntra, this is a &quot;no-brainer.&quot; You are effectively getting a 10% discount on your monthly shopping. ​Pro-Tip: I use this card to buy Amazon Gift Cards (up to ₹5,000) to get the ₹500 cashback, then use that Amazon Pay balance for utility bills. It beats almost every dedicated utility Ltf card out there. Used a bit of AI to improve the language 🙂 &#32; submitted by &#32; /u/Nikhil86 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting",
+            "external_comparison_seeking"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "comparison_shopper",
+          "quality_score": 1.0,
+          "metadata": {
+            "subreddit": "CreditCardsIndia",
+            "permalink": "https://www.reddit.com/r/CreditCardsIndia/comments/1qmnjqx/jupiter_edge_best_ltf_card_for_low_spenders/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:indianbeautyhauls:t3_1od2pw6",
+      "text": "Myntra’s treating me like Cinderella’s evil stepsisters treated her 🥺🥀👠 was eagerly waiting for this as it was on my wishlist forever, but i was heartbroken to find the eyeshadow palette broken upon opening the package. 💔😔🥀 &#32; submitted by &#32; /u/HugoEgo05 [link] &#32; [comments]",
+      "author_hash": "4ed65971dc750f2b78ab7c19f0bc1668",
+      "language": "en",
+      "created_at": "2025-10-22T08:33:02+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision"
+      ],
+      "metadata": {
+        "subreddit": "indianbeautyhauls",
+        "permalink": "https://www.reddit.com/r/indianbeautyhauls/comments/1od2pw6/myntras_treating_me_like_cinderellas_evil/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra’s treating me like Cinderella’s evil stepsisters treated her 🥺🥀👠 was eagerly waiting for this as it was on my wishlist forever, but i was heartbroken to find the eyeshadow palette broken upon opening the package. 💔😔🥀 &#32; submitted by &#32; /u/HugoEgo05 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "subreddit": "indianbeautyhauls",
+            "permalink": "https://www.reddit.com/r/indianbeautyhauls/comments/1od2pw6/myntras_treating_me_like_cinderellas_evil/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:IndianFashionAddicts:t3_1umsu9n",
+      "text": "Do people actually buy clothes for their real life anymore or just for the vibe? I was cleaning my wishlist yesterday and realised half the clothes I save are not for anything I actually have planned like I’ll see a cute top or a dress on Savana or myntra and immediately think “this would be nice for a cafe day” or “this would look good on a trip” but then my week is office, errands, family stuff and maybe one dinner if I’m lucky. It made me wonder if this is just how online shopping has become now like we dont only buy clothes for need, we buy for some version of ourselves we want to feel like. For people here especially those who shop online a lot, do you buy clothes based on actual use or based on the mood/look you want wnd how do you stop yourself from buying things that only make sense in your head? &#32; submitted by &#32; /u/DragZealousidealll [link] &#32; [comments]",
+      "author_hash": "9246e2975771b96d137b42bfbd9de8ed",
+      "language": "en",
+      "created_at": "2026-07-03T23:02:29+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion"
+      ],
+      "metadata": {
+        "subreddit": "IndianFashionAddicts",
+        "permalink": "https://www.reddit.com/r/IndianFashionAddicts/comments/1umsu9n/do_people_actually_buy_clothes_for_their_real/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Do people actually buy clothes for their real life anymore or just for the vibe? I was cleaning my wishlist yesterday and realised half the clothes I save are not for anything I actually have planned like I’ll see a cute top or a dress on Savana or myntra and immediately think “this would be nice for a cafe day” or “this would look good on a trip” but then my week is office, errands, family stuff and maybe one dinner if I’m lucky. It made me wonder if this is just how online shopping has become now like we",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": "office",
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "subreddit": "IndianFashionAddicts",
+            "permalink": "https://www.reddit.com/r/IndianFashionAddicts/comments/1umsu9n/do_people_actually_buy_clothes_for_their_real/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "nder if this is just how online shopping has become now like we dont only buy clothes for need, we buy for some version of ourselves we want to feel like. For people here especially those who shop online a lot, do you buy clothes based on actual use or based on the mood/look you want wnd how do you stop yourself from buying things that only make sense in your head? &#32; submitted by &#32; /u/DragZealousidealll [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "subreddit": "IndianFashionAddicts",
+            "permalink": "https://www.reddit.com/r/IndianFashionAddicts/comments/1umsu9n/do_people_actually_buy_clothes_for_their_real/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ],
+      "category": "clothing"
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:MyntraSucks:t3_1pemstf",
+      "text": "Myntra doesn’t want me to wishlist the products 🙄 Why? Why is there a capping on whishlisting the items on Myntra?? How does it make sense? What are you trying to achieve? You are literally losing out on a potential customer. No other shopping site does that. Myntra won’t let me wishlist after a certain point of time. So annoying. &#32; submitted by &#32; /u/MotorBat7953 [link] &#32; [comments]",
+      "author_hash": "b73ba4bc9ddcbc8f9743b33fa58f6d14",
+      "language": "en",
+      "created_at": "2025-12-05T05:22:00+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage"
+      ],
+      "metadata": {
+        "subreddit": "MyntraSucks",
+        "permalink": "https://www.reddit.com/r/MyntraSucks/comments/1pemstf/myntra_doesnt_want_me_to_wishlist_the_products/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Myntra doesn’t want me to wishlist the products 🙄 Why? Why is there a capping on whishlisting the items on Myntra?? How does it make sense? What are you trying to achieve? You are literally losing out on a potential customer. No other shopping site does that. Myntra won’t let me wishlist after a certain point of time. So annoying. &#32; submitted by &#32; /u/MotorBat7953 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.78,
+          "metadata": {
+            "subreddit": "MyntraSucks",
+            "permalink": "https://www.reddit.com/r/MyntraSucks/comments/1pemstf/myntra_doesnt_want_me_to_wishlist_the_products/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:watchesindia:t3_1t792sf",
+      "text": "Bought a Timex MK1 Mechanical (36mm) for Rs. 12,000 (MRP Rs. 22,000) or 45% off and returned it the very next day. I already own around 10-11 watches and always wanted to add a proper field watch to my collection. And honestly, I just couldn’t say no to the Timex mechanical for this price. What an absolutely beautiful-looking watch. But the moment I wore it, I was genuinely shocked by how small it looked in real life. Everyone says 36mm is the “perfect classic field watch size,” but for me... it just wasn’t. The 18mm strap width didn’t help either. On wrist, it almost felt a bit girlish to me personally. No complaints about the watch itself though, vintage charm, clean dial, mechanical movement, everything about it was beautiful. I spent almost 24 hours trying to convince myself that the size was okay because “that’s how field watches are supposed to wear.” Took it to office, checked it under different outfits and lighting, kept staring at my wrist hoping it would grow on me. It didn’t. I realized I want to invest money in a watch that I wear confidently without second thoughts. If I have to mentally justify the size every time I look at it, it’s probably not the right watch for me. Lesson learnt: TRY IT BEFORE YOU BUY IT. Will probably save a bit more now and put that money towards a Seiko 5 GMT someday. That’s been sitting at the top of my wishlist for a long time anyway. Credit to Myntra as well - super smooth return process. For my field watch though, I’ll probably still go for the Timex MK1 itself, but the automatic version with the 40mm dial. That one feels more suitable for my wrist size. But this time, I’ll definitely try it on before buying. Note: pic 1 is on my wife&#39;s wrist. &#32; submitted by &#32; /u/AliensXI [link] &#32; [comments]",
+      "author_hash": "104285d9c8c912e171d651f41e441c3f",
+      "language": "en",
+      "created_at": "2026-05-08T14:09:46+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "fit_size_styling_quality_trust_occasion",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "subreddit": "watchesindia",
+        "permalink": "https://www.reddit.com/r/watchesindia/comments/1t792sf/bought_a_timex_mk1_mechanical_36mm_for_rs_12000/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Bought a Timex MK1 Mechanical (36mm) for Rs. 12,000 (MRP Rs. 22,000) or 45% off and returned it the very next day. I already own around 10-11 watches and always wanted to add a proper field watch to my collection. And honestly, I just couldn’t say no to the Timex mechanical for this price. What an absolutely beautiful-looking watch. But the moment I wore it, I was genuinely shocked by how small it looked in real life. Everyone says 36mm is the “perfect classic field watch size,” but for me... it just wasn’t",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "accessories",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "watchesindia",
+            "permalink": "https://www.reddit.com/r/watchesindia/comments/1t792sf/bought_a_timex_mk1_mechanical_36mm_for_rs_12000/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "“perfect classic field watch size,” but for me... it just wasn’t. The 18mm strap width didn’t help either. On wrist, it almost felt a bit girlish to me personally. No complaints about the watch itself though, vintage charm, clean dial, mechanical movement, everything about it was beautiful. I spent almost 24 hours trying to convince myself that the size was okay because “that’s how field watches are supposed to wear.” Took it to office, checked it under different outfits and lighting, kept staring at my wri",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "accessories",
+          "occasion": "office",
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "watchesindia",
+            "permalink": "https://www.reddit.com/r/watchesindia/comments/1t792sf/bought_a_timex_mk1_mechanical_36mm_for_rs_12000/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "it under different outfits and lighting, kept staring at my wrist hoping it would grow on me. It didn’t. I realized I want to invest money in a watch that I wear confidently without second thoughts. If I have to mentally justify the size every time I look at it, it’s probably not the right watch for me. Lesson learnt: TRY IT BEFORE YOU BUY IT. Will probably save a bit more now and put that money towards a Seiko 5 GMT someday. That’s been sitting at the top of my wishlist for a long time anyway. Credit to M",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "watchesindia",
+            "permalink": "https://www.reddit.com/r/watchesindia/comments/1t792sf/bought_a_timex_mk1_mechanical_36mm_for_rs_12000/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "ng at the top of my wishlist for a long time anyway. Credit to Myntra as well - super smooth return process. For my field watch though, I’ll probably still go for the Timex MK1 itself, but the automatic version with the 40mm dial. That one feels more suitable for my wrist size. But this time, I’ll definitely try it on before buying. Note: pic 1 is on my wife&#39;s wrist. &#32; submitted by &#32; /u/AliensXI [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "fit_size_styling_quality_trust_occasion",
+            "price_sensitivity_waiting"
+          ],
+          "category": "clothing",
+          "occasion": null,
+          "price_band": null,
+          "segment": "fit_uncertain",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "watchesindia",
+            "permalink": "https://www.reddit.com/r/watchesindia/comments/1t792sf/bought_a_timex_mk1_mechanical_36mm_for_rs_12000/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ],
+      "category": "clothing"
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:IndianFashionAddicts:t3_1j4q1sg",
+      "text": "A Small Gift for My Girlfriend Dressberry Tokyo Talkies Miss Chase Athena Miss Chase All from Myntra. We&#39;re moving in together soon and thought of surprising her with these. Not to worry, these were pre-approved by her and taken from her wishlist. She just doesn&#39;t know I got them. Just wanted to share a little update. Have a nice day. &#32; submitted by &#32; /u/1PerpetuallyAnxious [link] &#32; [comments]",
+      "author_hash": "dae8b65a8dc96128224a848fd5d80157",
+      "language": "en",
+      "created_at": "2025-03-06T07:20:40+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage"
+      ],
+      "metadata": {
+        "subreddit": "IndianFashionAddicts",
+        "permalink": "https://www.reddit.com/r/IndianFashionAddicts/comments/1j4q1sg/a_small_gift_for_my_girlfriend/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "A Small Gift for My Girlfriend Dressberry Tokyo Talkies Miss Chase Athena Miss Chase All from Myntra. We&#39;re moving in together soon and thought of surprising her with these. Not to worry, these were pre-approved by her and taken from her wishlist. She just doesn&#39;t know I got them. Just wanted to share a little update. Have a nice day. &#32; submitted by &#32; /u/1PerpetuallyAnxious [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.78,
+          "metadata": {
+            "subreddit": "IndianFashionAddicts",
+            "permalink": "https://www.reddit.com/r/IndianFashionAddicts/comments/1j4q1sg/a_small_gift_for_my_girlfriend/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ]
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:indianbeautyhauls:t3_1h03xiw",
+      "text": "Mega Haul ✨💕 Grabbed My Wishlist and Restocked My Favourites. Almost everything from the current Nykaa Sale and a couple of products from Myntra. Some were Gifts From my Boyfriend Since we Completed 7 Years last month and I asked him to wait till the Nykaa Sale so he can save some bucks 😂 So the Too Faced Products &amp; Huda Beauty Pretty Grunge Palette &amp; Huda Beauty Love Fest Cream Blush &amp; Loccitane Almond Milk Body Cream were His Gifts that we bought from the Nykaa Store. (Also a piece of advice, try avoiding purchasing any expensive palettes online since I had bad experiences in the past, grab them from the store if possible) Restocked My Favourites from The Ordinary and Got the New Hyaluronic Serum, Got My Holy Grail in Lip Balms (Laniege, Bobbi Brown), Restocked my Moisturizer from Clinique. Officially On No Buy For &#39;Sometime&#39; 🤡 &#32; submitted by &#32; /u/Grand_Birthday_6609 [link] &#32; [comments]",
+      "author_hash": "6864c9fdcb22dc681f436c6c93868be8",
+      "language": "en",
+      "created_at": "2024-11-26T04:55:07+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "subreddit": "indianbeautyhauls",
+        "permalink": "https://www.reddit.com/r/indianbeautyhauls/comments/1h03xiw/mega_haul/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "Mega Haul ✨💕 Grabbed My Wishlist and Restocked My Favourites. Almost everything from the current Nykaa Sale and a couple of products from Myntra. Some were Gifts From my Boyfriend Since we Completed 7 Years last month and I asked him to wait till the Nykaa Sale so he can save some bucks 😂 So the Too Faced Products &amp; Huda Beauty Pretty Grunge Palette &amp; Huda Beauty Love Fest Cream Blush &amp; Loccitane Almond Milk Body Cream were His Gifts that we bought from the Nykaa Store. (Also a piece of advice,",
+          "matched_signals": [
+            "wishlist_usage",
+            "price_sensitivity_waiting"
+          ],
+          "category": "beauty",
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.86,
+          "metadata": {
+            "subreddit": "indianbeautyhauls",
+            "permalink": "https://www.reddit.com/r/indianbeautyhauls/comments/1h03xiw/mega_haul/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "s that we bought from the Nykaa Store. (Also a piece of advice, try avoiding purchasing any expensive palettes online since I had bad experiences in the past, grab them from the store if possible) Restocked My Favourites from The Ordinary and Got the New Hyaluronic Serum, Got My Holy Grail in Lip Balms (Laniege, Bobbi Brown), Restocked my Moisturizer from Clinique. Officially On No Buy For &#39;Sometime&#39; 🤡 &#32; submitted by &#32; /u/Grand_Birthday_6609 [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "price_sensitivity_waiting"
+          ],
+          "category": "beauty",
+          "occasion": null,
+          "price_band": "premium",
+          "segment": null,
+          "quality_score": 0.86,
+          "metadata": {
+            "subreddit": "indianbeautyhauls",
+            "permalink": "https://www.reddit.com/r/indianbeautyhauls/comments/1h03xiw/mega_haul/",
+            "score": null,
+            "via": "apify"
+          }
+        }
+      ],
+      "category": "beauty"
+    },
+    {
+      "source": "reddit",
+      "source_ref": "reddit:DesiFragranceAddicts:t3_1c39w9x",
+      "text": "First Salary Splurge! Started my first job after med school and decided to treat myself. Checked a couple of items off the wishlist and blind bought a couple. Here are the reviews Valentino Uomo (Blind Buy) - As someone who isn&#39;t the biggest fan of Dior Homme intense, I was apprehensive about this one. The only reason I bought this was because of the Myntra sale and after two wearings, I can say that I&#39;m pleasantly surprised. What I smell - a creamy citrus (surprisingly fresh) in the initial blast which transition hastily into a coffee based creamy chocolaty gourmandish fragrance. I really enjoy this and can&#39;t wait for the temperatures to drop for me to wear this more! Netflix and chill vibes for sure! Mancera Cedrat Boise Intense - As someone who owns the screw cap version of the og Cedrat Boise, I can say that this is different. This is very very strong. I think this is overwhelming imo. If you&#39;re someone who likes room filling beast mode frags, this is for you. Unfortunately, I don&#39;t think this is for me and I&#39;d rather stick to the OG. Also, after trying this, I realised that Ishatar Citrus Oud is a perfect middle ground between OG and intense Cedrat Boise. Azzaro Most Wanted EDP intense - This was a rebuy. I already owned a 50ml version of this and decided to get a backup because of the Myntra sale. I&#39;ve already reviewed this and will add a link to it in the comments if anyone reading this would like to know my two cents. MB Legend EDP - This has been on my wishlist for a long time. A very good fraghead friend of mine once sent me a 2ml sample vials of this and it was love at first sniff. The performance is bang average and hence I decided to buy Kaaf instead (since both are claimed to be fierce clones). After buying Kaaf and using it, I realised that my itch for MB legend EDP wasn&#39;t getting satisfied and hence I sold my bottle of kaaf. Months later, I found someone selling this on FB and decided to pounce on it. Givenchy Gentleman EDT Intense - This scent is complex. I watched reviews online which said that this is a good beginner iris and a great office scent. I disagree. I think this could be a great date/cuddling scent. It smells like Valentino Uomo&#39;s stepbrother. I really like it and I can see it growing on me. I keep going in for whiffs of it every 5 minutes. I don&#39;t think this would be a hit with the &lt;20years old crowd, but if you&#39;re looking for subtle not so in your face daddy vibes, this is perfect. &#32; submitted by &#32; /u/Sher_update [link] &#32; [comments]",
+      "author_hash": "241a9b720c9fdb74bff81ed1302eb86a",
+      "language": "en",
+      "created_at": "2024-04-13T19:25:38+00:00",
+      "run_version": "run-20260830T070417Z",
+      "matched_signals": [
+        "wishlist_usage",
+        "delayed_decision",
+        "price_sensitivity_waiting"
+      ],
+      "metadata": {
+        "subreddit": "DesiFragranceAddicts",
+        "permalink": "https://www.reddit.com/r/DesiFragranceAddicts/comments/1c39w9x/first_salary_splurge/",
+        "score": null,
+        "via": "apify"
+      },
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "text": "First Salary Splurge! Started my first job after med school and decided to treat myself. Checked a couple of items off the wishlist and blind bought a couple. Here are the reviews Valentino Uomo (Blind Buy) - As someone who isn&#39;t the biggest fan of Dior Homme intense, I was apprehensive about this one. The only reason I bought this was because of the Myntra sale and after two wearings, I can say that I&#39;m pleasantly surprised. What I smell - a creamy citrus (surprisingly fresh) in the initial blast w",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "DesiFragranceAddicts",
+            "permalink": "https://www.reddit.com/r/DesiFragranceAddicts/comments/1c39w9x/first_salary_splurge/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 1,
+          "text": "ll - a creamy citrus (surprisingly fresh) in the initial blast which transition hastily into a coffee based creamy chocolaty gourmandish fragrance. I really enjoy this and can&#39;t wait for the temperatures to drop for me to wear this more! Netflix and chill vibes for sure! Mancera Cedrat Boise Intense - As someone who owns the screw cap version of the og Cedrat Boise, I can say that this is different. This is very very strong. I think this is overwhelming imo. If you&#39;re someone who likes room filling",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "DesiFragranceAddicts",
+            "permalink": "https://www.reddit.com/r/DesiFragranceAddicts/comments/1c39w9x/first_salary_splurge/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 2,
+          "text": "overwhelming imo. If you&#39;re someone who likes room filling beast mode frags, this is for you. Unfortunately, I don&#39;t think this is for me and I&#39;d rather stick to the OG. Also, after trying this, I realised that Ishatar Citrus Oud is a perfect middle ground between OG and intense Cedrat Boise. Azzaro Most Wanted EDP intense - This was a rebuy. I already owned a 50ml version of this and decided to get a backup because of the Myntra sale. I&#39;ve already reviewed this and will add a link to it in",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": "price_sensitive",
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "DesiFragranceAddicts",
+            "permalink": "https://www.reddit.com/r/DesiFragranceAddicts/comments/1c39w9x/first_salary_splurge/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 3,
+          "text": "ale. I&#39;ve already reviewed this and will add a link to it in the comments if anyone reading this would like to know my two cents. MB Legend EDP - This has been on my wishlist for a long time. A very good fraghead friend of mine once sent me a 2ml sample vials of this and it was love at first sniff. The performance is bang average and hence I decided to buy Kaaf instead (since both are claimed to be fierce clones). After buying Kaaf and using it, I realised that my itch for MB legend EDP wasn&#39;t getti",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "DesiFragranceAddicts",
+            "permalink": "https://www.reddit.com/r/DesiFragranceAddicts/comments/1c39w9x/first_salary_splurge/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 4,
+          "text": "g it, I realised that my itch for MB legend EDP wasn&#39;t getting satisfied and hence I sold my bottle of kaaf. Months later, I found someone selling this on FB and decided to pounce on it. Givenchy Gentleman EDT Intense - This scent is complex. I watched reviews online which said that this is a good beginner iris and a great office scent. I disagree. I think this could be a great date/cuddling scent. It smells like Valentino Uomo&#39;s stepbrother. I really like it and I can see it growing on me. I keep g",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": "office",
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "DesiFragranceAddicts",
+            "permalink": "https://www.reddit.com/r/DesiFragranceAddicts/comments/1c39w9x/first_salary_splurge/",
+            "score": null,
+            "via": "apify"
+          }
+        },
+        {
+          "chunk_index": 5,
+          "text": "other. I really like it and I can see it growing on me. I keep going in for whiffs of it every 5 minutes. I don&#39;t think this would be a hit with the &lt;20years old crowd, but if you&#39;re looking for subtle not so in your face daddy vibes, this is perfect. &#32; submitted by &#32; /u/Sher_update [link] &#32; [comments]",
+          "matched_signals": [
+            "wishlist_usage",
+            "delayed_decision",
+            "price_sensitivity_waiting"
+          ],
+          "category": null,
+          "occasion": null,
+          "price_band": null,
+          "segment": null,
+          "quality_score": 0.94,
+          "metadata": {
+            "subreddit": "DesiFragranceAddicts",
+            "permalink": "https://www.reddit.com/r/DesiFragranceAddicts/comments/1c39w9x/first_salary_splurge/",
+            "score": null,
+            "via": "apify"
           }
         }
       ]

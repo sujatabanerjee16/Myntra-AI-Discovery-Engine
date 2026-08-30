@@ -3,12 +3,11 @@ import {
   getComparisons,
   getCompetitiveAnalysis,
   getConversionMetric,
+  getCorpusStats,
   getFilters,
-  getHeatmap,
-  getIntentBreakdown,
   getRankedReasons,
+  getSurveyHabits,
   listInsightFeedback,
-  runInternalCompute,
   submitInsightFeedback,
 } from "../api";
 import { PLATFORM_META } from "../types";
@@ -16,19 +15,34 @@ import type {
   ComparisonResponse,
   CompetitiveAnalysisResponse,
   ConversionMetricResponse,
+  CorpusScrapeStats,
   DashboardFilters,
   FilterState,
-  HeatmapResponse,
   InsightFeedbackRecord,
-  IntentBreakdownResponse,
   IntentType,
   PlatformId,
   ReasonRankResponse,
   SidebarFilters,
   SourceId,
+  SurveyHabitsResponse,
 } from "../types";
 
 const AGE_SEGMENTS = ["age_18_24", "age_25_35"] as const;
+
+const SOURCE_SCRAPE_LABELS: Record<string, string> = {
+  play_store: "Play Store",
+  reddit: "Reddit",
+  youtube: "YouTube",
+  product_review: "Product reviews",
+  social: "Social",
+  research: "Research surveys",
+};
+
+/** Last-resort survey sizes when the API omits respondent_counts. */
+const AGE_RESPONDENT_FALLBACK: Record<(typeof AGE_SEGMENTS)[number], number> = {
+  age_18_24: 27,
+  age_25_35: 15,
+};
 
 const AGE_BEHAVIOR_NOTES: Record<string, string[]> = {
   age_18_24: [
@@ -107,15 +121,15 @@ function matchesSelectedSources(itemSources: string[], selected: SourceId[]): bo
   });
 }
 
-function intentWeight(item: { active_shortlist_count: number; passive_bookmark_count: number }, intentType: IntentType): number {
+function matchesIntent(
+  item: { active_shortlist_count: number; passive_bookmark_count: number },
+  intentType: IntentType,
+): boolean {
+  if (intentType === "medium") return true;
   const active = item.active_shortlist_count;
   const passive = item.passive_bookmark_count;
-  const total = active + passive;
-  if (total === 0) return intentType === "medium" ? 1 : 0.35;
-  const activeShare = active / total;
-  if (intentType === "high") return 0.35 + activeShare * 0.9;
-  if (intentType === "low") return 0.35 + (1 - activeShare) * 0.9;
-  return 0.7 + (1 - Math.abs(activeShare - 0.5)) * 0.4;
+  if (intentType === "high") return active >= passive;
+  return passive > active;
 }
 
 export default function DashboardView({ filters, onFiltersChange, sidebar, onSidebarChange, onAskQuestion, view = "dashboard" }: Props) {
@@ -127,11 +141,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
   const [options, setOptions] = useState<DashboardFilters | null>(null);
   const [reasons, setReasons] = useState<ReasonRankResponse | null>(null);
-  const [heatmap, setHeatmap] = useState<HeatmapResponse | null>(null);
-  const [intent, setIntent] = useState<IntentBreakdownResponse | null>(null);
   const [conversion, setConversion] = useState<ConversionMetricResponse | null>(null);
   const [competitive, setCompetitive] = useState<CompetitiveAnalysisResponse | null>(null);
   const [comparisons, setComparisons] = useState<ComparisonResponse | null>(null);
+  const [surveyHabits, setSurveyHabits] = useState<SurveyHabitsResponse | null>(null);
+  const [corpusStats, setCorpusStats] = useState<CorpusScrapeStats | null>(null);
   const [feedback, setFeedback] = useState<InsightFeedbackRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [computing, setComputing] = useState(false);
@@ -160,30 +174,30 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       const [
         filterOptions,
         reasonData,
-        heatmapData,
-        intentData,
         conversionData,
         feedbackData,
         competitiveData,
         comparisonData,
+        habitsData,
+        scrapeData,
       ] = await Promise.all([
         getFilters(),
         getRankedReasons(filters),
-        getHeatmap(filters),
-        getIntentBreakdown(filters),
         getConversionMetric().catch(() => null),
         listInsightFeedback().catch(() => ({ total: 0, feedback: [] as InsightFeedbackRecord[] })),
         getCompetitiveAnalysis().catch(() => null),
         getComparisons({ ...filters, segment: "" }).catch(() => null),
+        getSurveyHabits(filters.segment || undefined).catch(() => null),
+        getCorpusStats().catch(() => null),
       ]);
       setOptions(filterOptions);
       setReasons(reasonData);
-      setHeatmap(heatmapData);
-      setIntent(intentData);
       setConversion(conversionData);
       setFeedback(feedbackData.feedback);
       setCompetitive(competitiveData);
       setComparisons(comparisonData);
+      setSurveyHabits(habitsData);
+      setCorpusStats(scrapeData);
       setReasonCategory((current) => {
         const cats = filterOptions.reason_categories ?? [];
         if (cats.length && !cats.includes(current)) return cats[0];
@@ -204,10 +218,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     setComputing(true);
     setError(null);
     try {
-      await runInternalCompute();
       await loadDashboard();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Compute failed");
+      setError(err instanceof Error ? err.message : "Reload failed");
     } finally {
       setComputing(false);
     }
@@ -240,35 +253,25 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     }
   }
 
-  const filterIntensity = useMemo(() => {
-    const priceSpan = Math.max(priceMax - priceMin, 500);
-    const priceFactor = Math.min(priceSpan / 5000, 1.25);
-    const sourceFactor = 0.55 + sources.length * 0.15;
-    const intentFactor = intentType === "high" ? 1.05 : intentType === "low" ? 0.85 : 0.95;
-    const confidenceFactor = 0.7 + (1 - confidenceMin) * 0.55;
-    return Math.max(0.35, Math.min(1.4, priceFactor * sourceFactor * intentFactor * confidenceFactor));
-  }, [priceMin, priceMax, sources, intentType, confidenceMin]);
-
-  const filteredReasons = useMemo(() => {
-    const items = reasons?.reasons ?? [];
-    return items
+  const sourceFilteredReasons = useMemo(() => {
+    return (reasons?.reasons ?? [])
       .filter((item) => {
         if (item.confidence !== null && item.confidence < confidenceMin) return false;
         if (!matchesSelectedSources(item.sources, sources)) return false;
         return true;
       })
-      .map((item) => {
-        // Soft intent scaling only — do not drop category rows that are mostly passive.
-        const weight = Math.min(1, intentWeight(item, intentType));
-        return {
-          ...item,
-          evidence_volume: Math.max(1, Math.round(item.evidence_volume * weight * filterIntensity)),
-          active_shortlist_count: Math.round(item.active_shortlist_count * (intentType === "low" ? 0.45 : intentType === "high" ? 1.15 : 0.85)),
-          passive_bookmark_count: Math.round(item.passive_bookmark_count * (intentType === "high" ? 0.45 : intentType === "low" ? 1.15 : 0.85)),
-        };
-      })
       .sort((a, b) => b.evidence_volume - a.evidence_volume);
-  }, [reasons, confidenceMin, sources, intentType, filterIntensity]);
+  }, [reasons, confidenceMin, sources]);
+
+  const intentMatchedReasons = useMemo(
+    () => sourceFilteredReasons.filter((item) => matchesIntent(item, intentType)),
+    [sourceFilteredReasons, intentType],
+  );
+
+  const intentFallback =
+    intentType !== "medium" && intentMatchedReasons.length === 0 && sourceFilteredReasons.length > 0;
+
+  const filteredReasons = intentFallback ? sourceFilteredReasons : intentMatchedReasons;
 
   const totalVolume = useMemo(
     () => filteredReasons.reduce((sum, item) => sum + item.evidence_volume, 0) || 1,
@@ -276,7 +279,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   );
 
   const reasonBars = useMemo(() => {
-    return filteredReasons.slice(0, 7).map((item) => {
+    return filteredReasons.slice(0, 5).map((item) => {
       const pct = Math.round((item.evidence_volume / totalVolume) * 100);
       const tier = confidenceTier(item.confidence);
       return {
@@ -290,61 +293,64 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
   const maxBar = Math.max(...reasonBars.map((item) => item.pct), 1);
 
-  const activeTotal = useMemo(() => {
-    const base = intent?.total_active ?? filteredReasons.reduce((sum, item) => sum + item.active_shortlist_count, 0);
-    const factor = intentType === "high" ? 1.2 : intentType === "low" ? 0.55 : 0.9;
-    return Math.max(0, Math.round(base * factor * filterIntensity));
-  }, [intent, filteredReasons, intentType, filterIntensity]);
+  const activeTotal = useMemo(
+    () => filteredReasons.reduce((sum, item) => sum + item.active_shortlist_count, 0),
+    [filteredReasons],
+  );
 
-  const passiveTotal = useMemo(() => {
-    const base = intent?.total_passive ?? filteredReasons.reduce((sum, item) => sum + item.passive_bookmark_count, 0);
-    const factor = intentType === "low" ? 1.2 : intentType === "high" ? 0.55 : 0.9;
-    return Math.max(0, Math.round(base * factor * filterIntensity));
-  }, [intent, filteredReasons, intentType, filterIntensity]);
+  const passiveTotal = useMemo(
+    () => filteredReasons.reduce((sum, item) => sum + item.passive_bookmark_count, 0),
+    [filteredReasons],
+  );
 
-  const intentSum = activeTotal + passiveTotal || 1;
-  const activePct = Math.round((activeTotal / intentSum) * 100);
-  const passivePct = 100 - activePct;
+  const intentSum = activeTotal + passiveTotal;
+  const activePct = intentSum ? Math.round((activeTotal / intentSum) * 100) : 0;
+  const passivePct = intentSum ? 100 - activePct : 0;
 
-  const feedbackTotal = useMemo(() => {
-    const fromReasons = filteredReasons.reduce((sum, item) => sum + item.evidence_volume, 0);
-    const scale = 12 + sources.length * 3;
-    if (fromReasons > 0) return fromReasons * scale;
-    // Loading placeholder only — once reasons are loaded, empty filters stay at 0.
-    if (reasons !== null) return 0;
-    return Math.round(124832 * filterIntensity);
-  }, [filteredReasons, sources.length, filterIntensity, reasons]);
+  const evidenceTotal = useMemo(
+    () => filteredReasons.reduce((sum, item) => sum + item.evidence_volume, 0),
+    [filteredReasons],
+  );
 
-  const topFriction = reasonBars[0];
-  // The conversion metric is only meaningful once it has been computed against a
-  // cohort. A freshly loaded dataset returns 0 wishlist_users → 0/0 = 0.0%, which
-  // looks alarming/broken. Treat that as "not computed" and show a neutral state.
-  const conversionReady = conversion !== null && conversion.wishlist_users > 0;
+  const topFriction =
+    reasonBars.find((item) => item.reason_category !== "passive_bookmarking") ?? reasonBars[0];
+  // Seed file data/seeds/internal_wishlist_events.json is 16 rows (10 wishlist users).
+  // Do not show that demo cohort as a live conversion rate.
+  const conversionReady =
+    conversion !== null && conversion.wishlist_users > 16 && conversion.wishlist_users > 0;
   const wishlistRate = conversionReady
-    ? `${(Math.min(0.95, conversion!.conversion_rate * (intentType === "high" ? 1.15 : intentType === "low" ? 0.75 : 1)) * 100).toFixed(1)}%`
-    : conversion !== null
-      ? "—"
-      : `${(18.4 * filterIntensity).toFixed(1)}%`;
+    ? `${(conversion!.conversion_rate * 100).toFixed(1)}%`
+    : surveyHabits
+      ? `${surveyHabits.respondents} respondents`
+      : "No rate";
+  const excerptScopeNote = [
+    reasons?.scope_note,
+    intentFallback
+      ? intentType === "high"
+        ? "No high-intent excerpts in this slice — showing all intents"
+        : "No low-intent excerpts in this slice — showing all intents"
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  const excerptFilterLabel = [
+    filters.segment ? formatReason(filters.segment) : null,
+    filters.category ? formatReason(filters.category) : null,
+    intentType === "high" && !intentFallback ? "High intent" : null,
+    intentType === "low" && !intentFallback ? "Low intent" : null,
+  ]
+    .filter(Boolean)
+    .join(" + ");
+
   const wishlistDelta = conversionReady
     ? `${conversion!.converted_users.toLocaleString()} / ${conversion!.wishlist_users.toLocaleString()} users · ${conversion!.window_days}d`
-    : conversion !== null
-      ? "Not computed yet — click Refresh"
-      : "Last 30 days, +2.1%";
+    : filters.segment
+      ? `Self-reported ${formatReason(filters.segment)} survey answers — category and intent do not apply`
+      : "Self-reported survey answers — not a checkout conversion rate";
   const nonConversionRate = conversionReady
-    ? `${(Math.max(0.05, conversion!.non_conversion_rate * (intentType === "low" ? 1.1 : intentType === "high" ? 0.9 : 1)) * 100).toFixed(1)}%`
+    ? `${(conversion!.non_conversion_rate * 100).toFixed(1)}%`
     : null;
-
-  const filteredHeatmap = useMemo(() => {
-    if (!heatmap) return null;
-    const cells = heatmap.cells.map((cell) => ({
-      ...cell,
-      value: Math.max(0, Math.round(cell.value * filterIntensity * (intentType === "high" ? 1.1 : 0.9))),
-    }));
-    const columns = [...AGE_SEGMENTS];
-    return { ...heatmap, cells, columns };
-  }, [heatmap, filterIntensity, intentType]);
-
-  const maxHeat = Math.max(...(filteredHeatmap?.cells.map((cell) => cell.value) ?? [1]), 1);
 
   const ageComparison = useMemo(() => {
     const items = comparisons?.items ?? [];
@@ -355,10 +361,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         .sort((a, b) => b.evidence_volume - a.evidence_volume)
         .slice(0, 4);
       const excerptTotal = rows.reduce((sum, row) => sum + row.evidence_volume, 0);
+      const fromApi = Number(respondents[segment] ?? 0);
       return {
         segment,
         label: formatReason(segment),
-        respondents: respondents[segment] ?? 0,
+        respondents: fromApi || (rows.length ? AGE_RESPONDENT_FALLBACK[segment] : 0),
         excerptTotal,
         reasons: rows,
         notes: AGE_BEHAVIOR_NOTES[segment] ?? [],
@@ -430,7 +437,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     onSidebarChange({
       priceMin: 500,
       priceMax: 5000,
-      intentType: "high",
+      intentType: "medium",
       sources: ["play_store", "youtube", "reddit", "product_review", "social", "research"],
       confidenceMin: 0.5,
       platforms: ["myntra", "nykaa", "ajio"],
@@ -503,7 +510,12 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                 key={value}
                 type="button"
                 className={`wi-dash-hint ${filters.category === value ? "active" : ""}`}
-                onClick={() => onFiltersChange({ ...filters, category: value })}
+                onClick={() =>
+                  onFiltersChange({
+                    ...filters,
+                    category: filters.category === value ? "" : value,
+                  })
+                }
               >
                 {formatReason(value)}
               </button>
@@ -648,20 +660,53 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
           <>
             {onAskQuestion && <QuestionsView onAsk={onAskQuestion} />}
 
-            <div className="wi-filter-chip-row">
-              <span className="wi-filter-chip">{activeFilterSummary}</span>
-              <span className="wi-filter-chip">
-                Platforms:{" "}
-                {platforms
-                  .map((id) => PLATFORM_META.find((p) => p.id === id)?.label ?? id)
-                  .join(", ")}
-              </span>
-              <span className="wi-filter-chip wi-filter-chip--count">
-                {reasonBars.length} reason{reasonBars.length === 1 ? "" : "s"} shown
-              </span>
-            </div>
+            {corpusStats && (
+              <section className="wi-scrape-panel" aria-label="Scraped corpus volume by source">
+                <div className="wi-scrape-totals">
+                  <p className="wi-scrape-kicker">Corpus</p>
+                  <div className="wi-scrape-total-pair">
+                    <div>
+                      <p className="wi-scrape-hero">{corpusStats.documents.toLocaleString()}</p>
+                      <p className="wi-scrape-hero-label">Items scraped</p>
+                    </div>
+                    <div>
+                      <p className="wi-scrape-hero">{corpusStats.chunks.toLocaleString()}</p>
+                      <p className="wi-scrape-hero-label">Items classified</p>
+                    </div>
+                  </div>
+                </div>
+                <ul className="wi-scrape-sources">
+                  {corpusStats.by_source.map((row) => {
+                    const active = sources.includes(row.source as SourceId);
+                    const share = corpusStats.documents
+                      ? Math.round((row.documents / corpusStats.documents) * 100)
+                      : 0;
+                    return (
+                      <li
+                        key={row.source}
+                        className={`wi-scrape-source${active ? "" : " wi-scrape-source--off"}`}
+                      >
+                        <div className="wi-scrape-source-top">
+                          <span>{SOURCE_SCRAPE_LABELS[row.source] ?? formatReason(row.source)}</span>
+                          <strong>
+                            {row.documents.toLocaleString()}
+                            <em>{share}%</em>
+                          </strong>
+                        </div>
+                        <div className="wi-scrape-source-track" aria-hidden="true">
+                          <div
+                            className="wi-scrape-source-fill"
+                            style={{ width: `${Math.max(share, 4)}%` }}
+                          />
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            )}
 
-            <div className="wi-kpi-row">
+            <div className="wi-insight-grid">
               <article className="wi-kpi-card">
                 <div className="wi-kpi-card-head">
                   <h3>Wishlist-to-Purchase</h3>
@@ -670,41 +715,84 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                     className="wi-kpi-action"
                     onClick={() => void handleCompute()}
                     disabled={computing}
-                    title="Recompute conversion and analytics from the latest offline events"
+                    title="Reload insights from the scraped corpus export"
                   >
-                    {computing ? "Computing…" : "Refresh data"}
+                    {computing ? "Reloading…" : "Reload"}
                   </button>
                 </div>
-                <p className="wi-kpi-value">{wishlistRate}</p>
-                <p className="wi-kpi-sub wi-kpi-sub--up">{wishlistDelta}</p>
+                <p className={`wi-kpi-value${conversionReady ? "" : " wi-kpi-value--sm"}`}>
+                  {wishlistRate}
+                </p>
+                <p className="wi-kpi-sub">{wishlistDelta}</p>
                 {nonConversionRate && (
                   <p className="wi-kpi-sub">Non-conversion {nonConversionRate}</p>
                 )}
+                {!conversionReady && surveyHabits && (
+                  <ul className="wi-survey-habits">
+                    {surveyHabits.workbooks.map((book) => (
+                      <li key={book.file}>
+                        <strong>
+                          {book.file.replace(/\.xlsx$/i, "")} · n={book.n}
+                        </strong>
+                        <span>
+                          {book.answers
+                            .map((item) => `${item.count} ${item.label}`)
+                            .join(" · ") || "No answers in this filter"}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </article>
-              <article className="wi-kpi-card">
-                <h3>Active vs Passive</h3>
-                <p className="wi-kpi-value">
-                  {activePct}% / {passivePct}%
+              <div className="wi-insight-metrics">
+                <article className="wi-kpi-card">
+                  <h3>User intent</h3>
+                  <p className="wi-kpi-value">
+                    {intentSum ? `${activePct}% / ${passivePct}%` : "—"}
+                  </p>
+                  <p className="wi-kpi-sub">
+                    {intentSum
+                      ? excerptScopeNote || `${activeTotal} buy-soon · ${passiveTotal} bookmark-later excerpts`
+                      : excerptFilterLabel
+                        ? `No tagged excerpts for ${excerptFilterLabel}`
+                        : "No tagged excerpts in this filter"}
+                  </p>
+                  {intentSum > 0 && (
+                    <div className="wi-intent-track" aria-hidden="true">
+                      <div className="wi-intent-fill" style={{ width: `${activePct}%` }} />
+                    </div>
+                  )}
+                </article>
+                <article className="wi-kpi-card">
+                  <h3>Evidence excerpts</h3>
+                  <p className="wi-kpi-value">{evidenceTotal.toLocaleString()}</p>
+                  <p className="wi-kpi-sub">
+                  {evidenceTotal
+                    ? excerptScopeNote || "Tagged chunks in the current filter — not people"
+                    : excerptFilterLabel
+                      ? `No tagged chunks for ${excerptFilterLabel}`
+                      : "Tagged chunks in the current filter — not people"}
                 </p>
-                <p className="wi-kpi-sub">Active Intent / Passive Intent</p>
-              </article>
-              <article className="wi-kpi-card">
-                <h3>Total Feedback</h3>
-                <p className="wi-kpi-value">{feedbackTotal.toLocaleString()}</p>
-                <p className="wi-kpi-sub">Feedback Entries Collected</p>
-              </article>
-              <article className="wi-kpi-card">
-                <h3>Top Friction</h3>
-                <p className="wi-kpi-value wi-kpi-value--sm">
-                  {topFriction ? `${topFriction.label} ${topFriction.pct}%` : "—"}
+                </article>
+                <article className="wi-kpi-card">
+                  <h3>Top Friction</h3>
+                  <p className="wi-kpi-value wi-kpi-value--sm">
+                    {topFriction ? `${topFriction.label} ${topFriction.pct}%` : "—"}
+                  </p>
+                  <p className="wi-kpi-sub">
+                  Highest-volume blocker — not save-for-later / no-intent bookmarking
                 </p>
-                <p className="wi-kpi-sub">Most Common Reason</p>
-              </article>
+                </article>
+              </div>
             </div>
 
             <section className="wi-dash-card wi-age-compare">
                 <div className="wi-age-compare-head">
                   <h2>Age cohort comparison · 18–24 vs 25–35</h2>
+                  <p className="wi-age-scope-note">
+                    Always compares both age bands. The User segment filter scopes KPIs, reasons,
+                    and the heatmap — not this card.
+                  </p>
                   <p className="wi-kpi-sub">
                     Unique survey respondents from Myntra Wishlist + Wishlist Habits. Reason
                     shares are excerpt mix, not extra people — one response can produce several tags.
@@ -712,11 +800,18 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                   {ageContrast && <p className="wi-age-contrast">{ageContrast}</p>}
                 </div>
                 <div className="wi-age-compare-grid">
-                  {ageComparison.map((cohort) => (
-                    <article key={cohort.segment} className="wi-age-cohort">
+                  {ageComparison.map((cohort) => {
+                    const selected = filters.segment === cohort.segment;
+                    const otherSelected = Boolean(filters.segment) && !selected;
+                    return (
+                    <article
+                      key={cohort.segment}
+                      className={`wi-age-cohort${selected ? " wi-age-cohort--active" : ""}${otherSelected ? " wi-age-cohort--muted" : ""}`}
+                    >
                       <header className="wi-age-cohort-head">
                         <h3>{cohort.label}</h3>
                         <span className="wi-age-cohort-vol">
+                          {selected ? "Sidebar filter · " : ""}
                           {cohort.respondents
                             ? `${cohort.respondents} respondent${cohort.respondents === 1 ? "" : "s"}`
                             : "No respondents"}
@@ -746,102 +841,70 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                       </div>
                       <button
                         type="button"
-                        className="wi-dash-hint"
-                        onClick={() => onFiltersChange({ ...filters, segment: cohort.segment })}
+                        className={`wi-dash-hint${selected ? " active" : ""}`}
+                        onClick={() =>
+                          onFiltersChange({
+                            ...filters,
+                            segment: selected ? "" : cohort.segment,
+                          })
+                        }
                       >
-                        Filter dashboard to {cohort.label}
+                        {selected
+                          ? `Clear ${cohort.label} filter`
+                          : `Filter dashboard to ${cohort.label}`}
                       </button>
                     </article>
-                  ))}
+                    );
+                  })}
                 </div>
               </section>
 
-            <div className="wi-dash-mid">
-              <section className="wi-dash-card">
-                <h2>Non-Conversion Reasons (with AI Confidence)</h2>
-                <div className="wi-reason-bars">
-                  {reasonBars.map((item) => (
-                    <div key={item.reason_category} className="wi-reason-bar-row">
-                      <span className="wi-reason-bar-label">{item.label}</span>
-                      <div className="wi-reason-bar-track">
-                        <div
-                          className="wi-reason-bar-fill"
-                          style={{ width: `${(item.pct / maxBar) * 100}%` }}
-                        />
-                        <span className="wi-reason-bar-pct">{item.pct}%</span>
-                      </div>
-                      <span className={`wi-conf-pill wi-conf-pill--${item.tier}`}>
-                        {confidenceLabel(item.tier)}
-                      </span>
+            <section className="wi-dash-card">
+              <h2>Why wishlists do not convert</h2>
+              <p className="wi-kpi-sub" style={{ marginTop: "-0.55rem", marginBottom: "0.9rem" }}>
+                Top reasons from scraped reviews, social posts, and survey answers
+              </p>
+              <div className="wi-reason-bars">
+                {reasonBars.map((item) => (
+                  <div key={item.reason_category} className="wi-reason-bar-row">
+                    <span className="wi-reason-bar-label">{item.label}</span>
+                    <div className="wi-reason-bar-track">
+                      <div
+                        className="wi-reason-bar-fill"
+                        style={{ width: `${(item.pct / maxBar) * 100}%` }}
+                      />
+                      <span className="wi-reason-bar-pct">{item.pct}%</span>
                     </div>
-                  ))}
-                  {reasonBars.length === 0 && (
-                    <p className="muted">No reasons match the current filters.</p>
-                  )}
-                </div>
-              </section>
-
-              <section className="wi-dash-card">
-                <h2>Reasons vs Segments Heatmap</h2>
-                {filteredHeatmap && filteredHeatmap.rows.length > 0 ? (
-                  <div className="wi-heat-wrap">
-                    <table className="wi-heat-table">
-                      <thead>
-                        <tr>
-                          <th />
-                          {filteredHeatmap.columns.slice(0, 4).map((col) => (
-                            <th key={col}>{formatReason(col)}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredHeatmap.rows.slice(0, 4).map((row) => (
-                          <tr key={row}>
-                            <th>{formatReason(row).split(/[\s&/]+/)[0]}</th>
-                            {filteredHeatmap.columns.slice(0, 4).map((col) => {
-                              const cell = filteredHeatmap.cells.find(
-                                (item) => item.row === row && item.column === col,
-                              );
-                              const value = cell?.value ?? 0;
-                              const intensity = value / maxHeat;
-                              return (
-                                <td key={col}>
-                                  <div
-                                    className="wi-heat-cell"
-                                    style={{
-                                      background: `rgba(219, 39, 119, ${0.1 + intensity * 0.75})`,
-                                      color: intensity > 0.5 ? "#fff" : "#831843",
-                                    }}
-                                    title={`${formatReason(row)} × ${formatReason(col)}: ${value} items`}
-                                  >
-                                    {value}
-                                  </div>
-                                </td>
-                              );
-                            })}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <span className={`wi-conf-pill wi-conf-pill--${item.tier}`}>
+                      {confidenceLabel(item.tier)}
+                    </span>
                   </div>
-                ) : (
-                  <p className="muted">No heatmap data for current filters.</p>
+                ))}
+                {reasonBars.length === 0 && (
+                  <p className="muted">No reasons match the current filters.</p>
                 )}
-              </section>
-            </div>
+              </div>
+            </section>
 
-            <div className="wi-dash-mid wi-dash-mid--feedback">
-              <section className="wi-dash-card">
-                <h2>Insight Feedback</h2>
-                <p className="wi-kpi-sub" style={{ marginTop: "-0.35rem", marginBottom: "0.85rem" }}>
-                  Validate or flag a non-conversion reason. Verdicts adjust confidence for that reason.
-                </p>
+            <details className="wi-dash-card wi-pm-calibrate">
+              <summary>
+                PM calibration
+                <span>
+                  {feedback.length
+                    ? `${feedback.length} note${feedback.length === 1 ? "" : "s"}`
+                    : "Optional"}
+                </span>
+              </summary>
+              <p className="wi-kpi-sub">
+                Internal only — not scraped user data. Use this to validate or flag a reason.
+              </p>
+              <div className="wi-pm-calibrate-grid">
                 <form
                   onSubmit={(event) => void handleSubmitFeedback(event)}
                   className="feedback-form wi-dash-feedback-form"
                 >
                   <label>
-                    Reason category
+                    Reason
                     <select
                       value={reasonCategory}
                       onChange={(event) => setReasonCategory(event.target.value)}
@@ -856,9 +919,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                   <label>
                     Verdict
                     <select value={verdict} onChange={(event) => setVerdict(event.target.value)}>
-                      <option value="validated">Validated (+0.05 confidence)</option>
-                      <option value="flagged">Flagged (−0.12 confidence)</option>
-                      <option value="needs_review">Needs review (−0.03 confidence)</option>
+                      <option value="validated">Validated</option>
+                      <option value="flagged">Flagged</option>
+                      <option value="needs_review">Needs review</option>
                     </select>
                   </label>
                   <label>
@@ -866,61 +929,33 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                     <textarea
                       value={notes}
                       onChange={(event) => setNotes(event.target.value)}
-                      rows={3}
-                      placeholder="Optional context for other PMs…"
+                      rows={2}
+                      placeholder="Optional note…"
                     />
                   </label>
                   <button type="submit" disabled={feedbackSubmitting}>
-                    {feedbackSubmitting ? "Saving…" : "Submit feedback"}
+                    {feedbackSubmitting ? "Saving…" : "Save note"}
                   </button>
                   {feedbackSuccess && <p className="wi-feedback-success">{feedbackSuccess}</p>}
                 </form>
-              </section>
-
-              <section className="wi-dash-card">
-                <h2>Recent Feedback</h2>
-                <p className="wi-kpi-sub" style={{ marginTop: "-0.35rem", marginBottom: "0.85rem" }}>
-                  Latest PM validation history for taxonomy and confidence calibration.
-                </p>
-                {feedback.length === 0 ? (
-                  <p className="muted">No feedback recorded yet. Submit a verdict to see it here.</p>
-                ) : (
-                  <ul className="wi-feedback-list">
-                    {feedback.map((item) => {
-                      const reviewer = (item.reviewer || "pm").toLowerCase() === "pm"
-                        ? "PM"
-                        : item.reviewer;
-                      const when = item.created_at
-                        ? new Date(item.created_at).toLocaleString(undefined, {
-                            dateStyle: "medium",
-                            timeStyle: "short",
-                          })
-                        : null;
-                      const metaParts = [
-                        reviewer,
-                        item.adjusted_confidence !== null
-                          ? `Adj. conf. ${item.adjusted_confidence.toFixed(2)}`
-                          : null,
-                        when,
-                      ].filter(Boolean);
-
-                      return (
-                        <li key={item.id} className="wi-feedback-item">
-                          <div className="wi-feedback-item-top">
-                            <strong>{formatReason(item.reason_category)}</strong>
-                            <span className={`wi-feedback-verdict wi-feedback-verdict--${item.verdict}`}>
-                              {item.verdict.replace(/_/g, " ")}
-                            </span>
-                          </div>
-                          <p className="wi-feedback-item-meta">{metaParts.join(" · ")}</p>
-                          {item.notes && <p className="wi-feedback-notes">{item.notes}</p>}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </section>
-            </div>
+                <ul className="wi-feedback-list">
+                  {feedback.slice(0, 4).map((item) => (
+                    <li key={item.id} className="wi-feedback-item">
+                      <div className="wi-feedback-item-top">
+                        <strong>{formatReason(item.reason_category)}</strong>
+                        <span className={`wi-feedback-verdict wi-feedback-verdict--${item.verdict}`}>
+                          {item.verdict.replace(/_/g, " ")}
+                        </span>
+                      </div>
+                      {item.notes && <p className="wi-feedback-notes">{item.notes}</p>}
+                    </li>
+                  ))}
+                  {feedback.length === 0 && (
+                    <li className="muted">No PM notes yet.</li>
+                  )}
+                </ul>
+              </div>
+            </details>
           </>
         )}
 

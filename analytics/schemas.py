@@ -65,6 +65,7 @@ class InsightListResponse(BaseModel):
 class ReasonRankResponse(BaseModel):
     run_version: str | None
     reasons: list[ReasonRankItem]
+    scope_note: str | None = None
 
 
 class ThemeClusterResponse(BaseModel):
@@ -96,6 +97,37 @@ class ComparisonResponse(BaseModel):
     items: list[ComparisonItem]
     # Unique survey respondents (research row documents) per segment key.
     respondent_counts: dict[str, int] = {}
+
+
+class SurveyHabitAnswer(BaseModel):
+    label: str
+    count: int
+
+
+class SurveyHabitWorkbook(BaseModel):
+    file: str
+    n: int
+    question: str | None
+    answers: list[SurveyHabitAnswer]
+
+
+class SurveyHabitsResponse(BaseModel):
+    respondents: int
+    self_reported: bool = True
+    checkout_rate_available: bool = False
+    workbooks: list[SurveyHabitWorkbook] = []
+
+
+class CorpusSourceCount(BaseModel):
+    source: str
+    documents: int
+    chunks: int = 0
+
+
+class CorpusScrapeStats(BaseModel):
+    documents: int
+    chunks: int
+    by_source: list[CorpusSourceCount] = []
 
 
 class HeatmapCell(BaseModel):

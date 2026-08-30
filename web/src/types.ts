@@ -19,6 +19,7 @@ export interface ReasonRankItem {
 export interface ReasonRankResponse {
   run_version: string | null;
   reasons: ReasonRankItem[];
+  scope_note?: string | null;
 }
 
 export interface ComparisonItem {
@@ -35,6 +36,37 @@ export interface ComparisonResponse {
   group_by: string;
   items: ComparisonItem[];
   respondent_counts?: Record<string, number>;
+}
+
+export interface SurveyHabitAnswer {
+  label: string;
+  count: number;
+}
+
+export interface SurveyHabitWorkbook {
+  file: string;
+  n: number;
+  question: string | null;
+  answers: SurveyHabitAnswer[];
+}
+
+export interface SurveyHabitsResponse {
+  respondents: number;
+  self_reported: boolean;
+  checkout_rate_available: boolean;
+  workbooks: SurveyHabitWorkbook[];
+}
+
+export interface CorpusSourceCount {
+  source: string;
+  documents: number;
+  chunks: number;
+}
+
+export interface CorpusScrapeStats {
+  documents: number;
+  chunks: number;
+  by_source: CorpusSourceCount[];
 }
 
 export interface HeatmapCell {
@@ -162,7 +194,7 @@ export interface SidebarFilters {
 export const DEFAULT_SIDEBAR: SidebarFilters = {
   priceMin: 500,
   priceMax: 5000,
-  intentType: "high",
+  intentType: "medium",
   sources: ["play_store", "youtube", "reddit", "product_review", "social", "research"],
   confidenceMin: 0.5,
   platforms: ["myntra", "nykaa", "ajio"],

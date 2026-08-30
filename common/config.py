@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -83,6 +84,11 @@ class Settings(BaseSettings):
     reddit_search_query: str = "myntra wishlist"
     reddit_fetch_limit: int = 25
     reddit_live_fetch_enabled: bool = False
+    apify_api_token: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("APIFY_API_TOKEN", "Apify_API_TOKEN", "apify_api_token"),
+    )
+    apify_reddit_actor: str = "trudax/reddit-scraper-lite"
     youtube_search_query: str = "myntra wishlist shopping"
     youtube_fetch_limit: int = 20
     youtube_api_key: str | None = None

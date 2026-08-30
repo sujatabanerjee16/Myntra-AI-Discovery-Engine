@@ -141,6 +141,37 @@ def get_dashboard_filters(_run_version: str | None = None) -> DashboardFiltersRe
     )
 
 
+def rank_reasons_for_dashboard(
+    *,
+    run_version: str | None = None,
+    segment: str | None = None,
+    category: str | None = None,
+    reason_category: str | None = None,
+) -> tuple[list[ReasonRankItem], str | None]:
+    """Rank reasons; if age+category is empty, fall back to category-only excerpts."""
+    items = get_filtered_reason_ranks(
+        run_version=run_version,
+        segment=segment,
+        category=category,
+        reason_category=reason_category,
+    )
+    if items:
+        return items, None
+    if category and segment:
+        loosened = get_filtered_reason_ranks(
+            run_version=run_version,
+            category=category,
+            reason_category=reason_category,
+        )
+        if loosened:
+            age = segment.replace("age_", "").replace("_", "–")
+            label = category.replace("_", " ")
+            return loosened, (
+                f"No excerpts match Age {age} + {label} — showing all {label} excerpts"
+            )
+    return [], None
+
+
 def get_filtered_reason_ranks(
     *,
     run_version: str | None = None,
@@ -202,17 +233,36 @@ def get_filtered_reason_ranks(
 
 def research_respondent_counts() -> dict[str, int]:
     """Count unique survey *rows* per age band (not chunks or open-text extras)."""
+    stored = _payload().get("respondent_counts")
+    if isinstance(stored, dict):
+        baked = {
+            key: int(stored[key])
+            for key in ("age_18_24", "age_25_35")
+            if stored.get(key) not in (None, "")
+        }
+        if any(baked.values()):
+            return {key: baked.get(key, 0) for key in ("age_18_24", "age_25_35")}
+
     seen: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
     for chunk in load_corpus_chunks():
-        if chunk.get("source") != "research":
+        source = chunk.get("source")
+        if hasattr(source, "value"):
+            source = source.value
+        if source != "research":
             continue
-        segment = chunk.get("segment")
+        meta = chunk.get("metadata") or {}
+        segment = chunk.get("segment") or meta.get("age_band")
         if segment not in seen:
             continue
         ref = str(chunk.get("source_ref") or "")
-        if ":open:" in ref or ":row:" not in ref:
+        if ":open:" in ref:
             continue
-        seen[segment].add(ref)
+        row_key = ref
+        if meta.get("workbook") is not None and meta.get("row_index") is not None:
+            row_key = f"{meta.get('workbook')}:{meta.get('row_index')}"
+        elif ":row:" not in ref:
+            continue
+        seen[segment].add(str(row_key))
     return {key: len(refs) for key, refs in seen.items()}
 
 

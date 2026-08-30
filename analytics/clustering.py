@@ -83,6 +83,8 @@ def cluster_themes(
     """Group analyzed chunks into theme clusters by reason + signal similarity."""
     by_reason: dict[str, list[AnalyzedChunk]] = {}
     for item in analyzed:
+        if not item.reason_category:
+            continue
         by_reason.setdefault(item.reason_category, []).append(item)
 
     clusters: list[ThemeClusterResult] = []

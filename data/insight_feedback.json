@@ -1,6 +1,66 @@
 {
   "feedback": [
     {
+      "id": "58b29679-079a-4b2f-9781-bf595c56d9bc",
+      "insight_id": null,
+      "reason_category": "fit_sizing_uncertainty",
+      "verdict": "validated",
+      "notes": null,
+      "reviewer": "pm",
+      "adjusted_confidence": 0.888,
+      "created_at": "2026-08-29T10:56:45.859998+00:00"
+    },
+    {
+      "id": "4fc94a59-1ee6-4380-a72a-9b2708dcc0bd",
+      "insight_id": null,
+      "reason_category": "styling_decision_uncertainty",
+      "verdict": "flagged",
+      "notes": null,
+      "reviewer": "pm",
+      "adjusted_confidence": 0.724,
+      "created_at": "2026-08-29T05:15:50.494149+00:00"
+    },
+    {
+      "id": "7bba9ebb-2efb-4d8e-9ace-9a4cd3362c96",
+      "insight_id": null,
+      "reason_category": "timing_occasion",
+      "verdict": "flagged",
+      "notes": null,
+      "reviewer": "pm",
+      "adjusted_confidence": 0.719,
+      "created_at": "2026-08-29T05:15:45.845729+00:00"
+    },
+    {
+      "id": "95b7ad04-e4af-4267-8977-73887191a1ff",
+      "insight_id": null,
+      "reason_category": "timing_occasion",
+      "verdict": "validated",
+      "notes": null,
+      "reviewer": "pm",
+      "adjusted_confidence": 0.889,
+      "created_at": "2026-08-29T05:15:42.480508+00:00"
+    },
+    {
+      "id": "cf4894f4-60ee-4e03-a11c-b3c48ebf2c7e",
+      "insight_id": null,
+      "reason_category": "review_trust",
+      "verdict": "validated",
+      "notes": null,
+      "reviewer": "pm",
+      "adjusted_confidence": 0.886,
+      "created_at": "2026-08-29T05:15:37.792936+00:00"
+    },
+    {
+      "id": "49234f76-8352-4bac-bc5e-99326debe49a",
+      "insight_id": null,
+      "reason_category": "external_comparison",
+      "verdict": "validated",
+      "notes": null,
+      "reviewer": "pm",
+      "adjusted_confidence": 0.886,
+      "created_at": "2026-08-29T05:15:24.796487+00:00"
+    },
+    {
       "id": "7eecd970-7689-4d3b-979f-cacef7896854",
       "insight_id": null,
       "reason_category": "external_comparison",

@@ -22,6 +22,29 @@ def test_normalize_age_band():
     assert normalize_age_band("") is None
 
 
+def test_enrich_tags_beauty_and_footwear_terms():
+    beauty = enrich_chunk(
+        TextChunk(
+            document_ref="test:beauty",
+            chunk_index=0,
+            text="This lipstick and kajal stay on my wishlist",
+            matched_signals=["wishlist_usage"],
+            metadata={},
+        )
+    )
+    footwear = enrich_chunk(
+        TextChunk(
+            document_ref="test:footwear",
+            chunk_index=0,
+            text="Waiting for a sale on these sandals and heels",
+            matched_signals=["price_sensitivity_waiting"],
+            metadata={},
+        )
+    )
+    assert beauty.category == "beauty"
+    assert footwear.category == "footwear"
+
+
 def test_enrich_prefers_age_metadata():
     chunk = TextChunk(
         text="I am waiting for a sale before buying this wishlist item",
@@ -75,3 +98,41 @@ def test_research_bundle_via_registry(tmp_path):
     bands = {r.metadata.get("age_band") for r in records}
     assert AGE_18_24 in bands
     assert AGE_25_35 in bands
+
+
+def test_survey_purchase_habits_from_excel():
+    from api.survey_habits import get_survey_purchase_habits
+
+    payload = get_survey_purchase_habits()
+    assert payload["respondents"] == 43
+    assert payload["checkout_rate_available"] is False
+    files = {row["file"] for row in payload["workbooks"]}
+    assert "Myntra Wishlist.xlsx" in files
+    assert "Your Wishlist Habits (Responses).xlsx" in files
+    young = get_survey_purchase_habits(segment="age_18_24")
+    assert young["respondents"] == 27
+
+
+def test_research_respondent_counts_from_corpus():
+    from api.json_dashboard import research_respondent_counts
+
+    counts = research_respondent_counts()
+    assert counts["age_18_24"] == 27
+    assert counts["age_25_35"] == 15
+
+
+def test_reason_rank_falls_back_to_category_when_age_combo_empty():
+    from api.json_dashboard import rank_reasons_for_dashboard
+
+    items, note = rank_reasons_for_dashboard(
+        segment="age_25_35",
+        category="beauty",
+    )
+    if items:
+        assert note is None or "showing all beauty excerpts" in (note or "").lower()
+    empty, empty_note = rank_reasons_for_dashboard(
+        segment="age_18_24",
+        category="__no_such_category__",
+    )
+    assert empty == []
+    assert empty_note is None

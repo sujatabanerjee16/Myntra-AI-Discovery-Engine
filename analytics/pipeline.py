@@ -161,6 +161,8 @@ def _group_insights(
     competitive_rows: list[dict[str, Any]] = []
 
     for _raw, item in zip(raw_chunks, analyzed, strict=True):
+        if not item.reason_category:
+            continue
         intent = detect_intent(item.text, reason_category=item.reason_category)
         journey = map_journey_stage(item.text, reason_category=item.reason_category)
         platforms = item.platforms or ["myntra"]
@@ -432,5 +434,11 @@ def export_analytics_json(result: AnalyticsResult, output_path: str | Path) -> P
         "competitive": result.competitive,
         "competitive_summary": result.competitive_summary,
     }
+    try:
+        from api.json_dashboard import research_respondent_counts
+
+        payload["respondent_counts"] = research_respondent_counts()
+    except Exception:
+        payload["respondent_counts"] = {}
     path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
     return path
