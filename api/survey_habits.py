@@ -34,12 +34,19 @@ def _find_column(columns: list[str], hints: tuple[str, ...]) -> str | None:
 
 def _counts(series: pd.Series) -> list[dict[str, object]]:
     tallies: Counter[str] = Counter()
+    blank = 0
     for raw in series:
         label = _safe_str(raw)
         if not label:
+            blank += 1
             continue
         tallies[label] += 1
-    return [{"label": label, "count": count} for label, count in tallies.most_common()]
+    items: list[dict[str, object]] = [
+        {"label": label, "count": count} for label, count in tallies.most_common()
+    ]
+    if blank:
+        items.append({"label": "Did not answer", "count": blank})
+    return items
 
 
 def get_survey_purchase_habits(*, segment: str | None = None) -> dict:

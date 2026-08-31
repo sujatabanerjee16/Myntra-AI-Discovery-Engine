@@ -95,8 +95,10 @@ class ComparisonResponse(BaseModel):
     run_version: str | None
     group_by: str
     items: list[ComparisonItem]
-    # Unique survey respondents (research row documents) per segment key.
+    # Unique survey *rows* per age band (research workbooks).
     respondent_counts: dict[str, int] = {}
+    # Unique aged documents: survey rows + Play Store / other scrapes that carry an age tag.
+    age_origin_counts: dict[str, dict[str, int]] = {}
 
 
 class SurveyHabitAnswer(BaseModel):
@@ -124,10 +126,21 @@ class CorpusSourceCount(BaseModel):
     chunks: int = 0
 
 
+class CorpusWorkbookCount(BaseModel):
+    workbook: str
+    respondents: int
+
+
 class CorpusScrapeStats(BaseModel):
     documents: int
     chunks: int
     by_source: list[CorpusSourceCount] = []
+    survey_documents: int = 0
+    scraped_documents: int = 0
+    survey_respondents: int = 0
+    survey_open_text: int = 0
+    survey_interviews: int = 0
+    survey_by_workbook: list[CorpusWorkbookCount] = []
 
 
 class HeatmapCell(BaseModel):

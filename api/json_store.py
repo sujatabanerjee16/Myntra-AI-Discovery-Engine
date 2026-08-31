@@ -129,6 +129,9 @@ def load_corpus_scrape_stats() -> dict[str, Any]:
     payload = json.loads(path.read_text(encoding="utf-8"))
     by_docs: dict[str, int] = {}
     by_chunks: dict[str, int] = {}
+    workbook_rows: dict[str, set[str]] = {}
+    open_text = 0
+    interviews = 0
     for doc in payload.get("documents", []):
         source = doc.get("source")
         if hasattr(source, "value"):
@@ -137,6 +140,24 @@ def load_corpus_scrape_stats() -> dict[str, Any]:
         by_docs[key] = by_docs.get(key, 0) + 1
         chunk_n = len(doc.get("chunks") or [])
         by_chunks[key] = by_chunks.get(key, 0) + chunk_n
+        if key != "research":
+            continue
+        ref = str(doc.get("source_ref") or "")
+        meta = doc.get("metadata") or {}
+        if ":open:" in ref:
+            open_text += 1
+            continue
+        if "interview" in ref:
+            interviews += 1
+            continue
+        workbook = str(meta.get("workbook") or "workbook")
+        if meta.get("row_index") is not None:
+            row_key = f"{workbook}:{meta.get('row_index')}"
+        elif ":row:" in ref:
+            row_key = ref
+        else:
+            continue
+        workbook_rows.setdefault(workbook, set()).add(row_key)
     by_source = [
         {
             "source": source,
@@ -145,8 +166,21 @@ def load_corpus_scrape_stats() -> dict[str, Any]:
         }
         for source in sorted(by_docs, key=lambda item: by_docs[item], reverse=True)
     ]
+    survey_documents = by_docs.get("research", 0)
+    scraped_documents = sum(count for source, count in by_docs.items() if source != "research")
+    survey_by_workbook = [
+        {"workbook": name, "respondents": len(refs)}
+        for name, refs in sorted(workbook_rows.items(), key=lambda item: -len(item[1]))
+    ]
+    survey_respondents = sum(item["respondents"] for item in survey_by_workbook)
     return {
         "documents": sum(by_docs.values()),
         "chunks": sum(by_chunks.values()),
         "by_source": by_source,
+        "survey_documents": survey_documents,
+        "scraped_documents": scraped_documents,
+        "survey_respondents": survey_respondents,
+        "survey_open_text": open_text,
+        "survey_interviews": interviews,
+        "survey_by_workbook": survey_by_workbook,
     }

@@ -49,8 +49,8 @@ def ask_assistant(
 ) -> AssistantAskResponse:
     """Answer a business question using retrieved evidence and aggregate context."""
     filters = body.filters.model_copy() if body.filters else RetrievalFilters()
-    if body.platforms:
-        filters.sources = body.platforms
+    # body.platforms are Myntra/Nykaa/Ajio, not scrape sources (play_store/youtube).
+    # RetrievalFilters.sources is the scrape-source list; do not overwrite it.
 
     return answer_question(
         session,

@@ -10,14 +10,16 @@ import {
   YAxis,
 } from "recharts";
 import type { CompetitiveAnalysisResponse } from "../types";
+import { COMPETITIVE_PLATFORMS } from "../types";
 import { formatReason } from "./ConfidenceBadge";
 
 const PLATFORM_COLORS: Record<string, string> = {
   myntra: "#FF3F6C",
   nykaa: "#FC2779",
-  ajio: "#2C4152",
-  other: "#64748b",
+  ajio: "#3b82f6",
 };
+
+const NAMED = new Set<string>(COMPETITIVE_PLATFORMS);
 
 interface Props {
   data: CompetitiveAnalysisResponse | null;
@@ -49,24 +51,27 @@ function parseWhyItem(raw: string): { lead: string; detail: string; accent?: str
 export default function CompetitiveAnalysisPanel({ data, loading, selectedPlatforms }: Props) {
   const platforms = useMemo(() => {
     if (!data) return [];
-    if (!selectedPlatforms || selectedPlatforms.length === 0) return data.platforms;
-    const selected = new Set(selectedPlatforms.map((p) => p.toLowerCase()));
-    const filtered = data.platforms.filter((p) => selected.has(p.toLowerCase()));
-    // Fall back to all platforms if the selection excludes everything we have data for.
-    return filtered.length > 0 ? filtered : data.platforms;
+    const named = data.platforms.filter((p) => NAMED.has(p.toLowerCase()));
+    const selected = new Set(
+      (selectedPlatforms ?? []).map((p) => p.toLowerCase()).filter((p) => NAMED.has(p)),
+    );
+    if (selected.size === 0) return named;
+    const filtered = named.filter((p) => selected.has(p.toLowerCase()));
+    return filtered.length > 0 ? filtered : named;
   }, [data, selectedPlatforms]);
+
   const motiveChart = useMemo(() => {
     if (!data) return [];
     const labels = Array.from(new Set(data.motives.map((m) => m.label)));
     return labels.map((label) => {
       const row: Record<string, string | number> = { label: formatReason(label) };
-      for (const platform of data.platforms) {
+      for (const platform of platforms) {
         const hit = data.motives.find((m) => m.label === label && m.platform === platform);
         row[platform] = hit?.count ?? 0;
       }
       return row;
     });
-  }, [data]);
+  }, [data, platforms]);
 
   const barrierChart = useMemo(() => {
     if (!data) return [];
@@ -75,7 +80,7 @@ export default function CompetitiveAnalysisPanel({ data, loading, selectedPlatfo
       .map((label) => {
         const row: Record<string, string | number> = { label: formatReason(label) };
         let total = 0;
-        for (const platform of data.platforms) {
+        for (const platform of platforms) {
           const hit = data.barriers.find((b) => b.label === label && b.platform === platform);
           const count = hit?.count ?? 0;
           row[platform] = count;
@@ -87,7 +92,7 @@ export default function CompetitiveAnalysisPanel({ data, loading, selectedPlatfo
       .sort((a, b) => Number(b._total) - Number(a._total))
       .slice(0, 8)
       .map(({ _total, ...rest }) => rest);
-  }, [data]);
+  }, [data, platforms]);
 
   if (loading && !data) {
     return (
@@ -98,7 +103,7 @@ export default function CompetitiveAnalysisPanel({ data, loading, selectedPlatfo
     );
   }
 
-  if (!data || data.platforms.length === 0) {
+  if (!data || platforms.length === 0) {
     return (
       <section className="wi-dash-card wi-competitive">
         <h2>Competitive Wishlist Analysis</h2>
@@ -136,7 +141,14 @@ export default function CompetitiveAnalysisPanel({ data, loading, selectedPlatfo
       <div className="wi-competitive-why">
         <h3>Why wishlist items are not purchased</h3>
         <div className="wi-why-grid">
-          {data.why_not_purchase.map((item) => {
+          {data.why_not_purchase
+            .filter((item) => {
+              const lower = item.toLowerCase();
+              if (lower.startsWith("other ")) return false;
+              const named = Object.keys(PLATFORM_COLORS).find((p) => lower.startsWith(p));
+              return !named || platforms.includes(named);
+            })
+            .map((item) => {
             const { lead, detail, accent } = parseWhyItem(item);
             return (
               <div

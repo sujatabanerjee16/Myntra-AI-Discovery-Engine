@@ -71,14 +71,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(health.router)
-app.include_router(storage.router)
-app.include_router(retrieval.router)
-app.include_router(insights.router)
-app.include_router(assistant.router)
-app.include_router(ingestion.router)
-app.include_router(internal.router)
-app.include_router(observability.router)
+_API_ROUTERS = (
+    health.router,
+    storage.router,
+    retrieval.router,
+    insights.router,
+    assistant.router,
+    ingestion.router,
+    internal.router,
+    observability.router,
+)
+for _router in _API_ROUTERS:
+    app.include_router(_router)
+    # Same-origin Vite/Vercel builds call /api/insights/...; FastAPI routes are bare.
+    app.include_router(_router, prefix="/api", include_in_schema=False)
 
 
 @app.get("/api/meta")

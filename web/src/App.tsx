@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import AssistantView from "./components/AssistantView";
 import DashboardView from "./components/DashboardView";
+import { EXPLORE_QUESTIONS } from "./components/QuestionsView";
 import {
   DEFAULT_SIDEBAR,
   EMPTY_FILTERS,
@@ -77,6 +78,21 @@ export default function App() {
   const [sidebar, setSidebar] = useState<SidebarFilters>(DEFAULT_SIDEBAR);
   const [pendingQuestion, setPendingQuestion] = useState<string | undefined>(undefined);
 
+  useEffect(() => {
+    setSidebar((current) => {
+      const sources = current.sources.filter((item) => item !== "research");
+      const platforms = current.platforms.filter((item) => item !== "other");
+      if (sources.length === current.sources.length && platforms.length === current.platforms.length) {
+        return current;
+      }
+      return {
+        ...current,
+        sources: sources.length ? sources : DEFAULT_SIDEBAR.sources,
+        platforms: platforms.length ? platforms : DEFAULT_SIDEBAR.platforms,
+      };
+    });
+  }, []);
+
   const [activeNav, setActiveNav] = useState<"dashboard" | "competitive" | "chat">("dashboard");
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -123,6 +139,7 @@ export default function App() {
   const closeDropdowns = () => {
     setNotificationsOpen(false);
     setProfileOpen(false);
+    setSearchOpen(false);
   };
 
   const goToDashboard = () => setActiveNav("dashboard");
@@ -139,6 +156,46 @@ export default function App() {
   const handleAskQuestion = (question: string) => {
     setPendingQuestion(question);
     setActiveNav("chat");
+  };
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setSearchQuery("");
+  };
+
+  const searchHits = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const pages = [
+      { id: "page-dashboard", label: "Dashboard", hint: "Page", run: goToDashboard },
+      { id: "page-competitive", label: "Competitive Analysis", hint: "Page", run: goToCompetitive },
+      { id: "page-chat", label: "Discovery Chat", hint: "Page", run: goToChat },
+    ];
+    const questions = EXPLORE_QUESTIONS.map((question) => ({
+      id: `q-${question}`,
+      label: question,
+      hint: "Ask",
+      run: () => handleAskQuestion(question),
+    }));
+    const pool = [...pages, ...questions];
+    if (!q) return pages;
+    return pool.filter((item) => item.label.toLowerCase().includes(q)).slice(0, 8);
+  }, [searchQuery]);
+
+  const runSearchHit = (hit: (typeof searchHits)[number]) => {
+    hit.run();
+    closeSearch();
+  };
+
+  const submitSearch = () => {
+    const q = searchQuery.trim();
+    if (searchHits.length) {
+      runSearchHit(searchHits[0]);
+      return;
+    }
+    if (q) {
+      handleAskQuestion(q);
+      closeSearch();
+    }
   };
 
   return (
@@ -178,62 +235,81 @@ export default function App() {
 
         <div className="topbar-actions relative">
           {searchOpen ? (
-            <div className="topbar-search-bar">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="search-icon-inside"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <path d="m21 21-4.3-4.3" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search analytics, segments... (Coming soon)"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoFocus
-                disabled
-                title="Coming soon"
-                aria-disabled="true"
-                onKeyDown={(e) => {
-                  if (e.key === "Escape") setSearchOpen(false);
-                }}
-              />
-              <button
-                type="button"
-                className="close-search"
-                onClick={() => {
-                  setSearchOpen(false);
-                  setSearchQuery("");
-                }}
-              >
+            <div className="topbar-search">
+              <div className="topbar-search-bar">
                 <svg
-                  width="14"
-                  height="14"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="search-icon-inside"
                 >
-                  <path d="M18 6 6 18M6 6l12 12" />
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m21 21-4.3-4.3" />
                 </svg>
-              </button>
+                <input
+                  type="search"
+                  placeholder="Search pages or ask a question…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  autoFocus
+                  aria-label="Search"
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") closeSearch();
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      submitSearch();
+                    }
+                  }}
+                />
+                <button type="button" className="close-search" onClick={closeSearch} aria-label="Close search">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  >
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <ul className="topbar-search-hits" role="listbox">
+                {searchHits.map((hit) => (
+                  <li key={hit.id}>
+                    <button type="button" onClick={() => runSearchHit(hit)}>
+                      <span>{hit.label}</span>
+                      <em>{hit.hint}</em>
+                    </button>
+                  </li>
+                ))}
+                {searchQuery.trim() && searchHits.length === 0 && (
+                  <li>
+                    <button type="button" onClick={submitSearch}>
+                      <span>Ask “{searchQuery.trim()}”</span>
+                      <em>Chat</em>
+                    </button>
+                  </li>
+                )}
+              </ul>
             </div>
           ) : (
             <button
               type="button"
               className="icon-btn"
-              aria-label="Search (Coming soon)"
-              title="Coming soon"
-              disabled
+              aria-label="Search"
+              title="Search"
+              onClick={() => {
+                setSearchOpen(true);
+                setNotificationsOpen(false);
+                setProfileOpen(false);
+              }}
             >
               <svg
                 width="18"
@@ -260,6 +336,7 @@ export default function App() {
               onClick={() => {
                 setNotificationsOpen(!notificationsOpen);
                 setProfileOpen(false);
+                setSearchOpen(false);
               }}
             >
               {unreadCount > 0 && <div className="notification-badge-dot" />}
@@ -283,7 +360,6 @@ export default function App() {
                 <div className="dropdown-header">
                   <h4>Notifications</h4>
                   <div className="dropdown-header-meta">
-                    <span className="notif-chip notif-chip--sample">Sample</span>
                     {unreadCount > 0 && (
                       <span className="notif-chip notif-chip--new">{unreadCount} new</span>
                     )}
@@ -359,6 +435,7 @@ export default function App() {
               onClick={() => {
                 setProfileOpen(!profileOpen);
                 setNotificationsOpen(false);
+                setSearchOpen(false);
               }}
             >
               <svg

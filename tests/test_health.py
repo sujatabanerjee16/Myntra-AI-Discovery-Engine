@@ -41,3 +41,12 @@ def test_api_meta_ok():
     assert resp.status_code == 200
     body = resp.json()
     assert body["health"] == "/health"
+
+
+def test_api_prefix_aliases_health_and_insights():
+    """Vite/Vercel same-origin builds call /api/*; those paths must not 404."""
+    assert client.get("/api/health").status_code == 200
+    filters = client.get("/api/insights/filters")
+    bare = client.get("/insights/filters")
+    assert filters.status_code == 200
+    assert filters.json() == bare.json()

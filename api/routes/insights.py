@@ -197,8 +197,10 @@ def _ranked_reasons_db(
     sidebar_active = bool(sources or platforms or intent or price_band)
     if segment or category or reason_category or min_confidence is not None or sidebar_active:
         resolved = resolve_insight_run_version(session, run_version)
-        reasons = db_get_filtered_reason_ranks(
-            session,
+        reasons: list = []
+        scope_note = None
+        seen: set[tuple] = set()
+        for kwargs, note in json_dash.loosened_reason_attempts(
             run_version=resolved,
             segment=segment,
             category=category,
@@ -208,26 +210,15 @@ def _ranked_reasons_db(
             platforms=platforms,
             intent=intent,
             price_band=price_band,
-        )
-        scope_note = None
-        if not reasons and category and segment:
-            reasons = db_get_filtered_reason_ranks(
-                session,
-                run_version=resolved,
-                category=category,
-                reason_category=reason_category,
-                min_confidence=min_confidence,
-                sources=sources,
-                platforms=platforms,
-                intent=intent,
-                price_band=price_band,
-            )
+        ):
+            key = (kwargs.get("segment"), kwargs.get("intent"), kwargs.get("price_band"), kwargs.get("category"))
+            if key in seen:
+                continue
+            seen.add(key)
+            reasons = db_get_filtered_reason_ranks(session, **kwargs)
             if reasons:
-                age = segment.replace("age_", "").replace("_", "–")
-                label = category.replace("_", " ")
-                scope_note = (
-                    f"No excerpts match Age {age} + {label} — showing all {label} excerpts"
-                )
+                scope_note = note
+                break
         return ReasonRankResponse(run_version=resolved, reasons=reasons, scope_note=scope_note)
 
     stmt = select(ReasonAggregate).order_by(ReasonAggregate.evidence_volume.desc())
@@ -489,7 +480,7 @@ def _competitive_from_db(
     *,
     run_version: str | None,
 ) -> CompetitiveAnalysisResponse:
-    from analytics.competitive import summarize_competitive
+    from analytics.competitive import filter_ui_competitive_payloads, summarize_competitive
     from analytics.schemas import CompetitiveMetricItem, CompetitiveTopItem
     from api.json_dashboard import WHY_NOT_PURCHASE_NARRATIVE
     from common.models import CompetitiveAggregate
@@ -523,7 +514,7 @@ def _competitive_from_db(
         }
         for row in rows
     ]
-    summary = summarize_competitive(competitive)
+    summary = summarize_competitive(filter_ui_competitive_payloads(competitive))
 
     def _items(metric_rows: list[dict]) -> list[CompetitiveMetricItem]:
         return [
@@ -564,7 +555,7 @@ def _competitive_from_db(
         why_not_purchase=summary.get("why_not_purchase") or WHY_NOT_PURCHASE_NARRATIVE,
         limitations=(
             "Competitive comparisons are directional public-evidence inferences from platform "
-            "mentions (Myntra / Nykaa / Ajio / other). They are not competitor private analytics "
+            "mentions (Myntra / Nykaa / Ajio). They are not competitor private analytics "
             "or ground-truth conversion rates."
         ),
     )

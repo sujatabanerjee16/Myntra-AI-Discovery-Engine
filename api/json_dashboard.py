@@ -30,6 +30,30 @@ def _payload() -> dict:
     return load_insights_payload()
 
 
+def normalize_filter_key(value: str | None) -> str | None:
+    """Slug a UI filter so 'Clothing' and 'clothing' hit the same rows."""
+    if not value:
+        return None
+    key = (
+        str(value)
+        .strip()
+        .lower()
+        .replace("–", "_")
+        .replace("—", "_")
+        .replace("-", "_")
+        .replace(" ", "_")
+    )
+    while "__" in key:
+        key = key.replace("__", "_")
+    return key or None
+
+
+def _keys_match(stored: str | None, wanted: str | None) -> bool:
+    if not wanted:
+        return True
+    return normalize_filter_key(stored) == wanted
+
+
 _SOURCE_ALIASES = {
     "play_store": {"play_store", "playstore", "google_play", "app"},
     "youtube": {"youtube", "yt"},
@@ -59,7 +83,7 @@ def _matches_sources(row: dict, selected: list[str]) -> bool:
     aliases = {alias for key in selected for alias in _SOURCE_ALIASES.get(key, {key})}
     row_sources = _insight_sources(row)
     if not row_sources:
-        return True
+        return False
     return any(source.lower().replace(" ", "_") in aliases for source in row_sources)
 
 
@@ -86,8 +110,9 @@ def _chunk_price_bands() -> dict[str, str]:
 def _matches_price_band(row: dict, price_band: str | None, price_index: dict[str, str]) -> bool:
     if not price_band:
         return True
+    wanted = normalize_filter_key(price_band)
     for raw_id in row.get("evidence_chunk_ids") or []:
-        if price_index.get(str(raw_id)) == price_band:
+        if normalize_filter_key(price_index.get(str(raw_id))) == wanted:
             return True
     return False
 
@@ -104,14 +129,19 @@ def _insights(
     price_band: str | None = None,
 ) -> list[dict]:
     rows = _payload().get("insights", [])
+    segment = normalize_filter_key(segment)
+    category = normalize_filter_key(category)
+    reason_category = normalize_filter_key(reason_category)
+    intent = normalize_filter_key(intent)
+    price_band = normalize_filter_key(price_band)
     price_index = _chunk_price_bands() if price_band else {}
     filtered: list[dict] = []
     for row in rows:
-        if segment and row.get("segment") != segment:
+        if not _keys_match(row.get("segment"), segment):
             continue
-        if category and row.get("category") != category:
+        if not _keys_match(row.get("category"), category):
             continue
-        if reason_category and row.get("reason_category") != reason_category:
+        if not _keys_match(row.get("reason_category"), reason_category):
             continue
         if min_confidence is not None:
             conf = row.get("confidence")
@@ -121,7 +151,7 @@ def _insights(
             continue
         if not _matches_platforms(row, platforms or []):
             continue
-        if intent and row.get("intent_type") != intent:
+        if not _keys_match(row.get("intent_type"), intent):
             continue
         if not _matches_price_band(row, price_band, price_index):
             continue
@@ -221,6 +251,68 @@ def get_dashboard_filters(_run_version: str | None = None) -> DashboardFiltersRe
     )
 
 
+def loosened_reason_attempts(
+    *,
+    run_version: str | None = None,
+    segment: str | None = None,
+    category: str | None = None,
+    reason_category: str | None = None,
+    min_confidence: float | None = None,
+    sources: list[str] | None = None,
+    platforms: list[str] | None = None,
+    intent: str | None = None,
+    price_band: str | None = None,
+) -> list[tuple[dict, str | None]]:
+    """Strict filters first, then drop intent / price / age so a real category slice can show."""
+    category = normalize_filter_key(category)
+    segment = normalize_filter_key(segment)
+    reason_category = normalize_filter_key(reason_category)
+    intent = normalize_filter_key(intent)
+    price_band = normalize_filter_key(price_band)
+    base = {
+        "run_version": run_version,
+        "category": category,
+        "reason_category": reason_category,
+        "min_confidence": min_confidence,
+        "sources": sources,
+        "platforms": platforms,
+    }
+    cat_label = (category or "this filter").replace("_", " ")
+    attempts: list[tuple[dict, str | None]] = [
+        ({**base, "segment": segment, "intent": intent, "price_band": price_band}, None),
+    ]
+    if intent:
+        kind = "high-intent" if intent == "active_shortlist" else "low-intent"
+        attempts.append(
+            (
+                {**base, "segment": segment, "intent": None, "price_band": price_band},
+                f"No {kind} comments for {cat_label}. Showing all comments.",
+            )
+        )
+    if price_band:
+        attempts.append(
+            (
+                {**base, "segment": segment, "intent": None, "price_band": None},
+                f"No comments for that price filter. Showing all {cat_label}.",
+            )
+        )
+    if category and segment:
+        age = segment.replace("age_", "").replace("_", "–")
+        attempts.append(
+            (
+                {**base, "segment": None, "intent": intent, "price_band": price_band},
+                f"No comments for Age {age} + {cat_label}. Showing all {cat_label}.",
+            )
+        )
+        attempts.append(
+            (
+                {**base, "segment": None, "intent": None, "price_band": None},
+                f"No comments for Age {age} + {cat_label}. Showing all {cat_label}.",
+            )
+        )
+    return attempts
+
+
 def rank_reasons_for_dashboard(
     *,
     run_version: str | None = None,
@@ -233,8 +325,9 @@ def rank_reasons_for_dashboard(
     intent: str | None = None,
     price_band: str | None = None,
 ) -> tuple[list[ReasonRankItem], str | None]:
-    """Rank reasons; if age+category is empty, fall back to category-only excerpts."""
-    items = get_filtered_reason_ranks(
+    """Rank reasons; loosen intent/price/age when the intersection is empty."""
+    seen: set[tuple] = set()
+    for kwargs, note in loosened_reason_attempts(
         run_version=run_version,
         segment=segment,
         category=category,
@@ -244,26 +337,14 @@ def rank_reasons_for_dashboard(
         platforms=platforms,
         intent=intent,
         price_band=price_band,
-    )
-    if items:
-        return items, None
-    if category and segment:
-        loosened = get_filtered_reason_ranks(
-            run_version=run_version,
-            category=category,
-            reason_category=reason_category,
-            min_confidence=min_confidence,
-            sources=sources,
-            platforms=platforms,
-            intent=intent,
-            price_band=price_band,
-        )
-        if loosened:
-            age = segment.replace("age_", "").replace("_", "–")
-            label = category.replace("_", " ")
-            return loosened, (
-                f"No excerpts match Age {age} + {label} — showing all {label} excerpts"
-            )
+    ):
+        key = (kwargs.get("segment"), kwargs.get("intent"), kwargs.get("price_band"), kwargs.get("category"))
+        if key in seen:
+            continue
+        seen.add(key)
+        items = get_filtered_reason_ranks(**kwargs)
+        if items:
+            return items, note
     return [], None
 
 
@@ -343,7 +424,11 @@ def get_filtered_reason_ranks(
 
 
 def research_respondent_counts() -> dict[str, int]:
-    """Count unique survey *rows* per age band (not chunks or open-text extras)."""
+    """Count unique Excel survey rows per age band.
+
+    Interviews and open-text extras are not Excel respondents — including them
+    made 18–24 + 25–35 sum to more people than the 43-person survey card.
+    """
     seen: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
     for chunk in load_corpus_chunks():
         source = chunk.get("source")
@@ -352,11 +437,13 @@ def research_respondent_counts() -> dict[str, int]:
         if source != "research":
             continue
         meta = chunk.get("metadata") or {}
+        if meta.get("kind") == "interview" or meta.get("workbook") == "interview-docx":
+            continue
         segment = chunk.get("segment") or meta.get("age_band")
         if segment not in seen:
             continue
         ref = str(chunk.get("source_ref") or "")
-        if ":open:" in ref:
+        if ":open:" in ref or "interview" in ref:
             continue
         row_key = ref
         if meta.get("workbook") is not None and meta.get("row_index") is not None:
@@ -365,6 +452,39 @@ def research_respondent_counts() -> dict[str, int]:
             continue
         seen[segment].add(str(row_key))
     return {key: len(refs) for key, refs in seen.items()}
+
+
+def age_band_origin_counts() -> dict[str, dict[str, int]]:
+    """Unique aged items per band: survey rows vs Play Store vs other scrapes."""
+    survey = research_respondent_counts()
+    play_store: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
+    other: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
+    for chunk in load_corpus_chunks():
+        source = chunk.get("source")
+        if hasattr(source, "value"):
+            source = source.value
+        source = str(source or "")
+        if source == "research":
+            continue
+        meta = chunk.get("metadata") or {}
+        segment = chunk.get("segment") or meta.get("age_band")
+        if segment not in play_store:
+            continue
+        ref = str(chunk.get("source_ref") or "")
+        if not ref:
+            continue
+        if source == "play_store":
+            play_store[segment].add(ref)
+        else:
+            other[segment].add(ref)
+    return {
+        band: {
+            "survey": int(survey.get(band, 0)),
+            "play_store": len(play_store[band]),
+            "other_scrape": len(other[band]),
+        }
+        for band in ("age_18_24", "age_25_35")
+    }
 
 
 def get_segment_comparisons(
@@ -416,6 +536,7 @@ def get_segment_comparisons(
         group_by=group_by,
         items=items,
         respondent_counts=research_respondent_counts() if group_by == "segment" else {},
+        age_origin_counts=age_band_origin_counts() if group_by == "segment" else {},
     )
 
 
@@ -607,8 +728,8 @@ WHY_NOT_PURCHASE_NARRATIVE = [
     ),
     "Passive bookmarking - inspiration saves never enter a 30-day purchase window.",
     (
-        "External / competitive comparison - checking Nykaa, Ajio, Amazon, or "
-        "Flipkart before committing."
+        "External / competitive comparison - checking Nykaa, Ajio, or other apps "
+        "before committing."
     ),
     "Trust & authenticity - especially beauty on Nykaa; review doubt blocks checkout.",
     "Timing / occasion - saved for weddings, festivals, or later seasons.",
@@ -621,14 +742,16 @@ WHY_NOT_PURCHASE_NARRATIVE = [
 
 
 def get_competitive_analysis() -> CompetitiveAnalysisResponse:
-    from analytics.competitive import build_why_not_purchase_narrative, summarize_competitive
+    from analytics.competitive import (
+        build_why_not_purchase_narrative,
+        filter_ui_competitive_payloads,
+        summarize_competitive,
+    )
     from analytics.schemas import CompetitiveMetricItem, CompetitiveTopItem
 
     payload = _payload()
-    competitive = payload.get("competitive") or []
-    summary = payload.get("competitive_summary") or summarize_competitive(competitive)
-    if competitive and not summary.get("platforms"):
-        summary = summarize_competitive(competitive)
+    competitive = filter_ui_competitive_payloads(payload.get("competitive") or [])
+    summary = summarize_competitive(competitive)
 
     def _items(rows: list[dict]) -> list[CompetitiveMetricItem]:
         return [
@@ -677,7 +800,7 @@ def get_competitive_analysis() -> CompetitiveAnalysisResponse:
         why_not_purchase=why,
         limitations=(
             "Competitive comparisons are directional public-evidence inferences from platform "
-            "mentions (Myntra / Nykaa / Ajio / other). They are not competitor private analytics "
+            "mentions (Myntra / Nykaa / Ajio). They are not competitor private analytics "
             "or ground-truth conversion rates."
         ),
     )

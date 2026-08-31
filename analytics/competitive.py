@@ -8,6 +8,23 @@ from typing import Any
 from analytics.confidence import compute_confidence
 from analytics.platforms import PLATFORMS, comparison_scope
 
+# Named competitors shown on the competitive analysis page.
+UI_COMPETITIVE_PLATFORMS = ("myntra", "nykaa", "ajio")
+
+
+def filter_ui_competitive_payloads(payloads: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Drop the Other bucket and survey-only rows from the competitive view."""
+    allowed = set(UI_COMPETITIVE_PLATFORMS)
+    kept: list[dict[str, Any]] = []
+    for row in payloads:
+        if str(row.get("platform") or "").lower() not in allowed:
+            continue
+        sources = [str(s).lower() for s in (row.get("sources") or [])]
+        if sources and all(s == "research" for s in sources):
+            continue
+        kept.append(row)
+    return kept
+
 
 def build_competitive_aggregates(
     analyzed_rows: list[dict[str, Any]],
@@ -143,8 +160,8 @@ def build_why_not_purchase_narrative(summary: dict[str, Any] | None = None) -> l
         ),
         "Passive bookmarking - inspiration saves never enter a 30-day purchase window.",
         (
-            "External / competitive comparison - checking Nykaa, Ajio, Amazon, or "
-            "Flipkart before committing."
+            "External / competitive comparison - checking Nykaa, Ajio, or other apps "
+            "before committing."
         ),
         "Trust & authenticity - especially beauty on Nykaa; review doubt blocks checkout.",
         "Timing / occasion - saved for weddings, festivals, or later seasons.",
@@ -160,7 +177,7 @@ def build_why_not_purchase_narrative(summary: dict[str, Any] | None = None) -> l
     # Prepend evidence-backed platform tops so the UI reflects live aggregates.
     dynamic: list[str] = []
     top_barriers = summary.get("top_barrier_by_platform") or {}
-    for platform in ("myntra", "nykaa", "ajio", "other"):
+    for platform in UI_COMPETITIVE_PLATFORMS:
         row = top_barriers.get(platform)
         if not row:
             continue

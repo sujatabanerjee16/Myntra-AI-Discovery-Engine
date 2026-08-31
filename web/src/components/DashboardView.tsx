@@ -10,7 +10,7 @@ import {
   listInsightFeedback,
   submitInsightFeedback,
 } from "../api";
-import { PLATFORM_META } from "../types";
+import { COMPETITIVE_PLATFORMS, PLATFORM_META } from "../types";
 import type {
   ComparisonResponse,
   CompetitiveAnalysisResponse,
@@ -26,38 +26,22 @@ import type {
   SourceId,
   SurveyHabitsResponse,
 } from "../types";
+import CompetitiveAnalysisPanel from "./CompetitiveAnalysisPanel";
+import { formatReason } from "./ConfidenceBadge";
+import QuestionsView from "./QuestionsView";
 
 const AGE_SEGMENTS = ["age_18_24", "age_25_35"] as const;
 
-const SOURCE_SCRAPE_LABELS: Record<string, string> = {
-  play_store: "Play Store",
-  reddit: "Reddit",
-  youtube: "YouTube",
-  product_review: "Product reviews",
-  social: "Social",
-  research: "Research surveys",
+const WORKBOOK_LABELS: Record<string, string> = {
+  "myntra-wishlist": "Myntra Wishlist",
+  "your-wishlist-habits-responses": "Wishlist Habits",
 };
 
 /** Last-resort survey sizes when the API omits respondent_counts. */
 const AGE_RESPONDENT_FALLBACK: Record<(typeof AGE_SEGMENTS)[number], number> = {
   age_18_24: 27,
-  age_25_35: 21,
+  age_25_35: 15,
 };
-
-const AGE_FOCUS: Record<string, string> = {
-  age_18_24: "Leads on photos + occasion / forgetting",
-  age_25_35: "Leads on price-too-high + fit",
-};
-
-const SHARED_PAINS = [
-  { id: "price", label: "Price / sale" },
-  { id: "fit", label: "Fit / size" },
-  { id: "proof", label: "Proof / photos" },
-  { id: "timing", label: "Timing / forget" },
-] as const;
-import CompetitiveAnalysisPanel from "./CompetitiveAnalysisPanel";
-import { formatReason } from "./ConfidenceBadge";
-import QuestionsView from "./QuestionsView";
 
 interface Props {
   filters: FilterState;
@@ -76,20 +60,7 @@ const SOURCES: { id: SourceId; label: string }[] = [
   { id: "reddit", label: "Reddit" },
   { id: "product_review", label: "Product Reviews" },
   { id: "social", label: "Social" },
-  { id: "research", label: "Research" },
 ];
-
-function confidenceTier(confidence: number | null): "high" | "medium" | "low" {
-  if (confidence === null) return "low";
-  if (confidence >= 0.75) return "high";
-  if (confidence >= 0.5) return "medium";
-  return "low";
-}
-
-function confidencePillText(confidence: number | null): string {
-  if (confidence === null) return "No score";
-  return `${Math.round(confidence * 100)}%`;
-}
 
 export default function DashboardView({ filters, onFiltersChange, sidebar, onSidebarChange, onAskQuestion, view = "dashboard" }: Props) {
   const { intentType, sources, confidenceMin, platforms } = sidebar;
@@ -144,7 +115,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         getRankedReasons(filters, {
           minConfidence: confidenceRef.current,
           sources,
-          platforms,
           intentType,
         }).catch((err) => {
           setError(String(err));
@@ -177,7 +147,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     } finally {
       setLoading(false);
     }
-  }, [filters, sources, platforms, intentType]);
+  }, [filters, sources, intentType]);
 
   useEffect(() => {
     void loadDashboard();
@@ -193,7 +163,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     void getRankedReasons(filters, {
       minConfidence: appliedConfidence,
       sources,
-      platforms,
       intentType,
     })
       .then((reasonData) => {
@@ -211,7 +180,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     return () => {
       cancelled = true;
     };
-  }, [appliedConfidence, filters, sources, platforms, intentType]);
+  }, [appliedConfidence, filters, sources, intentType]);
 
   async function handleCompute() {
     setComputing(true);
@@ -256,25 +225,25 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     return (reasons?.reasons ?? []).slice().sort((a, b) => b.evidence_volume - a.evidence_volume);
   }, [reasons]);
 
-  const totalVolume = useMemo(
-    () => filteredReasons.reduce((sum, item) => sum + item.evidence_volume, 0) || 1,
-    [filteredReasons],
-  );
-
   const reasonBars = useMemo(() => {
-    return filteredReasons.slice(0, 5).map((item) => {
-      const pct = Math.round((item.evidence_volume / totalVolume) * 100);
-      const tier = confidenceTier(item.confidence);
-      return {
-        ...item,
-        pct,
-        tier,
-        label: formatReason(item.reason_category),
-      };
-    });
-  }, [filteredReasons, totalVolume]);
-
-  const maxBar = Math.max(...reasonBars.map((item) => item.pct), 1);
+    const top = filteredReasons.slice(0, 5);
+    const shownVolume = top.reduce((sum, item) => sum + item.evidence_volume, 0) || 1;
+    const raw = top.map((item) => (item.evidence_volume / shownVolume) * 100);
+    const floored = raw.map((value) => Math.floor(value));
+    let leftover = 100 - floored.reduce((sum, value) => sum + value, 0);
+    const byFraction = raw
+      .map((value, index) => ({ index, frac: value - Math.floor(value) }))
+      .sort((a, b) => b.frac - a.frac);
+    const pcts = [...floored];
+    for (let i = 0; i < leftover && i < byFraction.length; i += 1) {
+      pcts[byFraction[i].index] += 1;
+    }
+    return top.map((item, index) => ({
+      ...item,
+      pct: top.length ? pcts[index] : 0,
+      label: formatReason(item.reason_category),
+    }));
+  }, [filteredReasons]);
 
   const activeTotal = useMemo(
     () => filteredReasons.reduce((sum, item) => sum + item.active_shortlist_count, 0),
@@ -289,6 +258,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const intentSum = activeTotal + passiveTotal;
   const activePct = intentSum ? Math.round((activeTotal / intentSum) * 100) : 0;
   const passivePct = intentSum ? 100 - activePct : 0;
+  const intentThin = intentSum > 0 && intentSum < 10;
+  const intentTautology =
+    intentType === "high" || intentType === "low" || filters.price_band === "sale_waiting";
 
   const evidenceTotal = useMemo(
     () => filteredReasons.reduce((sum, item) => sum + item.evidence_volume, 0),
@@ -298,10 +270,31 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const visibleCorpus = useMemo(() => {
     if (!corpusStats) return null;
     const selected = new Set(sources);
-    const activeRows = corpusStats.by_source.filter((row) => selected.has(row.source as SourceId));
-    const documents = activeRows.reduce((sum, row) => sum + row.documents, 0);
-    const chunks = activeRows.reduce((sum, row) => sum + row.chunks, 0);
-    return { documents, chunks, by_source: corpusStats.by_source };
+    const countBySource = new Map(
+      corpusStats.by_source.map((row) => [row.source, row] as const),
+    );
+    const scrapedRows = SOURCES.filter((item) => selected.has(item.id)).map((item) => {
+      const row = countBySource.get(item.id);
+      return {
+        source: item.id,
+        label: item.label,
+        documents: row?.documents ?? 0,
+        chunks: row?.chunks ?? 0,
+      };
+    });
+    const scrapedDocuments = scrapedRows.reduce((sum, row) => sum + row.documents, 0);
+    const surveyRespondents = corpusStats.survey_respondents ?? 0;
+    const surveyOpenText = corpusStats.survey_open_text ?? 0;
+    const surveyInterviews = corpusStats.survey_interviews ?? 0;
+    return {
+      scrapedDocuments,
+      scrapedLabels: scrapedRows.map((row) => row.label).join(", ") || "No sources selected",
+      surveyRespondents,
+      surveyOpenText,
+      surveyInterviews,
+      surveyByWorkbook: corpusStats.survey_by_workbook ?? [],
+      scrapedRows,
+    };
   }, [corpusStats, sources]);
 
   const topFriction =
@@ -328,9 +321,17 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
   const wishlistDelta = conversionReady
     ? `${conversion!.converted_users.toLocaleString()} / ${conversion!.wishlist_users.toLocaleString()} users · ${conversion!.window_days}d`
-    : filters.segment
-      ? `Self-reported ${formatReason(filters.segment)} survey answers — category and intent do not apply`
-      : "Self-reported survey answers — not a checkout conversion rate";
+    : "Excel survey — category and price filters do not change this";
+
+  const intentNote = !intentSum
+    ? null
+    : intentType === "high"
+      ? "High filter is on, so every comment here is High. Not a purchase rate."
+      : intentType === "low"
+        ? "Low filter is on, so every comment here is Low. Not a purchase rate."
+        : filters.price_band === "sale_waiting"
+          ? "Sale waiting is tagged High. Not people who bought."
+          : "All comments in this filter, split into High and Low. Not a purchase rate.";
   const nonConversionRate = conversionReady
     ? `${(conversion!.non_conversion_rate * 100).toFixed(1)}%`
     : null;
@@ -339,22 +340,62 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     const items = comparisons?.items ?? [];
     const respondents = comparisons?.respondent_counts ?? {};
     return AGE_SEGMENTS.map((segment) => {
-      const rows = items
+      const allRows = items
         .filter((item) => item.dimension === segment)
-        .sort((a, b) => b.evidence_volume - a.evidence_volume)
-        .slice(0, 3);
-      const excerptTotal = rows.reduce((sum, row) => sum + row.evidence_volume, 0);
+        .sort((a, b) => b.evidence_volume - a.evidence_volume);
+      const rows = allRows.slice(0, 5);
+      const excerptTotal = allRows.reduce((sum, row) => sum + row.evidence_volume, 0);
       const fromApi = Number(respondents[segment] ?? 0);
+      const origin = comparisons?.age_origin_counts?.[segment];
       return {
         segment,
         label: formatReason(segment),
         respondents: fromApi || (rows.length ? AGE_RESPONDENT_FALLBACK[segment] : 0),
+        surveyCount: origin?.survey ?? fromApi,
+        playStoreCount: origin?.play_store ?? 0,
+        otherScrapeCount: origin?.other_scrape ?? 0,
         excerptTotal,
         reasons: rows,
-        focus: AGE_FOCUS[segment] ?? "",
       };
     });
   }, [comparisons]);
+
+  const agePainSplit = useMemo(() => {
+    const younger = new Set(
+      (ageComparison.find((cohort) => cohort.segment === "age_18_24")?.reasons ?? []).map(
+        (row) => row.reason_category,
+      ),
+    );
+    const older = new Set(
+      (ageComparison.find((cohort) => cohort.segment === "age_25_35")?.reasons ?? []).map(
+        (row) => row.reason_category,
+      ),
+    );
+    const shared = [...younger].filter((reason) => older.has(reason));
+    const youngerOnly = [...younger].filter((reason) => !older.has(reason));
+    const olderOnly = [...older].filter((reason) => !younger.has(reason));
+    const headline = "Shared pains, then what each age adds";
+    const youngCount = ageComparison.find((cohort) => cohort.segment === "age_18_24")?.surveyCount ?? 0;
+    const olderCount = ageComparison.find((cohort) => cohort.segment === "age_25_35")?.surveyCount ?? 0;
+    const surveyPeople =
+      surveyHabits?.respondents || visibleCorpus?.surveyRespondents || youngCount + olderCount;
+    const playStorePeople = sources.includes("play_store")
+      ? ageComparison.reduce((sum, cohort) => sum + (cohort.playStoreCount || 0), 0)
+      : 0;
+    const otherPeople = sources.some((id) => id !== "play_store")
+      ? ageComparison.reduce((sum, cohort) => sum + (cohort.otherScrapeCount || 0), 0)
+      : 0;
+    const ageSplit =
+      youngCount || olderCount ? ` ${youngCount} are 18–24, ${olderCount} are 25–35.` : "";
+    const sourceNote =
+      playStorePeople || otherPeople
+        ? `${surveyPeople} survey people.` +
+          (playStorePeople ? ` ${playStorePeople} Play Store.` : "") +
+          (otherPeople ? ` ${otherPeople} other scrapes.` : "") +
+          ageSplit
+        : `From the same ${surveyPeople} survey people.${ageSplit}`;
+    return { shared, youngerOnly, olderOnly, headline, sourceNote };
+  }, [ageComparison, surveyHabits, visibleCorpus, sources]);
 
   const categoryOptions = options?.categories?.length
     ? options.categories
@@ -380,10 +421,12 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     filters.segment ? formatReason(filters.segment) : "Age 18–24 + 25–35",
     filters.category ? formatReason(filters.category) : "All categories",
     filters.price_band ? formatReason(filters.price_band) : "All prices",
-    intentType === "high" ? "High intent" : intentType === "low" ? "Low intent" : "Medium intent",
-    `${sources.length} source${sources.length === 1 ? "" : "s"}`,
+    intentType === "high" ? "High intent" : intentType === "low" ? "Low intent" : "All intents",
+    view === "competitive" ? null : `${sources.length} source${sources.length === 1 ? "" : "s"}`,
     `≥${Math.round(confidenceMin * 100)}% conf.`,
-  ].join(" · ");
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   const toggleSource = (id: SourceId) => {
     const next = sources.includes(id)
@@ -406,9 +449,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       priceMin: 500,
       priceMax: 5000,
       intentType: "medium",
-      sources: ["play_store", "youtube", "reddit", "product_review", "social", "research"],
+      sources: ["play_store", "youtube", "reddit", "product_review", "social"],
       confidenceMin: 0.5,
-      platforms: ["myntra", "nykaa", "ajio", "other"],
+      platforms: ["myntra", "nykaa", "ajio"],
     });
     onFiltersChange({ ...filters, category: "", price_band: "", segment: "" });
   };
@@ -427,13 +470,28 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         <div className="wi-dash-filter">
           <div className="wi-dash-label-row">
             <span className="wi-dash-label">Filters</span>
-            <button type="button" className="wi-dash-clear" onClick={clearSidebarFilters}>
+            <button
+              type="button"
+              className="wi-dash-clear"
+              onClick={
+                view === "competitive"
+                  ? () => onSidebarChange({ ...sidebar, platforms: [...COMPETITIVE_PLATFORMS] })
+                  : clearSidebarFilters
+              }
+            >
               Reset
             </button>
           </div>
-          <p className="wi-dash-active-summary">{activeFilterSummary}</p>
+          {view !== "competitive" && <p className="wi-dash-active-summary">{activeFilterSummary}</p>}
+          {view === "competitive" && (
+            <p className="wi-dash-filter-hint">
+              Compare named competitors. Dashboard filters (age, category, source) do not apply here.
+            </p>
+          )}
         </div>
 
+        {view !== "competitive" && (
+          <>
         <div className="wi-dash-filter">
           <span className="wi-dash-label">User segment</span>
           <div className="wi-dash-pills">
@@ -463,7 +521,12 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             id="dash-category"
             className="wi-dash-select"
             value={filters.category}
-            onChange={(e) => onFiltersChange({ ...filters, category: e.target.value })}
+            onChange={(e) =>
+              onFiltersChange({
+                ...filters,
+                category: e.target.value.trim().toLowerCase().replace(/[\s-]+/g, "_"),
+              })
+            }
           >
             <option value="">All categories</option>
             {categoryOptions.map((value) => (
@@ -523,13 +586,13 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         </div>
 
         <div className="wi-dash-filter">
-          <span className="wi-dash-label">Intent Type</span>
+          <span className="wi-dash-label">Intent</span>
           <div className="wi-dash-pills">
             {(
               [
-                { id: "high", label: "High Intent (Active)" },
-                { id: "medium", label: "Medium Intent" },
-                { id: "low", label: "Low Intent (Passive)" },
+                { id: "medium", label: "All intents" },
+                { id: "high", label: "High" },
+                { id: "low", label: "Low" },
               ] as const
             ).map((item) => (
               <button
@@ -541,28 +604,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                 {item.label}
               </button>
             ))}
-          </div>
-        </div>
-
-        <div className="wi-dash-filter">
-          <span className="wi-dash-label">Platform</span>
-          <div className="wi-dash-platforms">
-            {PLATFORM_META.map((item) => {
-              const active = platforms.includes(item.id);
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`wi-dash-platform-chip ${active ? "active" : ""}`}
-                  style={active ? { borderColor: item.color, background: `${item.color}22` } : undefined}
-                  onClick={() => togglePlatform(item.id)}
-                  aria-pressed={active}
-                >
-                  <span className="wi-dash-platform-dot" style={{ background: item.color }} />
-                  {item.label}
-                </button>
-              );
-            })}
           </div>
         </div>
 
@@ -601,9 +642,35 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             <span>100%</span>
           </div>
           <p className="wi-dash-filter-hint">
-            Keeps excerpts at or above this score, then re-ranks. Most sit at 45–63%. Above 65% the list shrinks; above ~80% it can empty.
+            Drops weaker comments. Counts change first; above ~80% the list can empty.
           </p>
         </div>
+          </>
+        )}
+
+        {view === "competitive" && (
+        <div className="wi-dash-filter">
+          <span className="wi-dash-label">Platform</span>
+          <div className="wi-dash-platforms">
+            {PLATFORM_META.filter((item) => COMPETITIVE_PLATFORMS.includes(item.id)).map((item) => {
+              const active = platforms.includes(item.id);
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`wi-dash-platform-chip ${active ? "active" : ""}`}
+                  style={active ? { borderColor: item.color, background: `${item.color}22` } : undefined}
+                  onClick={() => togglePlatform(item.id)}
+                  aria-pressed={active}
+                >
+                  <span className="wi-dash-platform-dot" style={{ background: item.color }} />
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        )}
       </aside>
 
       <div className="wi-dash-content">
@@ -623,50 +690,67 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             {onAskQuestion && <QuestionsView onAsk={onAskQuestion} />}
 
             {visibleCorpus && (
-              <section className="wi-scrape-panel" aria-label="Scraped corpus volume by source">
-                <div className="wi-scrape-totals">
-                  <p className="wi-scrape-kicker">Corpus</p>
-                  <p className="wi-scrape-hero">{visibleCorpus.documents.toLocaleString()}</p>
-                  <p className="wi-scrape-hero-label">
-                    {sources.length < 6 ? "Posts in selected sources" : "Posts collected"}
-                  </p>
-                  <p className="wi-scrape-split-note">
-                    {evidenceTotal.toLocaleString()} excerpts match the left filters
-                    {visibleCorpus.chunks > visibleCorpus.documents
-                      ? ` · ${visibleCorpus.chunks.toLocaleString()} text pieces in those posts`
-                      : ""}
-                    .
-                  </p>
-                </div>
-                <ul className="wi-scrape-sources">
-                  {visibleCorpus.by_source.map((row) => {
-                    const active = sources.includes(row.source as SourceId);
-                    const share =
-                      active && visibleCorpus.documents
-                        ? Math.round((row.documents / visibleCorpus.documents) * 100)
-                        : 0;
-                    return (
-                      <li
-                        key={row.source}
-                        className={`wi-scrape-source${active ? "" : " wi-scrape-source--off"}`}
-                      >
+              <section className="wi-scrape-panel" aria-label="Survey vs scraped corpus">
+                <div className="wi-scrape-family">
+                  <p className="wi-scrape-kicker">Surveys</p>
+                  <p className="wi-scrape-hero">{visibleCorpus.surveyRespondents.toLocaleString()}</p>
+                  <p className="wi-scrape-hero-label">Unique Excel respondents</p>
+                  <ul className="wi-scrape-sources">
+                    {visibleCorpus.surveyByWorkbook.map((row) => (
+                      <li key={row.workbook} className="wi-scrape-source">
                         <div className="wi-scrape-source-top">
-                          <span>{SOURCE_SCRAPE_LABELS[row.source] ?? formatReason(row.source)}</span>
-                          <strong>
-                            {row.documents.toLocaleString()}
-                            <em>{share}%</em>
-                          </strong>
-                        </div>
-                        <div className="wi-scrape-source-track" aria-hidden="true">
-                          <div
-                            className="wi-scrape-source-fill"
-                            style={{ width: `${Math.max(share, 4)}%` }}
-                          />
+                          <span>{WORKBOOK_LABELS[row.workbook] ?? formatReason(row.workbook)}</span>
+                          <strong>{row.respondents.toLocaleString()}</strong>
                         </div>
                       </li>
-                    );
-                  })}
-                </ul>
+                    ))}
+                    {visibleCorpus.surveyOpenText > 0 && (
+                      <li className="wi-scrape-source">
+                        <div className="wi-scrape-source-top">
+                          <span>Open-text extras (same people)</span>
+                          <strong>{visibleCorpus.surveyOpenText.toLocaleString()}</strong>
+                        </div>
+                      </li>
+                    )}
+                    {visibleCorpus.surveyInterviews > 0 && (
+                      <li className="wi-scrape-source">
+                        <div className="wi-scrape-source-top">
+                          <span>Interviews</span>
+                          <strong>{visibleCorpus.surveyInterviews.toLocaleString()}</strong>
+                        </div>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+                <div className="wi-scrape-family">
+                  <p className="wi-scrape-kicker">Scraped</p>
+                  <p className="wi-scrape-hero">{visibleCorpus.scrapedDocuments.toLocaleString()}</p>
+                  <p className="wi-scrape-hero-label">{visibleCorpus.scrapedLabels}</p>
+                  <ul className="wi-scrape-sources">
+                    {visibleCorpus.scrapedRows.map((row) => {
+                      const share = visibleCorpus.scrapedDocuments
+                        ? Math.round((row.documents / visibleCorpus.scrapedDocuments) * 100)
+                        : 0;
+                      return (
+                        <li key={row.source} className="wi-scrape-source">
+                          <div className="wi-scrape-source-top">
+                            <span>{row.label}</span>
+                            <strong>
+                              {row.documents.toLocaleString()}
+                              <em>{share}%</em>
+                            </strong>
+                          </div>
+                          <div className="wi-scrape-source-track" aria-hidden="true">
+                            <div
+                              className="wi-scrape-source-fill"
+                              style={{ width: `${share}%` }}
+                            />
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </section>
             )}
 
@@ -710,40 +794,69 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
               </article>
               <div className="wi-insight-metrics">
                 <article className="wi-kpi-card">
-                  <h3>User intent</h3>
+                  <h3>
+                    {intentType === "high"
+                      ? "High comments"
+                      : intentType === "low"
+                        ? "Low comments"
+                        : filters.price_band === "sale_waiting"
+                          ? "Sale-waiting comments"
+                          : "High vs Low"}
+                  </h3>
                   {intentSum ? (
+                    intentTautology ? (
+                      <>
+                        <p className="wi-kpi-value">{intentSum.toLocaleString()}</p>
+                        <p className="wi-kpi-sub">{intentNote}</p>
+                      </>
+                    ) : (
                     <>
                       <div className="wi-intent-pair">
-                        <span>Buy soon</span>
-                        <span>Save later</span>
-                        <strong>{activePct}%</strong>
-                        <strong>{passivePct}%</strong>
+                        <span>High</span>
+                        <span>Low</span>
+                        <strong>
+                          {intentThin ? activeTotal.toLocaleString() : `${activePct}%`}
+                        </strong>
+                        <strong>
+                          {intentThin ? passiveTotal.toLocaleString() : `${passivePct}%`}
+                        </strong>
+                        {!intentThin && (
+                          <>
+                            <span className="wi-intent-count">{activeTotal.toLocaleString()} comments</span>
+                            <span className="wi-intent-count">{passiveTotal.toLocaleString()} comments</span>
+                          </>
+                        )}
                       </div>
-                      {excerptScopeNote ? <p className="wi-kpi-sub">{excerptScopeNote}</p> : null}
+                      <p className="wi-kpi-sub">{intentNote}</p>
                     </>
+                    )
                   ) : (
                     <p className="wi-kpi-sub">
                       {excerptFilterLabel
-                        ? `No tagged excerpts for ${excerptFilterLabel}`
-                        : "No tagged excerpts in this filter"}
+                        ? `No comments for ${excerptFilterLabel}`
+                        : "No comments in this filter"}
                     </p>
                   )}
                 </article>
                 <article className="wi-kpi-card">
-                  <h3>Evidence excerpts</h3>
+                  <h3>Comments</h3>
                   <p className="wi-kpi-value">{evidenceTotal.toLocaleString()}</p>
                   <p className="wi-kpi-sub">
                   {evidenceTotal
-                    ? excerptScopeNote || "Chunks in this filter, not people"
+                    ? excerptScopeNote || "Comments in this filter — not unique people"
                     : excerptFilterLabel
-                      ? `No tagged chunks for ${excerptFilterLabel}`
-                      : "Chunks in this filter, not people"}
+                      ? `No comments for ${excerptFilterLabel}`
+                      : "Comments in this filter — not unique people"}
                 </p>
                 </article>
                 <article className="wi-kpi-card">
                   <h3>Top Friction</h3>
                   <p className="wi-kpi-value wi-kpi-value--sm">
-                    {topFriction ? `${topFriction.label} ${topFriction.pct}%` : "—"}
+                    {topFriction
+                      ? evidenceTotal < 10
+                        ? `${topFriction.label} · ${topFriction.evidence_volume} comments`
+                        : `${topFriction.label} ${topFriction.pct}%`
+                      : "—"}
                   </p>
                   <p className="wi-kpi-sub">
                   Highest-volume blocker — not save-for-later / no-intent bookmarking
@@ -755,17 +868,57 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             <section className="wi-dash-card wi-age-compare">
               <div className="wi-age-compare-head">
                 <h2>18–24 vs 25–35</h2>
-                <p className="wi-age-lead">Same four pains. Different order.</p>
+                <p className="wi-age-lead">{agePainSplit.headline}</p>
+                <p className="wi-age-source-note">{agePainSplit.sourceNote}</p>
               </div>
 
-              <ul className="wi-shared-pains">
-                {SHARED_PAINS.map((pain) => (
-                  <li key={pain.id}>{pain.label}</li>
-                ))}
-              </ul>
-              <p className="wi-age-takeaway">
-                v1 opportunity: real photos + one price-drop reminder
-              </p>
+              <div className="wi-age-pain-groups">
+                {agePainSplit.shared.length > 0 && (
+                  <div className="wi-age-lane wi-age-lane--shared">
+                    <p className="wi-age-pain-kicker">
+                      Shared
+                      <span>{agePainSplit.shared.length}</span>
+                    </p>
+                    <ul className="wi-shared-pains">
+                      {agePainSplit.shared.map((reason) => (
+                        <li key={reason} className="wi-pain-name">
+                          {formatReason(reason)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {agePainSplit.youngerOnly.length > 0 && (
+                  <div className="wi-age-lane wi-age-lane--young">
+                    <p className="wi-age-pain-kicker">
+                      18–24 also
+                      <span>{agePainSplit.youngerOnly.length}</span>
+                    </p>
+                    <ul className="wi-shared-pains">
+                      {agePainSplit.youngerOnly.map((reason) => (
+                        <li key={reason} className="wi-pain-name">
+                          {formatReason(reason)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {agePainSplit.olderOnly.length > 0 && (
+                  <div className="wi-age-lane wi-age-lane--older">
+                    <p className="wi-age-pain-kicker">
+                      25–35 also
+                      <span>{agePainSplit.olderOnly.length}</span>
+                    </p>
+                    <ul className="wi-shared-pains">
+                      {agePainSplit.olderOnly.map((reason) => (
+                        <li key={reason} className="wi-pain-name">
+                          {formatReason(reason)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
 
               <div className="wi-age-compare-grid">
                 {ageComparison.map((cohort) => {
@@ -779,17 +932,23 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                       <header className="wi-age-cohort-head">
                         <h3>{cohort.label}</h3>
                         <span className="wi-age-cohort-vol">
-                          {cohort.respondents ? `${cohort.respondents} people` : "No survey"}
+                          {cohort.surveyCount > 0 && <span>{cohort.surveyCount} survey</span>}
+                          {cohort.playStoreCount > 0 && sources.includes("play_store") && (
+                            <span>{cohort.playStoreCount} Play Store</span>
+                          )}
+                          {cohort.otherScrapeCount > 0 &&
+                            sources.some((id) => id !== "play_store") && (
+                            <span>{cohort.otherScrapeCount} other</span>
+                          )}
                         </span>
                       </header>
-                      {cohort.focus && <p className="wi-age-focus">{cohort.focus}</p>}
                       <div className="wi-age-reasons">
                         {cohort.reasons.length === 0 ? (
                           <p className="muted">No reasons yet</p>
                         ) : (
                           cohort.reasons.map((row) => (
                             <div key={row.reason_category} className="wi-age-reason-row">
-                              <span>{formatReason(row.reason_category)}</span>
+                              <span className="wi-pain-name">{formatReason(row.reason_category)}</span>
                               <strong>
                                 {cohort.excerptTotal
                                   ? `${Math.round((row.evidence_volume / cohort.excerptTotal) * 100)}%`
@@ -809,7 +968,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                           })
                         }
                       >
-                        {selected ? "Clear filter" : `View ${cohort.label}`}
+                        {selected ? "Clear filter" : "Use this filter"}
                       </button>
                     </article>
                   );
@@ -820,21 +979,34 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             <section className="wi-dash-card">
               <h2>Why wishlists do not convert</h2>
               <p className="wi-kpi-sub" style={{ marginTop: "-0.55rem", marginBottom: "0.9rem" }}>
-                Top reasons from excerpts at ≥{Math.round(appliedConfidence * 100)}% confidence
+                {evidenceTotal.toLocaleString()} comments at ≥
+                {Math.round(appliedConfidence * 100)}% confidence. Bar length is share of the
+                reasons shown — the % on the right is that same share.
               </p>
               <div className="wi-reason-bars">
                 {reasonBars.map((item) => (
                   <div key={item.reason_category} className="wi-reason-bar-row">
-                    <span className="wi-reason-bar-label">{item.label}</span>
-                    <div className="wi-reason-bar-track">
-                      <div
-                        className="wi-reason-bar-fill"
-                        style={{ width: `${(item.pct / maxBar) * 100}%` }}
-                      />
-                      <span className="wi-reason-bar-pct">{item.pct}%</span>
+                    <span className="wi-reason-bar-label wi-pain-name">{item.label}</span>
+                    <div className="wi-reason-bar-main">
+                      <div className="wi-reason-bar-track">
+                        <div
+                          className="wi-reason-bar-fill"
+                          style={{ width: `${item.pct}%` }}
+                        />
+                      </div>
+                      <span className="wi-reason-bar-pct">
+                        {item.evidence_volume.toLocaleString()} comments
+                      </span>
                     </div>
-                    <span className={`wi-conf-pill wi-conf-pill--${item.tier}`}>
-                      {confidencePillText(item.confidence)}
+                    <span
+                      className="wi-share-pill"
+                      title={
+                        item.confidence == null
+                          ? "No model confidence"
+                          : `Model confidence ${Math.round(item.confidence * 100)}% (not the bar)`
+                      }
+                    >
+                      {item.pct}%
                     </span>
                   </div>
                 ))}
@@ -849,7 +1021,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
             <details className="wi-dash-card wi-pm-calibrate">
               <summary>
-                PM calibration
+                <h2>PM calibration</h2>
                 <span>
                   {feedback.length
                     ? `${feedback.length} note${feedback.length === 1 ? "" : "s"}`
@@ -900,10 +1072,10 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                   {feedbackSuccess && <p className="wi-feedback-success">{feedbackSuccess}</p>}
                 </form>
                 <ul className="wi-feedback-list">
-                  {feedback.slice(0, 4).map((item) => (
+                  {feedback.map((item) => (
                     <li key={item.id} className="wi-feedback-item">
                       <div className="wi-feedback-item-top">
-                        <strong>{formatReason(item.reason_category)}</strong>
+                        <strong className="wi-pain-name">{formatReason(item.reason_category)}</strong>
                         <span className={`wi-feedback-verdict wi-feedback-verdict--${item.verdict}`}>
                           {item.verdict.replace(/_/g, " ")}
                         </span>
@@ -921,23 +1093,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         )}
 
         {view === "competitive" && (
-          <>
-            <div className="wi-filter-chip-row">
-              <span className="wi-filter-chip">{activeFilterSummary}</span>
-              <span className="wi-filter-chip">
-                Platforms:{" "}
-                {platforms
-                  .map((id) => PLATFORM_META.find((p) => p.id === id)?.label ?? id)
-                  .join(", ")}
-              </span>
-            </div>
-
-            <CompetitiveAnalysisPanel
-              data={competitive}
-              loading={loading}
-              selectedPlatforms={platforms}
-            />
-          </>
+          <CompetitiveAnalysisPanel
+            data={competitive}
+            loading={loading}
+            selectedPlatforms={platforms.filter((id) => COMPETITIVE_PLATFORMS.includes(id))}
+          />
         )}
       </div>
     </div>

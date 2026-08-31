@@ -24,6 +24,7 @@ from analytics.schemas import (
     ThemeClusterItem,
     TrendsResponse,
 )
+from api.json_dashboard import normalize_filter_key
 from common.models import Chunk, Document, Insight, IntentType, ReasonAggregate, SourceType, ThemeCluster
 
 _SOURCE_ALIASES = {
@@ -64,11 +65,14 @@ def _insight_filters(
     if run_version:
         stmt = stmt.where(Insight.run_version == run_version)
     if segment:
-        stmt = stmt.where(Insight.segment == segment)
+        segment_key = normalize_filter_key(segment)
+        stmt = stmt.where(func.lower(Insight.segment) == segment_key)
     if category:
-        stmt = stmt.where(Insight.category == category)
+        category_key = normalize_filter_key(category)
+        stmt = stmt.where(func.lower(Insight.category) == category_key)
     if reason_category:
-        stmt = stmt.where(Insight.reason_category == reason_category)
+        reason_key = normalize_filter_key(reason_category)
+        stmt = stmt.where(func.lower(Insight.reason_category) == reason_key)
     if min_confidence is not None:
         stmt = stmt.where(Insight.confidence >= min_confidence)
     if sources:
@@ -311,13 +315,24 @@ def get_segment_comparisons(
 
     items.sort(key=lambda item: item.evidence_volume, reverse=True)
     respondent_counts: dict[str, int] = {}
+    age_origin_counts: dict[str, dict[str, int]] = {}
     if group_by == "segment":
         respondent_counts = _research_respondent_counts(session)
+        try:
+            from api.json_dashboard import age_band_origin_counts
+
+            age_origin_counts = age_band_origin_counts()
+        except Exception:
+            age_origin_counts = {
+                band: {"survey": respondent_counts.get(band, 0), "play_store": 0, "other_scrape": 0}
+                for band in ("age_18_24", "age_25_35")
+            }
     return ComparisonResponse(
         run_version=run_version,
         group_by=group_by,
         items=items,
         respondent_counts=respondent_counts,
+        age_origin_counts=age_origin_counts,
     )
 
 

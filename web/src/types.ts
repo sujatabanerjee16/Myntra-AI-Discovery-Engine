@@ -36,6 +36,7 @@ export interface ComparisonResponse {
   group_by: string;
   items: ComparisonItem[];
   respondent_counts?: Record<string, number>;
+  age_origin_counts?: Record<string, { survey: number; play_store: number; other_scrape: number }>;
 }
 
 export interface SurveyHabitAnswer {
@@ -63,10 +64,21 @@ export interface CorpusSourceCount {
   chunks: number;
 }
 
+export interface CorpusWorkbookCount {
+  workbook: string;
+  respondents: number;
+}
+
 export interface CorpusScrapeStats {
   documents: number;
   chunks: number;
   by_source: CorpusSourceCount[];
+  survey_documents?: number;
+  scraped_documents?: number;
+  survey_respondents?: number;
+  survey_open_text?: number;
+  survey_interviews?: number;
+  survey_by_workbook?: CorpusWorkbookCount[];
 }
 
 export interface HeatmapCell {
@@ -195,17 +207,22 @@ export const DEFAULT_SIDEBAR: SidebarFilters = {
   priceMin: 500,
   priceMax: 5000,
   intentType: "medium",
-  sources: ["play_store", "youtube", "reddit", "product_review", "social", "research"],
+  sources: ["play_store", "youtube", "reddit", "product_review", "social"],
   confidenceMin: 0.5,
-  platforms: ["myntra", "nykaa", "ajio", "other"],
+  platforms: ["myntra", "nykaa", "ajio"],
 };
 
 export const PLATFORM_META: { id: PlatformId; label: string; color: string }[] = [
   { id: "myntra", label: "Myntra", color: "#ff3e6c" },
   { id: "nykaa", label: "Nykaa", color: "#fc2779" },
   { id: "ajio", label: "Ajio", color: "#3b82f6" },
-  { id: "other", label: "Other", color: "#a855f7" },
 ];
+
+/** Platforms shown on the main dashboard filter rail (hidden; kept for types). */
+export const DASHBOARD_PLATFORMS: PlatformId[] = ["myntra", "nykaa"];
+
+/** Named competitors on the competitive view. */
+export const COMPETITIVE_PLATFORMS: PlatformId[] = ["myntra", "nykaa", "ajio"];
 
 export function formatLabel(value: string): string {
   const normalized = value.replace(/[_-]+/g, " ").trim().toLowerCase();
@@ -243,7 +260,7 @@ export function formatLabel(value: string): string {
     "fit sizing uncertainty": "Fit & Sizing Uncertainty",
     "quality trust doubt": "Quality & Trust Doubt",
     "styling decision uncertainty": "Styling Decision Uncertainty",
-    "review trust": "Review Trust",
+    "review trust": "Proof / Photos",
     "timing occasion": "Timing / Occasion",
     "external comparison": "External Comparison",
     "passive bookmarking": "Passive Bookmarking",

@@ -37,13 +37,18 @@ function buildQuery(params: Record<string, string | undefined>): string {
   return serialized ? `?${serialized}` : "";
 }
 
+function slugFilter(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  return value.trim().toLowerCase().replace(/[–—\s-]+/g, "_") || undefined;
+}
+
 function filterParams(filters: FilterState): Record<string, string | undefined> {
   return {
-    segment: filters.segment || undefined,
-    category: filters.category || undefined,
-    occasion: filters.occasion || undefined,
-    price_band: filters.price_band || undefined,
-    reason_category: filters.reason_category || undefined,
+    segment: slugFilter(filters.segment),
+    category: slugFilter(filters.category),
+    occasion: slugFilter(filters.occasion),
+    price_band: slugFilter(filters.price_band),
+    reason_category: slugFilter(filters.reason_category),
   };
 }
 

@@ -1,16 +1,6 @@
 {
   "feedback": [
     {
-      "id": "87ae57a8-1cb4-4362-9f7f-3e7def50b8c1",
-      "insight_id": null,
-      "reason_category": "external_comparison",
-      "verdict": "validated",
-      "notes": "hi",
-      "reviewer": "pm",
-      "adjusted_confidence": 0.892,
-      "created_at": "2026-08-30T14:50:18.789175+00:00"
-    },
-    {
       "id": "58b29679-079a-4b2f-9781-bf595c56d9bc",
       "insight_id": null,
       "reason_category": "fit_sizing_uncertainty",

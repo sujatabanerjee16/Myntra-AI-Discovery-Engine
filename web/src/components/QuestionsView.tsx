@@ -73,10 +73,8 @@ const QUESTION_GROUPS: QuestionGroup[] = [
   },
 ];
 
-/**
- * Discoverable "Explore questions" card. Shown at the top of the dashboard so any
- * PM immediately sees what they can ask; clicking a question runs it in the Ask AI dock.
- */
+export const EXPLORE_QUESTIONS: string[] = QUESTION_GROUPS.flatMap((group) => group.questions);
+
 export default function QuestionsView({ onAsk }: QuestionsViewProps) {
   const [expanded, setExpanded] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string>(QUESTION_GROUPS[0].id);
@@ -89,9 +87,9 @@ export default function QuestionsView({ onAsk }: QuestionsViewProps) {
         <div className="wi-ql-card-title">
           <span className="wi-ql-card-icon" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3" />
-              <path d="M12 17h.01" />
+              <path d="M21 12a8.5 8.5 0 0 1-8.5 8.5H8l-4 3V12A8.5 8.5 0 1 1 21 12Z" />
+              <path d="M9.5 10a2.5 2.5 0 1 1 3.4 2.3c-.7.4-1.2.9-1.2 1.7" />
+              <circle cx="12" cy="16.6" r="0.75" fill="currentColor" stroke="none" />
             </svg>
           </span>
           <div>

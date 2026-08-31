@@ -58,6 +58,43 @@ def test_ask_assistant_endpoint():
     assert body["citations"][0]["chunk_id"] == str(chunk_id)
 
 
+def test_ask_does_not_treat_platforms_as_scrape_sources():
+    captured: dict[str, object] = {}
+
+    def fake_answer(session, **kwargs):
+        captured["filters"] = kwargs.get("filters")
+        return AssistantAskResponse(
+            trace_id=uuid4(),
+            question=kwargs.get("question") or "q",
+            answer="ok",
+            citations=[],
+            confidence=0.5,
+            limitations="",
+            insufficient_evidence=False,
+            retrieved_chunk_count=0,
+            reason_categories=[],
+        )
+
+    def override_session():
+        yield MagicMock()
+
+    with patch("api.routes.assistant.answer_question", side_effect=fake_answer):
+        app.dependency_overrides[get_session] = override_session
+        resp = client.post(
+            "/assistant/ask",
+            json={
+                "question": "What prevents wishlisted products from being purchased?",
+                "platforms": ["myntra", "ajio"],
+                "persist_trace": False,
+            },
+        )
+
+    assert resp.status_code == 200
+    filters = captured.get("filters")
+    sources = getattr(filters, "sources", None)
+    assert sources not in (["myntra", "ajio"], ["myntra"], ["ajio"])
+
+
 def test_list_traces_endpoint():
     trace_id = uuid4()
     chunk_id = uuid4()

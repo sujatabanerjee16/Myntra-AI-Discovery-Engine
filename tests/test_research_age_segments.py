@@ -111,6 +111,8 @@ def test_survey_purchase_habits_from_excel():
     assert "Your Wishlist Habits (Responses).xlsx" in files
     young = get_survey_purchase_habits(segment="age_18_24")
     assert young["respondents"] == 27
+    for book in payload["workbooks"]:
+        assert sum(row["count"] for row in book["answers"]) == book["n"]
 
 
 def test_research_respondent_counts_from_corpus():
@@ -118,7 +120,18 @@ def test_research_respondent_counts_from_corpus():
 
     counts = research_respondent_counts()
     assert counts["age_18_24"] == 27
-    assert counts["age_25_35"] >= 15
+    assert counts["age_25_35"] == 15
+    assert counts["age_18_24"] + counts["age_25_35"] <= 43
+
+
+def test_age_origin_counts_split_survey_and_play_store():
+    from api.json_dashboard import age_band_origin_counts
+
+    origins = age_band_origin_counts()
+    assert origins["age_18_24"]["survey"] == 27
+    assert origins["age_25_35"]["survey"] == 15
+    assert origins["age_18_24"]["play_store"] >= 0
+    assert "other_scrape" in origins["age_18_24"]
 
 
 def test_reasons_http_source_and_confidence_filters():
@@ -169,10 +182,45 @@ def test_reason_rank_falls_back_to_category_when_age_combo_empty():
         category="beauty",
     )
     if items:
-        assert note is None or "showing all beauty excerpts" in (note or "").lower()
+        assert note is None or "showing all beauty" in (note or "").lower()
     empty, empty_note = rank_reasons_for_dashboard(
         segment="age_18_24",
         category="__no_such_category__",
     )
     assert empty == []
     assert empty_note is None
+
+
+def test_category_filter_accepts_display_labels():
+    from api.json_dashboard import rank_reasons_for_dashboard
+
+    titled, _ = rank_reasons_for_dashboard(category="Clothing")
+    lower, _ = rank_reasons_for_dashboard(category="clothing")
+    beauty, _ = rank_reasons_for_dashboard(category="Beauty")
+    assert titled and lower
+    assert titled[0].reason_category == lower[0].reason_category
+    assert beauty
+
+
+def test_high_intent_does_not_zero_a_category_with_data():
+    from api.json_dashboard import rank_reasons_for_dashboard
+
+    sources = ["play_store", "youtube", "reddit", "product_review", "social"]
+    clothing, clothing_note = rank_reasons_for_dashboard(
+        category="clothing",
+        intent="active_shortlist",
+        sources=sources,
+        min_confidence=0.5,
+    )
+    beauty, beauty_note = rank_reasons_for_dashboard(
+        category="beauty",
+        intent="active_shortlist",
+        sources=sources,
+        min_confidence=0.5,
+    )
+    assert clothing
+    assert beauty
+    assert sum(item.evidence_volume for item in clothing) > 0
+    assert sum(item.evidence_volume for item in beauty) > 0
+    assert clothing_note is None or "intent" in clothing_note.lower()
+    assert beauty_note is None or "intent" in beauty_note.lower()
