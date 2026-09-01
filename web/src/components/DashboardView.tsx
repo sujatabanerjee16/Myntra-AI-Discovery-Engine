@@ -7,12 +7,11 @@ import {
   getDashboardBootstrap,
   getFilters,
   getRankedReasons,
-  getStaticDashboardBootstrap,
   getSurveyHabits,
   listInsightFeedback,
   submitInsightFeedback,
-  wakeApi,
 } from "../api";
+import bundledBootstrap from "../data/dashboard-bootstrap.json";
 import { COMPETITIVE_PLATFORMS, PLATFORM_META } from "../types";
 import type {
   ComparisonResponse,
@@ -47,6 +46,8 @@ const AGE_RESPONDENT_FALLBACK: Record<(typeof AGE_SEGMENTS)[number], number> = {
   age_25_35: 15,
 };
 
+const SNAPSHOT = bundledBootstrap as DashboardBootstrap;
+
 interface Props {
   filters: FilterState;
   onFiltersChange: (next: FilterState) => void;
@@ -71,15 +72,15 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const setIntentType = (value: IntentType) => onSidebarChange({ ...sidebar, intentType: value });
   const setConfidenceMin = (value: number) => onSidebarChange({ ...sidebar, confidenceMin: value });
 
-  const [options, setOptions] = useState<DashboardFilters | null>(null);
-  const [reasons, setReasons] = useState<ReasonRankResponse | null>(null);
-  const [conversion, setConversion] = useState<ConversionMetricResponse | null>(null);
-  const [competitive, setCompetitive] = useState<CompetitiveAnalysisResponse | null>(null);
-  const [comparisons, setComparisons] = useState<ComparisonResponse | null>(null);
-  const [surveyHabits, setSurveyHabits] = useState<SurveyHabitsResponse | null>(null);
-  const [corpusStats, setCorpusStats] = useState<CorpusScrapeStats | null>(null);
-  const [feedback, setFeedback] = useState<InsightFeedbackRecord[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [options, setOptions] = useState<DashboardFilters | null>(SNAPSHOT.filters);
+  const [reasons, setReasons] = useState<ReasonRankResponse | null>(SNAPSHOT.reasons);
+  const [conversion, setConversion] = useState<ConversionMetricResponse | null>(SNAPSHOT.conversion);
+  const [competitive, setCompetitive] = useState<CompetitiveAnalysisResponse | null>(SNAPSHOT.competitive);
+  const [comparisons, setComparisons] = useState<ComparisonResponse | null>(SNAPSHOT.comparisons);
+  const [surveyHabits, setSurveyHabits] = useState<SurveyHabitsResponse | null>(SNAPSHOT.survey_habits);
+  const [corpusStats, setCorpusStats] = useState<CorpusScrapeStats | null>(SNAPSHOT.corpus_stats);
+  const [feedback, setFeedback] = useState<InsightFeedbackRecord[]>(SNAPSHOT.feedback?.feedback ?? []);
+  const [loading, setLoading] = useState(false);
   const [computing, setComputing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -93,7 +94,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const confidenceRef = useRef(appliedConfidence);
   confidenceRef.current = appliedConfidence;
   const skipConfidenceReload = useRef(true);
-  const paintedRef = useRef(false);
+  const skipFirstNetworkLoad = useRef(true);
   useEffect(() => {
     const timer = window.setTimeout(() => setAppliedConfidence(confidenceMin), 180);
     return () => window.clearTimeout(timer);
@@ -165,39 +166,14 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }, [filters, sources, intentType]);
 
   const loadDashboard = useCallback(async () => {
-    const firstPaint = !paintedRef.current;
     setError(null);
-
-    if (firstPaint) {
-      setLoading(true);
-      const snapshot = await getStaticDashboardBootstrap();
-      if (snapshot) {
-        applyBootstrap(snapshot);
-        paintedRef.current = true;
-        setLoading(false);
-        void getDashboardBootstrap()
-          .then((live) => applyBootstrap(live))
-          .catch(() => {
-            /* Keep the static snapshot if the API is still waking. */
-          });
-        return;
-      }
-      await wakeApi();
-      try {
-        const live = await getDashboardBootstrap();
-        applyBootstrap(live);
-        paintedRef.current = true;
-      } catch {
-        try {
-          await fetchLiveDashboard();
-          paintedRef.current = true;
-        } catch (err) {
-          setReasons({ run_version: null, reasons: [], scope_note: null });
-          setError(String(err));
-        }
-      } finally {
-        setLoading(false);
-      }
+    if (skipFirstNetworkLoad.current) {
+      skipFirstNetworkLoad.current = false;
+      void getDashboardBootstrap()
+        .then((live) => applyBootstrap(live))
+        .catch(() => {
+          /* Bundled snapshot is already on screen. */
+        });
       return;
     }
 
@@ -737,9 +713,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
       <div className="wi-dash-content">
         {error && <div className="error-banner">{error}</div>}
-        {loading && reasons === null && view === "dashboard" && (
-          <p className="loading">Loading dashboard…</p>
-        )}
         {loading && reasons !== null && (
           <div className="wi-updating-chip" role="status" aria-live="polite">
             <span className="wi-updating-spinner" aria-hidden="true" />
