@@ -309,6 +309,12 @@ def dashboard_filters(
     )
 
 
+@router.get("/insights/bootstrap")
+def dashboard_bootstrap() -> dict:
+    """Single payload for the first dashboard paint (avoids 8 parallel cold-start fetches)."""
+    return json_dash.get_dashboard_bootstrap()
+
+
 @router.get("/insights/corpus-stats", response_model=CorpusScrapeStats)
 def corpus_scrape_stats() -> CorpusScrapeStats:
     """Document and chunk counts by source from the scraped corpus export."""

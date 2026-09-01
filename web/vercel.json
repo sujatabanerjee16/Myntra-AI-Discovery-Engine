@@ -8,6 +8,10 @@
       "destination": "https://myntra-ai-discovery-engine.onrender.com/:path*"
     },
     {
+      "source": "/dashboard-bootstrap.json",
+      "destination": "/dashboard-bootstrap.json"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }

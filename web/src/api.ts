@@ -20,9 +20,14 @@ import type {
   ReasonRankResponse,
   SurveyHabitsResponse,
   TrendsResponse,
+  DashboardBootstrap,
 } from "./types";
 
 const API_BASE = (import.meta.env.VITE_API_BASE ?? "/api").replace(/\/$/, "");
+
+const FETCH_TIMEOUT_MS = 20_000;
+const HEALTH_TIMEOUT_MS = 45_000;
+const ASSISTANT_TIMEOUT_MS = 120_000;
 
 function apiUrl(path: string): string {
   return API_BASE ? `${API_BASE}${path}` : path;
@@ -52,19 +57,55 @@ function filterParams(filters: FilterState): Record<string, string | undefined> 
   };
 }
 
-async function fetchJson<T>(path: string): Promise<T> {
-  const resp = await fetch(path);
-  if (!resp.ok) {
-    let detail = `${resp.status} ${resp.statusText}`;
-    try {
-      const body = (await resp.json()) as { detail?: unknown };
-      if (body.detail) detail = `${detail}: ${typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)}`;
-    } catch {
-      /* keep status text */
+async function fetchJson<T>(path: string, timeoutMs: number = FETCH_TIMEOUT_MS): Promise<T> {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const resp = await fetch(path, { signal: controller.signal });
+    if (!resp.ok) {
+      let detail = `${resp.status} ${resp.statusText}`;
+      try {
+        const body = (await resp.json()) as { detail?: unknown };
+        if (body.detail) {
+          detail = `${detail}: ${typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)}`;
+        }
+      } catch {
+        /* keep status text */
+      }
+      throw new Error(detail);
     }
-    throw new Error(detail);
+    return resp.json() as Promise<T>;
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      throw new Error(`Request timed out after ${Math.round(timeoutMs / 1000)}s`);
+    }
+    throw err;
+  } finally {
+    window.clearTimeout(timer);
   }
-  return resp.json() as Promise<T>;
+}
+
+export async function wakeApi(): Promise<boolean> {
+  try {
+    await fetchJson<{ status?: string }>(apiUrl("/health"), HEALTH_TIMEOUT_MS);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function getStaticDashboardBootstrap(): Promise<DashboardBootstrap | null> {
+  try {
+    const payload = await fetchJson<DashboardBootstrap>("/dashboard-bootstrap.json", 8_000);
+    if (!payload?.reasons || !payload?.filters) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+export async function getDashboardBootstrap(): Promise<DashboardBootstrap> {
+  return fetchJson(apiUrl("/insights/bootstrap"));
 }
 
 export async function getFilters(): Promise<DashboardFilters> {
@@ -145,11 +186,14 @@ export async function askAssistant(question: string, platforms?: string[]): Prom
     payload.platforms = platforms;
   }
   
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), ASSISTANT_TIMEOUT_MS);
   const resp = await fetch(apiUrl("/assistant/ask"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
-  });
+    signal: controller.signal,
+  }).finally(() => window.clearTimeout(timer));
   if (!resp.ok) {
     throw new Error(`${resp.status} ${resp.statusText}`);
   }

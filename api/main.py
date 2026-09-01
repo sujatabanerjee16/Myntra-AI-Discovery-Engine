@@ -7,12 +7,13 @@ Serves the built React dashboard from ``web/dist`` when present.
 from __future__ import annotations
 
 import logging
+import threading
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from api.routes import (
@@ -30,15 +31,15 @@ from common.config import get_settings
 logger = logging.getLogger(__name__)
 settings = get_settings()
 WEB_DIST = Path(__file__).resolve().parent.parent / "web" / "dist"
+DOC_DIR = Path(__file__).resolve().parent.parent / "doc"
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    """Warm offline conversion metrics when serving the JSON/demo backend."""
-    try:
-        from api import backend
+    """Warm offline conversion in the background so /health is not blocked."""
 
-        if backend.use_json_backend():
+    def _warm() -> None:
+        try:
             from internal.offline import run_offline_internal_pipeline
 
             result = run_offline_internal_pipeline()
@@ -46,8 +47,10 @@ async def lifespan(_app: FastAPI):
                 "Offline conversion warmed at startup run_version=%s",
                 result.run_version,
             )
-    except Exception:  # noqa: BLE001
-        logger.exception("Failed to warm offline internal pipeline at startup")
+        except Exception:  # noqa: BLE001
+            logger.exception("Failed to warm offline internal pipeline at startup")
+
+    threading.Thread(target=_warm, daemon=True, name="offline-warm").start()
     yield
 
 
@@ -110,10 +113,26 @@ _RESERVED_PATH_PREFIXES = {
     "insights",
     "observability",
     "openapi.json",
+    "pm-demo",
     "redoc",
     "retrieval",
     "storage",
+    "walkthrough",
 }
+
+
+def _mount_walkthrough() -> None:
+    """Serve the PM walkthrough over HTTP — file:// and Cursor preview often fail on WebM."""
+    html = DOC_DIR / "wishlist-intelligence-pm-walkthrough.html"
+    if not html.is_file():
+        return
+
+    app.mount("/pm-demo", StaticFiles(directory=DOC_DIR), name="pm-demo")
+
+    @app.get("/walkthrough", include_in_schema=False)
+    @app.get("/walkthrough/", include_in_schema=False)
+    def pm_walkthrough_redirect() -> RedirectResponse:
+        return RedirectResponse("/pm-demo/wishlist-intelligence-pm-walkthrough.html")
 
 
 def _mount_dashboard() -> None:
@@ -144,4 +163,5 @@ def _mount_dashboard() -> None:
         return FileResponse(index_file)
 
 
+_mount_walkthrough()
 _mount_dashboard()

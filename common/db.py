@@ -21,8 +21,10 @@ _settings = get_settings()
 engine = create_engine(
     _settings.sqlalchemy_url,
     pool_pre_ping=True,
-    pool_timeout=5,
-    connect_args={"connect_timeout": 5},
+    pool_timeout=3,
+    pool_size=2,
+    max_overflow=0,
+    connect_args={"connect_timeout": 3},
     future=True,
 )
 
@@ -40,10 +42,16 @@ def get_session() -> Iterator[Session]:
 
 @lru_cache
 def database_available() -> bool:
-    """Return True when PostgreSQL accepts connections."""
+    """Return True when PostgreSQL accepts connections.
+
+    Never block the request path for long: a sleeping Neon instance or a
+    missing local Postgres must fail fast so the JSON dashboard can load.
+    """
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
         return True
-    except SQLAlchemyError:
+    except (SQLAlchemyError, OSError, TimeoutError):
+        return False
+    except Exception:  # noqa: BLE001 - connectivity must never hang the UI
         return False

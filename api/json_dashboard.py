@@ -804,3 +804,60 @@ def get_competitive_analysis() -> CompetitiveAnalysisResponse:
             "or ground-truth conversion rates."
         ),
     )
+
+
+# Matches web DEFAULT_SIDEBAR so the static snapshot paints the same first view.
+_BOOTSTRAP_SOURCES = ["play_store", "youtube", "reddit", "product_review", "social"]
+
+
+def get_dashboard_bootstrap() -> dict:
+    """One payload for the first dashboard paint (filters + reasons + extras)."""
+    from analytics.schemas import ReasonRankResponse, SurveyHabitsResponse
+    from api.json_feedback import list_feedback
+    from api.json_store import load_corpus_scrape_stats
+    from api.survey_habits import get_survey_purchase_habits
+
+    payload = _payload()
+    reasons, note = rank_reasons_for_dashboard(
+        min_confidence=0.5,
+        sources=_BOOTSTRAP_SOURCES,
+    )
+    conversion: dict | None = None
+    try:
+        from internal.offline import get_offline_store, run_offline_internal_pipeline
+
+        store = get_offline_store()
+        if store.conversion is None:
+            run_offline_internal_pipeline()
+            store = get_offline_store()
+        snap = store.conversion
+        if snap is not None:
+            conversion = {
+                "run_version": snap.run_version,
+                "window_days": snap.window_days,
+                "wishlist_users": snap.wishlist_users,
+                "converted_users": snap.converted_users,
+                "conversion_rate": snap.conversion_rate,
+                "non_conversion_rate": round(1.0 - snap.conversion_rate, 4),
+                "cohort_start": snap.cohort_start.isoformat() if snap.cohort_start else None,
+                "cohort_end": snap.cohort_end.isoformat() if snap.cohort_end else None,
+            }
+    except Exception:  # noqa: BLE001
+        conversion = None
+
+    habits = get_survey_purchase_habits()
+    stats = load_corpus_scrape_stats()
+    return {
+        "filters": get_dashboard_filters().model_dump(mode="json"),
+        "reasons": ReasonRankResponse(
+            run_version=payload.get("run_version"),
+            reasons=reasons,
+            scope_note=note,
+        ).model_dump(mode="json"),
+        "comparisons": get_segment_comparisons(group_by="segment").model_dump(mode="json"),
+        "competitive": get_competitive_analysis().model_dump(mode="json"),
+        "corpus_stats": stats,
+        "survey_habits": SurveyHabitsResponse.model_validate(habits).model_dump(mode="json"),
+        "conversion": conversion,
+        "feedback": list_feedback().model_dump(mode="json"),
+    }

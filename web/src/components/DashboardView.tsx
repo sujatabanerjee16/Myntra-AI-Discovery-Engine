@@ -4,11 +4,14 @@ import {
   getCompetitiveAnalysis,
   getConversionMetric,
   getCorpusStats,
+  getDashboardBootstrap,
   getFilters,
   getRankedReasons,
+  getStaticDashboardBootstrap,
   getSurveyHabits,
   listInsightFeedback,
   submitInsightFeedback,
+  wakeApi,
 } from "../api";
 import { COMPETITIVE_PLATFORMS, PLATFORM_META } from "../types";
 import type {
@@ -16,6 +19,7 @@ import type {
   CompetitiveAnalysisResponse,
   ConversionMetricResponse,
   CorpusScrapeStats,
+  DashboardBootstrap,
   DashboardFilters,
   FilterState,
   InsightFeedbackRecord,
@@ -89,65 +93,123 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const confidenceRef = useRef(appliedConfidence);
   confidenceRef.current = appliedConfidence;
   const skipConfidenceReload = useRef(true);
+  const paintedRef = useRef(false);
   useEffect(() => {
     const timer = window.setTimeout(() => setAppliedConfidence(confidenceMin), 180);
     return () => window.clearTimeout(timer);
   }, [confidenceMin]);
 
+  const applyBootstrap = useCallback((snap: DashboardBootstrap) => {
+    if (snap.filters) {
+      setOptions(snap.filters);
+      setReasonCategory((current) => {
+        const cats = snap.filters.reason_categories ?? [];
+        if (cats.length && !cats.includes(current)) return cats[0];
+        return current;
+      });
+    }
+    if (snap.reasons) setReasons(snap.reasons);
+    if (snap.conversion !== undefined) setConversion(snap.conversion);
+    if (snap.feedback?.feedback) setFeedback(snap.feedback.feedback);
+    if (snap.competitive !== undefined) setCompetitive(snap.competitive);
+    if (snap.comparisons !== undefined) setComparisons(snap.comparisons);
+    if (snap.survey_habits !== undefined) setSurveyHabits(snap.survey_habits);
+    if (snap.corpus_stats !== undefined) setCorpusStats(snap.corpus_stats);
+  }, []);
+
+  const fetchLiveDashboard = useCallback(async () => {
+    const [
+      filterOptions,
+      reasonData,
+      conversionData,
+      feedbackData,
+      competitiveData,
+      comparisonData,
+      habitsData,
+      scrapeData,
+    ] = await Promise.all([
+      getFilters().catch((err) => {
+        setError(String(err));
+        return null;
+      }),
+      getRankedReasons(filters, {
+        minConfidence: confidenceRef.current,
+        sources,
+        intentType,
+      }).catch((err) => {
+        setError(String(err));
+        return null;
+      }),
+      getConversionMetric().catch(() => null),
+      listInsightFeedback().catch(() => ({ total: 0, feedback: [] as InsightFeedbackRecord[] })),
+      getCompetitiveAnalysis().catch(() => null),
+      getComparisons({ ...filters, segment: "" }).catch(() => null),
+      getSurveyHabits(filters.segment || undefined).catch(() => null),
+      getCorpusStats().catch(() => null),
+    ]);
+    if (filterOptions) {
+      setOptions(filterOptions);
+      setReasonCategory((current) => {
+        const cats = filterOptions.reason_categories ?? [];
+        if (cats.length && !cats.includes(current)) return cats[0];
+        return current;
+      });
+    }
+    setReasons(reasonData ?? { run_version: null, reasons: [], scope_note: null });
+    setConversion(conversionData);
+    setFeedback(feedbackData.feedback);
+    setCompetitive(competitiveData);
+    setComparisons(comparisonData);
+    setSurveyHabits(habitsData);
+    setCorpusStats(scrapeData);
+  }, [filters, sources, intentType]);
+
   const loadDashboard = useCallback(async () => {
-    setLoading(true);
+    const firstPaint = !paintedRef.current;
     setError(null);
-    try {
-      const [
-        filterOptions,
-        reasonData,
-        conversionData,
-        feedbackData,
-        competitiveData,
-        comparisonData,
-        habitsData,
-        scrapeData,
-      ] = await Promise.all([
-        getFilters().catch((err) => {
-          setError(String(err));
-          return null;
-        }),
-        getRankedReasons(filters, {
-          minConfidence: confidenceRef.current,
-          sources,
-          intentType,
-        }).catch((err) => {
-          setError(String(err));
-          return null;
-        }),
-        getConversionMetric().catch(() => null),
-        listInsightFeedback().catch(() => ({ total: 0, feedback: [] as InsightFeedbackRecord[] })),
-        getCompetitiveAnalysis().catch(() => null),
-        getComparisons({ ...filters, segment: "" }).catch(() => null),
-        getSurveyHabits(filters.segment || undefined).catch(() => null),
-        getCorpusStats().catch(() => null),
-      ]);
-      if (filterOptions) {
-        setOptions(filterOptions);
-        setReasonCategory((current) => {
-          const cats = filterOptions.reason_categories ?? [];
-          if (cats.length && !cats.includes(current)) return cats[0];
-          return current;
-        });
+
+    if (firstPaint) {
+      setLoading(true);
+      const snapshot = await getStaticDashboardBootstrap();
+      if (snapshot) {
+        applyBootstrap(snapshot);
+        paintedRef.current = true;
+        setLoading(false);
+        void getDashboardBootstrap()
+          .then((live) => applyBootstrap(live))
+          .catch(() => {
+            /* Keep the static snapshot if the API is still waking. */
+          });
+        return;
       }
-      setReasons(reasonData ?? { run_version: null, reasons: [], scope_note: null });
-      setConversion(conversionData);
-      setFeedback(feedbackData.feedback);
-      setCompetitive(competitiveData);
-      setComparisons(comparisonData);
-      setSurveyHabits(habitsData);
-      setCorpusStats(scrapeData);
+      await wakeApi();
+      try {
+        const live = await getDashboardBootstrap();
+        applyBootstrap(live);
+        paintedRef.current = true;
+      } catch {
+        try {
+          await fetchLiveDashboard();
+          paintedRef.current = true;
+        } catch (err) {
+          setReasons({ run_version: null, reasons: [], scope_note: null });
+          setError(String(err));
+        }
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await fetchLiveDashboard();
     } catch (err) {
       setError(String(err));
     } finally {
       setLoading(false);
     }
-  }, [filters, sources, intentType]);
+  }, [applyBootstrap, fetchLiveDashboard]);
 
   useEffect(() => {
     void loadDashboard();
@@ -399,7 +461,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
   const categoryOptions = options?.categories?.length
     ? options.categories
-    : ["clothing", "footwear", "accessories"];
+    : ["clothing", "beauty", "footwear", "accessories"];
 
   const reasonCategoryOptions = options?.reason_categories?.length
     ? options.reason_categories

@@ -34,8 +34,13 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Data / local artifacts
-data/
+# Data / local artifacts — keep demo JSON so Render can boot without Neon
+data/**
+!data/insights.json
+!data/scraped_corpus.json
+!data/insight_feedback.json
+!data/seeds/
+!data/seeds/**
 *.sqlite
 *.db
 logs/

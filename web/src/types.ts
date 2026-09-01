@@ -396,6 +396,17 @@ export interface InsightFeedbackListResponse {
   feedback: InsightFeedbackRecord[];
 }
 
+export interface DashboardBootstrap {
+  filters: DashboardFilters;
+  reasons: ReasonRankResponse;
+  comparisons: ComparisonResponse | null;
+  competitive: CompetitiveAnalysisResponse | null;
+  corpus_stats: CorpusScrapeStats | null;
+  survey_habits: SurveyHabitsResponse | null;
+  conversion: ConversionMetricResponse | null;
+  feedback: InsightFeedbackListResponse;
+}
+
 export interface CompetitiveMetricItem {
   platform: string;
   metric_type: string;

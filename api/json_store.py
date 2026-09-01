@@ -21,6 +21,9 @@ def resolve_data_path(raw: str) -> Path:
     candidate = _PROJECT_ROOT / raw
     if candidate.is_file():
         return candidate
+    bundled = _PROJECT_ROOT / "api" / "bundled_data" / Path(raw).name
+    if bundled.is_file():
+        return bundled
     return path
 
 
@@ -120,12 +123,20 @@ def json_data_available() -> bool:
     return resolve_data_path(settings.insights_json_path).is_file()
 
 
+_scrape_stats_mtime: float | None = None
+_scrape_stats_payload: dict[str, Any] | None = None
+
+
 def load_corpus_scrape_stats() -> dict[str, Any]:
     """Count scraped documents and classified chunks by source from the corpus file."""
+    global _scrape_stats_mtime, _scrape_stats_payload
     settings = get_settings()
     path = resolve_data_path(settings.scraped_json_path)
     if not path.is_file():
         return {"documents": 0, "chunks": 0, "by_source": []}
+    mtime = path.stat().st_mtime
+    if _scrape_stats_payload is not None and _scrape_stats_mtime == mtime:
+        return _scrape_stats_payload
     payload = json.loads(path.read_text(encoding="utf-8"))
     by_docs: dict[str, int] = {}
     by_chunks: dict[str, int] = {}
@@ -173,7 +184,7 @@ def load_corpus_scrape_stats() -> dict[str, Any]:
         for name, refs in sorted(workbook_rows.items(), key=lambda item: -len(item[1]))
     ]
     survey_respondents = sum(item["respondents"] for item in survey_by_workbook)
-    return {
+    _scrape_stats_payload = {
         "documents": sum(by_docs.values()),
         "chunks": sum(by_chunks.values()),
         "by_source": by_source,
@@ -184,3 +195,5 @@ def load_corpus_scrape_stats() -> dict[str, Any]:
         "survey_interviews": interviews,
         "survey_by_workbook": survey_by_workbook,
     }
+    _scrape_stats_mtime = mtime
+    return _scrape_stats_payload

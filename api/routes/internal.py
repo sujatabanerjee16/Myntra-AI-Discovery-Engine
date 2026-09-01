@@ -83,6 +83,23 @@ def get_conversion_metric(session: Session = Depends(get_session)) -> Conversion
         offline = _conversion_from_offline()
         if offline is not None:
             return offline
+        try:
+            run_offline_internal_pipeline()
+        except Exception:  # noqa: BLE001 - missing seed file is fine in demo mode
+            pass
+        offline = _conversion_from_offline()
+        if offline is not None:
+            return offline
+        return ConversionMetricResponse(
+            run_version="unknown",
+            window_days=30,
+            wishlist_users=0,
+            converted_users=0,
+            conversion_rate=0.0,
+            non_conversion_rate=1.0,
+            cohort_start=None,
+            cohort_end=None,
+        )
 
     try:
         row = session.execute(

@@ -19,16 +19,18 @@ T = TypeVar("T")
 
 
 def use_json_backend() -> bool:
-    """Prefer exported insights JSON when present so dashboard data stays in sync.
+    """Prefer exported insights JSON so the dashboard never waits on Postgres.
 
-    Local/demo setups often have a stale or unreachable Postgres instance. If the
-    insights export exists, serve it instead of blocking the UI on a DB timeout.
+    Local/demo and Render free-tier deploys often have a sleeping Neon instance
+    or no database at all. Probing it on every request (or at startup) can stall
+    the UI for minutes. When JSON exists, or ``USE_JSON_FALLBACK`` is on, skip
+    the probe and serve JSON immediately.
     """
     if json_data_available():
         return True
     settings = get_settings()
-    if not settings.use_json_fallback:
-        return False
+    if settings.use_json_fallback:
+        return True
     return not database_available()
 
 

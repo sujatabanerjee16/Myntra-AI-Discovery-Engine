@@ -15,6 +15,8 @@ _PROJECT_ROOT = Path(__file__).resolve().parents[1]
 _PURCHASE_HINTS = ("eventually purchase", "purchase items from your wishlist")
 _PLAN_HINTS = ("planned to buy soon", "maybe someday")
 
+_HABITS_CACHE: dict[tuple, dict] = {}
+
 
 def _resolve_workbook(raw: str) -> Path | None:
     path = Path(raw)
@@ -52,6 +54,18 @@ def _counts(series: pd.Series) -> list[dict[str, object]]:
 def get_survey_purchase_habits(*, segment: str | None = None) -> dict:
     """Count self-reported buy-habit answers. Not a checkout conversion rate."""
     settings = get_settings()
+    cache_key_parts: list[object] = [segment or ""]
+    for raw in settings.research_excel_path_list:
+        path = _resolve_workbook(raw)
+        if path is None:
+            cache_key_parts.append((raw, None))
+        else:
+            cache_key_parts.append((str(path), path.stat().st_mtime))
+    cache_key = tuple(cache_key_parts)
+    cached = _HABITS_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
+
     workbooks: list[dict] = []
     respondents = 0
 
@@ -84,9 +98,11 @@ def get_survey_purchase_habits(*, segment: str | None = None) -> dict:
         )
         respondents += int(len(df))
 
-    return {
+    result = {
         "respondents": respondents,
         "self_reported": True,
         "checkout_rate_available": False,
         "workbooks": workbooks,
     }
+    _HABITS_CACHE[cache_key] = result
+    return result
