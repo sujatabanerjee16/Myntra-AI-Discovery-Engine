@@ -145,6 +145,33 @@ export interface EvidenceSummaryResponse {
   excerpts: EvidenceExcerpt[];
 }
 
+export interface VoicePreviewLine {
+  text: string;
+  source: string;
+}
+
+export interface VoicePreviewGroup {
+  reason_category: string;
+  code: string;
+  evidence_volume: number;
+  lines: VoicePreviewLine[];
+}
+
+export interface SurveyPainItem {
+  reason_category: string;
+  evidence_volume: number;
+}
+
+export interface SurveyPainQuote {
+  text: string;
+  origin: "form" | "interview";
+}
+
+export interface SurveyPainPreview {
+  reasons: SurveyPainItem[];
+  quotes: SurveyPainQuote[];
+}
+
 export interface Citation {
   chunk_id: string;
   source: string;
@@ -262,7 +289,7 @@ export function formatLabel(value: string): string {
     "styling decision uncertainty": "Styling Decision Uncertainty",
     "review trust": "Proof / Photos",
     "timing occasion": "Timing / Occasion",
-    "external comparison": "Comparison",
+    "external comparison": "Research & Comparison",
     "passive bookmarking": "Passive Bookmarking",
     "logistics friction": "Logistics Friction",
     "competitive platform preference": "Competitive Platform Preference",
@@ -405,6 +432,8 @@ export interface DashboardBootstrap {
   survey_habits: SurveyHabitsResponse | null;
   conversion: ConversionMetricResponse | null;
   feedback: InsightFeedbackListResponse;
+  voice_preview?: VoicePreviewGroup[];
+  survey_pains?: SurveyPainPreview;
 }
 
 export interface CompetitiveMetricItem {

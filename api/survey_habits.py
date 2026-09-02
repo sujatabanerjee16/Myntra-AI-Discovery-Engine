@@ -8,7 +8,13 @@ from pathlib import Path
 import pandas as pd
 
 from common.config import get_settings
-from ingestion.connectors.research_excel import _find_age_column, _safe_str, normalize_age_band
+from ingestion.connectors.research_excel import (
+    AGE_18_24,
+    AGE_25_35,
+    _find_age_column,
+    _safe_str,
+    normalize_age_band,
+)
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -78,9 +84,12 @@ def get_survey_purchase_habits(*, segment: str | None = None) -> dict:
             continue
         columns = [str(c) for c in df.columns]
         age_col = _find_age_column(columns)
-        if segment and age_col:
-            mask = df[age_col].map(normalize_age_band) == segment
+        if age_col:
+            mapped = df[age_col].map(normalize_age_band)
+            mask = mapped == segment if segment else mapped.isin((AGE_18_24, AGE_25_35))
             df = df.loc[mask]
+        elif segment:
+            continue
         if df.empty:
             continue
 

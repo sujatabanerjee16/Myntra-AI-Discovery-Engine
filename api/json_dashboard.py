@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import uuid
 from collections import defaultdict
 
@@ -426,8 +427,8 @@ def get_filtered_reason_ranks(
 def research_respondent_counts() -> dict[str, int]:
     """Count unique Excel survey rows per age band.
 
-    Interviews and open-text extras are not Excel respondents — including them
-    made 18–24 + 25–35 sum to more people than the 43-person survey card.
+    Interviews, open-text extras, and Excel rows with no 18–24 / 25–35 age
+    (including a blank habits submission) are not counted.
     """
     seen: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
     for chunk in load_corpus_chunks():
@@ -717,6 +718,197 @@ def get_evidence_summary(
     )
 
 
+_REASON_CODES = {
+    "price_sensitivity_waiting": "PRI",
+    "logistics_friction": "LOG",
+    "quality_trust_doubt": "QLT",
+    "fit_sizing_uncertainty": "FIT",
+    "external_comparison": "CMP",
+    "timing_occasion": "TIM",
+    "review_trust": "PRF",
+    "styling_decision_uncertainty": "STY",
+    "passive_bookmarking": "PAS",
+}
+
+
+def _clip_voice_line(text: str, max_len: int = 140) -> str:
+    line = " ".join((text or "").split())
+    answer = re.search(r"\bA:\s*(.+)$", line, flags=re.I)
+    if answer:
+        line = answer.group(1).strip()
+    line = re.sub(r"^Comment on [^:]+:\s*", "", line, flags=re.I)
+    if len(line) > max_len:
+        clipped = line[:max_len].rsplit(" ", 1)[0]
+        line = (clipped or line[:max_len]).rstrip(".,;:") + "…"
+    return line
+
+
+def get_voice_preview(
+    *,
+    n_groups: int = 2,
+    n_excerpts: int = 1,
+    min_confidence: float | None = 0.5,
+    sources: list[str] | None = None,
+    segment: str | None = None,
+    category: str | None = None,
+) -> list[dict]:
+    """Top reasons plus Fit, Research & Comparison, and Timing, with real comments."""
+    extra_keys = (
+        "fit_sizing_uncertainty",
+        "external_comparison",
+        "timing_occasion",
+    )
+    reasons, _ = rank_reasons_for_dashboard(
+        min_confidence=min_confidence,
+        sources=sources,
+        segment=segment,
+        category=category,
+    )
+    selected = list(reasons[:n_groups])
+    have = {row.reason_category for row in selected}
+    by_key = {row.reason_category: row for row in reasons}
+    for key in extra_keys:
+        row = by_key.get(key)
+        if row is None or key in have:
+            continue
+        selected.append(row)
+        have.add(key)
+    groups: list[dict] = []
+    for row in selected:
+        summary = get_evidence_summary(
+            reason_category=row.reason_category,
+            segment=segment,
+            category=category,
+            limit=12,
+        )
+        lines: list[dict] = []
+        seen: set[str] = set()
+        for excerpt in summary.excerpts:
+            text = _clip_voice_line(excerpt.text)
+            key = text.lower()
+            if len(text) < 24 or key in seen:
+                continue
+            seen.add(key)
+            lines.append({"text": text, "source": excerpt.source})
+            if len(lines) >= n_excerpts:
+                break
+        if not lines:
+            continue
+        groups.append(
+            {
+                "reason_category": row.reason_category,
+                "code": _REASON_CODES.get(row.reason_category, row.reason_category[:3].upper()),
+                "evidence_volume": row.evidence_volume,
+                "lines": lines,
+            }
+        )
+    return groups
+
+
+_AGE_PREFIX = re.compile(r"^Age band:\s*[\d\-–]+\.\s*", re.I)
+_QUOTE_SKIP = (
+    "don't have any clothes",
+    "do not have any clothes",
+    "currently don't have",
+)
+_QUOTE_BUCKETS = (
+    ("price", ("price", "expensive", "budget", "discount", "offer", "afford", "money")),
+    ("fit", ("fit", "size")),
+    ("occasion", ("occasion", "moment", "treat")),
+    ("styling", ("style", "suit me", "cannot decide", "similar items")),
+    ("quality", ("quality",)),
+)
+
+
+def _clean_research_quote(text: str) -> str:
+    line = _AGE_PREFIX.sub("", " ".join((text or "").split())).strip()
+    line = re.sub(r"^Cz\s+", "Because ", line, flags=re.I)
+    line = re.sub(r"^CZ\s+", "Because ", line)
+    return line
+
+
+def _usable_quote(text: str) -> bool:
+    if len(text) < 12 or len(text) > 120:
+        return False
+    lowered = text.lower()
+    if any(skip in lowered for skip in _QUOTE_SKIP):
+        return False
+    letters = sum(ch.isalpha() for ch in text)
+    return letters >= 10
+
+
+def get_survey_pain_preview(*, n_reasons: int = 4, n_quotes: int = 4) -> dict:
+    """Pain tags and short quotes from the Google Form + interview corpus only."""
+    reasons = [
+        {"reason_category": row.reason_category, "evidence_volume": row.evidence_volume}
+        for row in get_filtered_reason_ranks(sources=["research"])[:n_reasons]
+    ]
+    form_quotes: list[str] = []
+    interview_quotes: list[str] = []
+    seen: set[str] = set()
+    for chunk in load_corpus_chunks():
+        source = chunk.get("source")
+        if hasattr(source, "value"):
+            source = source.value
+        if source != "research":
+            continue
+        meta = chunk.get("metadata") or {}
+        ref = str(chunk.get("source_ref") or "")
+        text = _clean_research_quote(str(chunk.get("text") or ""))
+        if not text:
+            continue
+        is_interview = (
+            "interview" in ref
+            or meta.get("kind") == "interview"
+            or meta.get("workbook") == "interview-docx"
+        )
+        if is_interview:
+            match = re.search(
+                r"What's stopping you\?\"\s*(.{12,140}?)(?=\s*\")",
+                text,
+                flags=re.I,
+            )
+            if match:
+                candidate = _clean_research_quote(match.group(1))
+                if _usable_quote(candidate) and candidate.lower() not in seen:
+                    seen.add(candidate.lower())
+                    interview_quotes.append(candidate)
+            continue
+        if ":open:" not in ref or not _usable_quote(text):
+            continue
+        key = text.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        form_quotes.append(text)
+
+    picked: list[dict] = []
+    used: set[str] = set()
+    for _name, needles in _QUOTE_BUCKETS:
+        for quote in form_quotes:
+            lowered = quote.lower()
+            if quote in used:
+                continue
+            if any(needle in lowered for needle in needles):
+                picked.append({"text": quote, "origin": "form"})
+                used.add(quote)
+                break
+        if len(picked) >= n_quotes:
+            break
+    for quote in interview_quotes:
+        if len(picked) >= n_quotes:
+            break
+        picked.append({"text": quote, "origin": "interview"})
+    if len(picked) < n_quotes:
+        for quote in form_quotes:
+            if quote in used:
+                continue
+            picked.append({"text": quote, "origin": "form"})
+            if len(picked) >= n_quotes:
+                break
+    return {"reasons": reasons, "quotes": picked[:n_quotes]}
+
+
 WHY_NOT_PURCHASE_NARRATIVE = [
     (
         "Price / sale waiting - users shortlist now and delay until discounts "
@@ -860,4 +1052,6 @@ def get_dashboard_bootstrap() -> dict:
         "survey_habits": SurveyHabitsResponse.model_validate(habits).model_dump(mode="json"),
         "conversion": conversion,
         "feedback": list_feedback().model_dump(mode="json"),
+        "voice_preview": get_voice_preview(sources=_BOOTSTRAP_SOURCES),
+        "survey_pains": get_survey_pain_preview(),
     }

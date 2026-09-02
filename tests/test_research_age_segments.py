@@ -104,7 +104,7 @@ def test_survey_purchase_habits_from_excel():
     from api.survey_habits import get_survey_purchase_habits
 
     payload = get_survey_purchase_habits()
-    assert payload["respondents"] == 43
+    assert payload["respondents"] == 42
     assert payload["checkout_rate_available"] is False
     files = {row["file"] for row in payload["workbooks"]}
     assert "Myntra Wishlist.xlsx" in files
@@ -121,7 +121,15 @@ def test_research_respondent_counts_from_corpus():
     counts = research_respondent_counts()
     assert counts["age_18_24"] == 27
     assert counts["age_25_35"] == 15
-    assert counts["age_18_24"] + counts["age_25_35"] <= 43
+    assert counts["age_18_24"] + counts["age_25_35"] == 42
+
+
+def test_survey_card_count_matches_age_split():
+    from api.json_store import load_corpus_scrape_stats
+
+    stats = load_corpus_scrape_stats()
+    assert stats["survey_respondents"] == 42
+    assert sum(row["respondents"] for row in stats["survey_by_workbook"]) == 42
 
 
 def test_age_origin_counts_split_survey_and_play_store():
@@ -224,3 +232,33 @@ def test_high_intent_does_not_zero_a_category_with_data():
     assert sum(item.evidence_volume for item in beauty) > 0
     assert clothing_note is None or "intent" in clothing_note.lower()
     assert beauty_note is None or "intent" in beauty_note.lower()
+
+
+def test_voice_preview_uses_real_excerpts():
+    from api.json_dashboard import get_voice_preview
+
+    groups = get_voice_preview(sources=["play_store", "youtube", "reddit", "product_review", "social"])
+    assert len(groups) >= 5
+    keys = {group["reason_category"] for group in groups}
+    assert "fit_sizing_uncertainty" in keys
+    assert "external_comparison" in keys
+    assert "timing_occasion" in keys
+    for group in groups:
+        assert group["evidence_volume"] > 0
+        assert group["code"]
+        assert len(group["lines"]) == 1
+        assert group["lines"][0]["text"]
+
+
+def test_survey_pain_preview_uses_form_quotes():
+    from api.json_dashboard import get_survey_pain_preview
+
+    preview = get_survey_pain_preview()
+    assert len(preview["reasons"]) == 4
+    assert preview["reasons"][0]["reason_category"] == "price_sensitivity_waiting"
+    assert preview["reasons"][0]["evidence_volume"] == 62
+    assert len(preview["quotes"]) == 4
+    texts = [item["text"].lower() for item in preview["quotes"]]
+    assert any("price" in text or "expensive" in text or "budget" in text for text in texts)
+    assert any("fit" in text for text in texts)
+    assert all(item["origin"] in ("form", "interview") for item in preview["quotes"])

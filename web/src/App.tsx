@@ -47,6 +47,10 @@ function FashionBanner() {
             <strong>Grounded answers</strong>
             <span>Cited shopper evidence</span>
           </li>
+          <li>
+            <strong>PM calibration</strong>
+            <span>Validate or flag a reason</span>
+          </li>
         </ul>
       </div>
       <div className="fashion-hero-images" aria-hidden="true">
@@ -166,9 +170,9 @@ export default function App() {
   const searchHits = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const pages = [
-      { id: "page-dashboard", label: "Dashboard", hint: "Page", run: goToDashboard },
-      { id: "page-competitive", label: "Competitive Analysis", hint: "Page", run: goToCompetitive },
-      { id: "page-chat", label: "Discovery Chat", hint: "Page", run: goToChat },
+      { id: "page-dashboard", label: "Dashboard", hint: "", run: goToDashboard },
+      { id: "page-competitive", label: "Competitive Analysis", hint: "", run: goToCompetitive },
+      { id: "page-chat", label: "Discovery Chat", hint: "", run: goToChat },
     ];
     const questions = EXPLORE_QUESTIONS.map((question) => ({
       id: `q-${question}`,
@@ -285,7 +289,7 @@ export default function App() {
                   <li key={hit.id}>
                     <button type="button" onClick={() => runSearchHit(hit)}>
                       <span>{hit.label}</span>
-                      <em>{hit.hint}</em>
+                      {hit.hint ? <em>{hit.hint}</em> : null}
                     </button>
                   </li>
                 ))}

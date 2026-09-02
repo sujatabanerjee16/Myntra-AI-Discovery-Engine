@@ -161,6 +161,9 @@ def load_corpus_scrape_stats() -> dict[str, Any]:
         if "interview" in ref:
             interviews += 1
             continue
+        # Blank / unaged Excel rows are not people (one habits row is all NaT).
+        if meta.get("age_band") not in ("age_18_24", "age_25_35"):
+            continue
         workbook = str(meta.get("workbook") or "workbook")
         if meta.get("row_index") is not None:
             row_key = f"{workbook}:{meta.get('row_index')}"

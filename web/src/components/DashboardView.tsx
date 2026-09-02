@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   getComparisons,
   getCompetitiveAnalysis,
-  getConversionMetric,
   getCorpusStats,
   getDashboardBootstrap,
+  getEvidence,
   getFilters,
   getRankedReasons,
   getSurveyHabits,
@@ -16,24 +16,47 @@ import { COMPETITIVE_PLATFORMS, PLATFORM_META } from "../types";
 import type {
   ComparisonResponse,
   CompetitiveAnalysisResponse,
-  ConversionMetricResponse,
   CorpusScrapeStats,
   DashboardBootstrap,
   DashboardFilters,
   FilterState,
   InsightFeedbackRecord,
-  IntentType,
   PlatformId,
   ReasonRankResponse,
   SidebarFilters,
   SourceId,
   SurveyHabitsResponse,
+  VoicePreviewGroup,
+  SurveyPainPreview,
 } from "../types";
 import CompetitiveAnalysisPanel from "./CompetitiveAnalysisPanel";
 import { formatReason } from "./ConfidenceBadge";
 import QuestionsView from "./QuestionsView";
 
 const AGE_SEGMENTS = ["age_18_24", "age_25_35"] as const;
+
+const OPP_RAIL_COLORS = [
+  "#e11d48",
+  "#eab308",
+  "#f97316",
+  "#3b82f6",
+  "#22d3ee",
+  "#22c55e",
+  "#7c3aed",
+];
+
+const VOICE_TONES: Record<string, { bg: string; ink: string; chip: string }> = {
+  price_sensitivity_waiting: { bg: "#ffe4e6", ink: "#9f1239", chip: "#e11d48" },
+  logistics_friction: { bg: "#fef08a", ink: "#713f12", chip: "#ca8a04" },
+  fit_sizing_uncertainty: { bg: "#bfdbfe", ink: "#1e3a8a", chip: "#2563eb" },
+  external_comparison: { bg: "#a5f3fc", ink: "#155e75", chip: "#0891b2" },
+  timing_occasion: { bg: "#bbf7d0", ink: "#14532d", chip: "#16a34a" },
+  quality_trust_doubt: { bg: "#fed7aa", ink: "#9a3412", chip: "#ea580c" },
+  review_trust: { bg: "#ddd6fe", ink: "#5b21b6", chip: "#7c3aed" },
+  styling_decision_uncertainty: { bg: "#fbcfe8", ink: "#9d174d", chip: "#db2777" },
+};
+
+const VOICE_TONE_FALLBACK = { bg: "#e2e8f0", ink: "#334155", chip: "#64748b" };
 
 const WORKBOOK_LABELS: Record<string, string> = {
   "myntra-wishlist": "Myntra Wishlist",
@@ -47,6 +70,63 @@ const AGE_RESPONDENT_FALLBACK: Record<(typeof AGE_SEGMENTS)[number], number> = {
 };
 
 const SNAPSHOT = bundledBootstrap as DashboardBootstrap;
+
+const REASON_CODES: Record<string, string> = {
+  price_sensitivity_waiting: "PRI",
+  logistics_friction: "LOG",
+  quality_trust_doubt: "QLT",
+  fit_sizing_uncertainty: "FIT",
+  external_comparison: "CMP",
+  timing_occasion: "TIM",
+  review_trust: "PRF",
+  styling_decision_uncertainty: "STY",
+  passive_bookmarking: "PAS",
+};
+
+const SOURCE_TAGS: Record<string, string> = {
+  play_store: "PLAY_STORE",
+  youtube: "YOUTUBE",
+  reddit: "REDDIT",
+  product_review: "PRODUCT_REVIEW",
+  social: "SOCIAL",
+  research: "SURVEY",
+};
+
+function clipVoiceLine(text: string, maxLen = 140): string {
+  let line = text.replace(/\s+/g, " ").trim();
+  const answer = line.match(/\bA:\s*(.+)$/i);
+  if (answer) line = answer[1].trim();
+  line = line.replace(/^Comment on [^:]+:\s*/i, "");
+  if (line.length > maxLen) {
+    const clipped = line.slice(0, maxLen).replace(/\s+\S*$/, "");
+    line = `${(clipped || line.slice(0, maxLen)).replace(/[.,;:]+$/, "")}…`;
+  }
+  return line;
+}
+
+const VOICE_EXTRA_REASONS = [
+  "fit_sizing_uncertainty",
+  "external_comparison",
+  "timing_occasion",
+] as const;
+
+function pickVoiceReasons<T extends { reason_category: string }>(reasons: T[]): T[] {
+  const selected = [...reasons.slice(0, 2)];
+  const have = new Set(selected.map((item) => item.reason_category));
+  for (const key of VOICE_EXTRA_REASONS) {
+    if (have.has(key)) continue;
+    const row = reasons.find((item) => item.reason_category === key);
+    if (row) {
+      selected.push(row);
+      have.add(key);
+    }
+  }
+  return selected;
+}
+
+function sourceTag(source: string): string {
+  return SOURCE_TAGS[source] ?? source.replace(/[_-]+/g, "_").toUpperCase();
+}
 
 interface Props {
   filters: FilterState;
@@ -68,20 +148,19 @@ const SOURCES: { id: SourceId; label: string }[] = [
 ];
 
 export default function DashboardView({ filters, onFiltersChange, sidebar, onSidebarChange, onAskQuestion, view = "dashboard" }: Props) {
-  const { intentType, sources, confidenceMin, platforms } = sidebar;
-  const setIntentType = (value: IntentType) => onSidebarChange({ ...sidebar, intentType: value });
+  const { sources, confidenceMin, platforms } = sidebar;
   const setConfidenceMin = (value: number) => onSidebarChange({ ...sidebar, confidenceMin: value });
 
   const [options, setOptions] = useState<DashboardFilters | null>(SNAPSHOT.filters);
   const [reasons, setReasons] = useState<ReasonRankResponse | null>(SNAPSHOT.reasons);
-  const [conversion, setConversion] = useState<ConversionMetricResponse | null>(SNAPSHOT.conversion);
   const [competitive, setCompetitive] = useState<CompetitiveAnalysisResponse | null>(SNAPSHOT.competitive);
   const [comparisons, setComparisons] = useState<ComparisonResponse | null>(SNAPSHOT.comparisons);
   const [surveyHabits, setSurveyHabits] = useState<SurveyHabitsResponse | null>(SNAPSHOT.survey_habits);
   const [corpusStats, setCorpusStats] = useState<CorpusScrapeStats | null>(SNAPSHOT.corpus_stats);
   const [feedback, setFeedback] = useState<InsightFeedbackRecord[]>(SNAPSHOT.feedback?.feedback ?? []);
+  const [voicePreview, setVoicePreview] = useState<VoicePreviewGroup[]>(SNAPSHOT.voice_preview ?? []);
+  const [surveyPains, setSurveyPains] = useState<SurveyPainPreview | null>(SNAPSHOT.survey_pains ?? null);
   const [loading, setLoading] = useState(false);
-  const [computing, setComputing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [reasonCategory, setReasonCategory] = useState("price_sensitivity_waiting");
@@ -110,19 +189,19 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       });
     }
     if (snap.reasons) setReasons(snap.reasons);
-    if (snap.conversion !== undefined) setConversion(snap.conversion);
     if (snap.feedback?.feedback) setFeedback(snap.feedback.feedback);
     if (snap.competitive !== undefined) setCompetitive(snap.competitive);
     if (snap.comparisons !== undefined) setComparisons(snap.comparisons);
     if (snap.survey_habits !== undefined) setSurveyHabits(snap.survey_habits);
     if (snap.corpus_stats !== undefined) setCorpusStats(snap.corpus_stats);
+    if (snap.voice_preview?.length) setVoicePreview(snap.voice_preview);
+    if (snap.survey_pains?.reasons?.length) setSurveyPains(snap.survey_pains);
   }, []);
 
   const fetchLiveDashboard = useCallback(async () => {
     const [
       filterOptions,
       reasonData,
-      conversionData,
       feedbackData,
       competitiveData,
       comparisonData,
@@ -133,18 +212,17 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         setError(String(err));
         return null;
       }),
-      getRankedReasons(filters, {
+      getRankedReasons({ ...filters, price_band: "" }, {
         minConfidence: confidenceRef.current,
         sources,
-        intentType,
+        intentType: "medium",
       }).catch((err) => {
         setError(String(err));
         return null;
       }),
-      getConversionMetric().catch(() => null),
       listInsightFeedback().catch(() => ({ total: 0, feedback: [] as InsightFeedbackRecord[] })),
       getCompetitiveAnalysis().catch(() => null),
-      getComparisons({ ...filters, segment: "" }).catch(() => null),
+      getComparisons({ ...filters, segment: "", price_band: "" }).catch(() => null),
       getSurveyHabits(filters.segment || undefined).catch(() => null),
       getCorpusStats().catch(() => null),
     ]);
@@ -157,13 +235,12 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       });
     }
     setReasons(reasonData ?? { run_version: null, reasons: [], scope_note: null });
-    setConversion(conversionData);
     setFeedback(feedbackData.feedback);
     setCompetitive(competitiveData);
     setComparisons(comparisonData);
     setSurveyHabits(habitsData);
     setCorpusStats(scrapeData);
-  }, [filters, sources, intentType]);
+  }, [filters, sources]);
 
   const loadDashboard = useCallback(async () => {
     setError(null);
@@ -198,10 +275,10 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     }
     let cancelled = false;
     setLoading(true);
-    void getRankedReasons(filters, {
+    void getRankedReasons({ ...filters, price_band: "" }, {
       minConfidence: appliedConfidence,
       sources,
-      intentType,
+      intentType: "medium",
     })
       .then((reasonData) => {
         if (!cancelled) {
@@ -218,19 +295,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     return () => {
       cancelled = true;
     };
-  }, [appliedConfidence, filters, sources, intentType]);
-
-  async function handleCompute() {
-    setComputing(true);
-    setError(null);
-    try {
-      await loadDashboard();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Reload failed");
-    } finally {
-      setComputing(false);
-    }
-  }
+  }, [appliedConfidence, filters, sources]);
 
   async function handleSubmitFeedback(event: React.FormEvent) {
     event.preventDefault();
@@ -264,7 +329,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }, [reasons]);
 
   const reasonBars = useMemo(() => {
-    const top = filteredReasons.slice(0, 5);
+    const top = filteredReasons.slice(0, 7);
     const shownVolume = top.reduce((sum, item) => sum + item.evidence_volume, 0) || 1;
     const raw = top.map((item) => (item.evidence_volume / shownVolume) * 100);
     const floored = raw.map((value) => Math.floor(value));
@@ -283,27 +348,48 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     }));
   }, [filteredReasons]);
 
-  const activeTotal = useMemo(
-    () => filteredReasons.reduce((sum, item) => sum + item.active_shortlist_count, 0),
-    [filteredReasons],
-  );
-
-  const passiveTotal = useMemo(
-    () => filteredReasons.reduce((sum, item) => sum + item.passive_bookmark_count, 0),
-    [filteredReasons],
-  );
-
-  const intentSum = activeTotal + passiveTotal;
-  const activePct = intentSum ? Math.round((activeTotal / intentSum) * 100) : 0;
-  const passivePct = intentSum ? 100 - activePct : 0;
-  const intentThin = intentSum > 0 && intentSum < 10;
-  const intentTautology =
-    intentType === "high" || intentType === "low" || filters.price_band === "sale_waiting";
-
   const evidenceTotal = useMemo(
     () => filteredReasons.reduce((sum, item) => sum + item.evidence_volume, 0),
     [filteredReasons],
   );
+
+  const voiceReasons = useMemo(() => pickVoiceReasons(filteredReasons), [filteredReasons]);
+  const voiceReasonKey = voiceReasons.map((item) => item.reason_category).join("|");
+
+  useEffect(() => {
+    if (voiceReasons.length === 0) return;
+    let cancelled = false;
+    void Promise.all(
+      voiceReasons.map(async (item) => {
+        const summary = await getEvidence(item.reason_category, { ...filters, price_band: "" });
+        const lines: VoicePreviewGroup["lines"] = [];
+        const seen = new Set<string>();
+        for (const excerpt of summary.excerpts) {
+          const text = clipVoiceLine(excerpt.text);
+          const key = text.toLowerCase();
+          if (text.length < 24 || seen.has(key)) continue;
+          seen.add(key);
+          lines.push({ text, source: excerpt.source });
+          if (lines.length >= 1) break;
+        }
+        return {
+          reason_category: item.reason_category,
+          code: REASON_CODES[item.reason_category] ?? item.reason_category.slice(0, 3).toUpperCase(),
+          evidence_volume: item.evidence_volume,
+          lines,
+        } satisfies VoicePreviewGroup;
+      }),
+    )
+      .then((groups) => {
+        if (!cancelled) setVoicePreview(groups.filter((group) => group.lines.length > 0));
+      })
+      .catch(() => {
+        /* Keep the bundled preview. */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [voiceReasonKey, filters, voiceReasons]);
 
   const visibleCorpus = useMemo(() => {
     if (!corpusStats) return null;
@@ -322,57 +408,15 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     });
     const scrapedDocuments = scrapedRows.reduce((sum, row) => sum + row.documents, 0);
     const surveyRespondents = corpusStats.survey_respondents ?? 0;
-    const surveyOpenText = corpusStats.survey_open_text ?? 0;
     const surveyInterviews = corpusStats.survey_interviews ?? 0;
     return {
       scrapedDocuments,
       scrapedLabels: scrapedRows.map((row) => row.label).join(", ") || "No sources selected",
       surveyRespondents,
-      surveyOpenText,
       surveyInterviews,
-      surveyByWorkbook: corpusStats.survey_by_workbook ?? [],
       scrapedRows,
     };
   }, [corpusStats, sources]);
-
-  const topFriction =
-    reasonBars.find((item) => item.reason_category !== "passive_bookmarking") ?? reasonBars[0];
-  // Seed file data/seeds/internal_wishlist_events.json is 16 rows (10 wishlist users).
-  // Do not show that demo cohort as a live conversion rate.
-  const conversionReady =
-    conversion !== null && conversion.wishlist_users > 16 && conversion.wishlist_users > 0;
-  const wishlistRate = conversionReady
-    ? `${(conversion!.conversion_rate * 100).toFixed(1)}%`
-    : surveyHabits
-      ? `${surveyHabits.respondents} people surveyed`
-      : "No rate";
-  const excerptScopeNote = [reasons?.scope_note].filter(Boolean).join(" · ");
-
-  const excerptFilterLabel = [
-    filters.segment ? formatReason(filters.segment) : null,
-    filters.category ? formatReason(filters.category) : null,
-    intentType === "high" ? "High intent" : null,
-    intentType === "low" ? "Low intent" : null,
-  ]
-    .filter(Boolean)
-    .join(" + ");
-
-  const wishlistDelta = conversionReady
-    ? `${conversion!.converted_users.toLocaleString()} / ${conversion!.wishlist_users.toLocaleString()} users · ${conversion!.window_days}d`
-    : "Excel survey — category and price filters do not change this";
-
-  const intentNote = !intentSum
-    ? null
-    : intentType === "high"
-      ? "High filter is on, so every comment here is High. Not a purchase rate."
-      : intentType === "low"
-        ? "Low filter is on, so every comment here is Low. Not a purchase rate."
-        : filters.price_band === "sale_waiting"
-          ? "Sale waiting is tagged High. Not people who bought."
-          : "All comments in this filter, split into High and Low. Not a purchase rate.";
-  const nonConversionRate = conversionReady
-    ? `${(conversion!.non_conversion_rate * 100).toFixed(1)}%`
-    : null;
 
   const ageComparison = useMemo(() => {
     const items = comparisons?.items ?? [];
@@ -415,8 +459,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     const headline = "Shared pains, then what each age adds";
     const youngCount = ageComparison.find((cohort) => cohort.segment === "age_18_24")?.surveyCount ?? 0;
     const olderCount = ageComparison.find((cohort) => cohort.segment === "age_25_35")?.surveyCount ?? 0;
-    const surveyPeople =
-      surveyHabits?.respondents || visibleCorpus?.surveyRespondents || youngCount + olderCount;
+    const surveyPeople = youngCount + olderCount || surveyHabits?.respondents || visibleCorpus?.surveyRespondents || 0;
     const playStorePeople = sources.includes("play_store")
       ? ageComparison.reduce((sum, cohort) => sum + (cohort.playStoreCount || 0), 0)
       : 0;
@@ -427,11 +470,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       youngCount || olderCount ? ` ${youngCount} are 18–24, ${olderCount} are 25–35.` : "";
     const sourceNote =
       playStorePeople || otherPeople
-        ? `${surveyPeople} survey people.` +
+        ? `${surveyPeople} Google Form survey.` +
           (playStorePeople ? ` ${playStorePeople} Play Store.` : "") +
           (otherPeople ? ` ${otherPeople} other scrapes.` : "") +
           ageSplit
-        : `From the same ${surveyPeople} survey people.${ageSplit}`;
+        : `${surveyPeople} Google Form survey.${ageSplit}`;
     return { shared, youngerOnly, olderOnly, headline, sourceNote };
   }, [ageComparison, surveyHabits, visibleCorpus, sources]);
 
@@ -458,8 +501,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const activeFilterSummary = [
     filters.segment ? formatReason(filters.segment) : "Age 18–24 + 25–35",
     filters.category ? formatReason(filters.category) : "All categories",
-    filters.price_band ? formatReason(filters.price_band) : "All prices",
-    intentType === "high" ? "High intent" : intentType === "low" ? "Low intent" : "All intents",
     view === "competitive" ? null : `${sources.length} source${sources.length === 1 ? "" : "s"}`,
     `≥${Math.round(confidenceMin * 100)}% conf.`,
   ]
@@ -501,6 +542,73 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }, [filters, onFiltersChange]);
 
   const segmentOptions = AGE_SEGMENTS;
+  const pmNoteCount = feedback.length
+    ? `${feedback.length} note${feedback.length === 1 ? "" : "s"}`
+    : "Optional";
+  const pmCalibrationBody = (
+    <>
+      <p className="wi-kpi-sub">
+        Internal only — not scraped user data. Use this to validate or flag a reason.
+      </p>
+      <div className="wi-pm-calibrate-grid">
+        <form
+          onSubmit={(event) => void handleSubmitFeedback(event)}
+          className="feedback-form wi-dash-feedback-form"
+        >
+          <label>
+            Reason
+            <select
+              value={reasonCategory}
+              onChange={(event) => setReasonCategory(event.target.value)}
+            >
+              {reasonCategoryOptions.map((value) => (
+                <option key={value} value={value}>
+                  {formatReason(value)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Verdict
+            <select value={verdict} onChange={(event) => setVerdict(event.target.value)}>
+              <option value="validated">Validated</option>
+              <option value="flagged">Flagged</option>
+              <option value="needs_review">Needs review</option>
+            </select>
+          </label>
+          <label>
+            Notes
+            <textarea
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              rows={2}
+              placeholder="Optional note…"
+            />
+          </label>
+          <button type="submit" disabled={feedbackSubmitting}>
+            {feedbackSubmitting ? "Saving…" : "Save note"}
+          </button>
+          {feedbackSuccess && <p className="wi-feedback-success">{feedbackSuccess}</p>}
+        </form>
+        <ul className="wi-feedback-list">
+          {feedback.map((item) => (
+            <li key={item.id} className="wi-feedback-item">
+              <div className="wi-feedback-item-top">
+                <strong className="wi-pain-name">{formatReason(item.reason_category)}</strong>
+                <span className={`wi-feedback-verdict wi-feedback-verdict--${item.verdict}`}>
+                  {item.verdict.replace(/_/g, " ")}
+                </span>
+              </div>
+              {item.notes && <p className="wi-feedback-notes">{item.notes}</p>}
+            </li>
+          ))}
+          {feedback.length === 0 && (
+            <li className="muted">No PM notes yet.</li>
+          )}
+        </ul>
+      </div>
+    </>
+  );
 
   return (
     <div className="wi-dashboard">
@@ -593,59 +701,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         </div>
 
         <div className="wi-dash-filter">
-          <span className="wi-dash-label">Price talk</span>
-          <div className="wi-dash-pills">
-            <button
-              type="button"
-              className={`wi-dash-pill ${filters.price_band === "" ? "active" : ""}`}
-              onClick={() => onFiltersChange({ ...filters, price_band: "" })}
-            >
-              All
-            </button>
-            {(options?.price_bands?.length
-              ? options.price_bands
-              : ["budget", "premium", "sale_waiting"]
-            ).map((value) => (
-              <button
-                key={value}
-                type="button"
-                className={`wi-dash-pill ${filters.price_band === value ? "active" : ""}`}
-                onClick={() =>
-                  onFiltersChange({
-                    ...filters,
-                    price_band: filters.price_band === value ? "" : value,
-                  })
-                }
-              >
-                {formatReason(value)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="wi-dash-filter">
-          <span className="wi-dash-label">Intent</span>
-          <div className="wi-dash-pills">
-            {(
-              [
-                { id: "medium", label: "All intents" },
-                { id: "high", label: "High" },
-                { id: "low", label: "Low" },
-              ] as const
-            ).map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`wi-dash-pill ${intentType === item.id ? "active" : ""}`}
-                onClick={() => setIntentType(item.id)}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="wi-dash-filter">
           <span className="wi-dash-label">Source</span>
           <div className="wi-dash-checks">
             {SOURCES.map((item) => (
@@ -726,38 +781,48 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
             {visibleCorpus && (
               <section className="wi-scrape-panel" aria-label="Survey vs scraped corpus">
-                <div className="wi-scrape-family">
+                <div className="wi-scrape-family wi-scrape-family--survey">
                   <p className="wi-scrape-kicker">Surveys</p>
-                  <p className="wi-scrape-hero">{visibleCorpus.surveyRespondents.toLocaleString()}</p>
-                  <p className="wi-scrape-hero-label">Unique Excel respondents</p>
-                  <ul className="wi-scrape-sources">
-                    {visibleCorpus.surveyByWorkbook.map((row) => (
-                      <li key={row.workbook} className="wi-scrape-source">
-                        <div className="wi-scrape-source-top">
-                          <span>{WORKBOOK_LABELS[row.workbook] ?? formatReason(row.workbook)}</span>
-                          <strong>{row.respondents.toLocaleString()}</strong>
-                        </div>
-                      </li>
-                    ))}
-                    {visibleCorpus.surveyOpenText > 0 && (
-                      <li className="wi-scrape-source">
-                        <div className="wi-scrape-source-top">
-                          <span>Open-text extras (same people)</span>
-                          <strong>{visibleCorpus.surveyOpenText.toLocaleString()}</strong>
-                        </div>
-                      </li>
-                    )}
+                  <div className="wi-survey-stats">
+                    <div>
+                      <p className="wi-scrape-hero">{visibleCorpus.surveyRespondents.toLocaleString()}</p>
+                      <p className="wi-scrape-hero-label">Google Form survey</p>
+                    </div>
                     {visibleCorpus.surveyInterviews > 0 && (
-                      <li className="wi-scrape-source">
-                        <div className="wi-scrape-source-top">
-                          <span>Interviews</span>
-                          <strong>{visibleCorpus.surveyInterviews.toLocaleString()}</strong>
-                        </div>
-                      </li>
+                      <div>
+                        <p className="wi-scrape-hero">{visibleCorpus.surveyInterviews.toLocaleString()}</p>
+                        <p className="wi-scrape-hero-label">User interviews</p>
+                      </div>
                     )}
-                  </ul>
+                  </div>
+                  {surveyPains && (surveyPains.reasons.length > 0 || surveyPains.quotes.length > 0) && (
+                    <div className="wi-survey-pains">
+                      <p className="wi-survey-pains-kicker">Pain points</p>
+                      <p className="wi-survey-pains-note">Tagged comments in the 42 forms + 6 interviews</p>
+                      {surveyPains.reasons.length > 0 && (
+                        <ul className="wi-survey-pain-tags">
+                          {surveyPains.reasons.map((item) => (
+                            <li key={item.reason_category}>
+                              <span>{formatReason(item.reason_category)}</span>
+                              <strong>{item.evidence_volume}</strong>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {surveyPains.quotes.length > 0 && (
+                        <ul className="wi-survey-quotes">
+                          {surveyPains.quotes.map((quote) => (
+                            <li key={`${quote.origin}-${quote.text}`}>
+                              <p>{quote.text}</p>
+                              <span>{quote.origin === "interview" ? "INTERVIEW" : "GOOGLE FORM"}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <div className="wi-scrape-family">
+                <div className="wi-scrape-family wi-scrape-family--scraped">
                   <p className="wi-scrape-kicker">Scraped</p>
                   <p className="wi-scrape-hero">{visibleCorpus.scrapedDocuments.toLocaleString()}</p>
                   <p className="wi-scrape-hero-label">{visibleCorpus.scrapedLabels}</p>
@@ -789,166 +854,122 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
               </section>
             )}
 
-            <div className="wi-insight-grid">
-              <article className="wi-kpi-card">
-                <div className="wi-kpi-card-head">
-                  <h3>Wishlist-to-Purchase</h3>
-                  <button
-                    type="button"
-                    className="wi-kpi-action"
-                    onClick={() => void handleCompute()}
-                    disabled={computing}
-                    title="Reload insights from the scraped corpus export"
-                  >
-                    {computing ? "Reloading…" : "Reload"}
-                  </button>
-                </div>
-                <p className={`wi-kpi-value${conversionReady ? "" : " wi-kpi-value--sm"}`}>
-                  {wishlistRate}
+            {voicePreview.length > 0 && (
+              <section className="wi-dash-card wi-voice-panel" aria-label="Example shopper comments">
+                <h2>Shopper comments</h2>
+                <p className="wi-kpi-sub" style={{ marginTop: "-0.55rem", marginBottom: "0.85rem" }}>
+                  One real line per reason, from YouTube, Play Store, and reviews.
                 </p>
-                <p className="wi-kpi-sub">{wishlistDelta}</p>
-                {nonConversionRate && (
-                  <p className="wi-kpi-sub">Non-conversion {nonConversionRate}</p>
-                )}
-                {!conversionReady && surveyHabits && (
-                  <ul className="wi-survey-habits">
-                    {surveyHabits.workbooks.map((book) => (
-                      <li key={book.file}>
-                        <strong>
-                          {book.file.replace(/\.xlsx$/i, "")} · {book.n} people
-                        </strong>
-                        <span>
-                          {book.answers
-                            .map((item) => `${item.count} ${item.label}`)
-                            .join(" · ") || "No answers in this filter"}
-                        </span>
+                <ul className="wi-voice-feed">
+                  {voicePreview.map((group) => {
+                    const line = group.lines[0];
+                    if (!line) return null;
+                    const tone = VOICE_TONES[group.reason_category] ?? VOICE_TONE_FALLBACK;
+                    return (
+                      <li
+                        key={group.reason_category}
+                        style={{
+                          ["--voice-bg" as string]: tone.bg,
+                          ["--voice-ink" as string]: tone.ink,
+                          ["--voice-chip" as string]: tone.chip,
+                        }}
+                      >
+                        <div className="wi-voice-meta">
+                          <span className="wi-voice-reason">{formatReason(group.reason_category)}</span>
+                          <span className="wi-voice-src">{sourceTag(line.source)}</span>
+                        </div>
+                        <p className="wi-voice-text">“{line.text}”</p>
                       </li>
-                    ))}
-                  </ul>
-                )}
-              </article>
-              <div className="wi-insight-metrics">
-                <article className="wi-kpi-card">
-                  <h3>
-                    {intentType === "high"
-                      ? "High comments"
-                      : intentType === "low"
-                        ? "Low comments"
-                        : filters.price_band === "sale_waiting"
-                          ? "Sale-waiting comments"
-                          : "High vs Low"}
-                  </h3>
-                  {intentSum ? (
-                    intentTautology ? (
-                      <>
-                        <p className="wi-kpi-value">{intentSum.toLocaleString()}</p>
-                        <p className="wi-kpi-sub">{intentNote}</p>
-                      </>
-                    ) : (
-                    <>
-                      <div className="wi-intent-pair">
-                        <span>High</span>
-                        <span>Low</span>
-                        <strong>
-                          {intentThin ? activeTotal.toLocaleString() : `${activePct}%`}
-                        </strong>
-                        <strong>
-                          {intentThin ? passiveTotal.toLocaleString() : `${passivePct}%`}
-                        </strong>
-                        {!intentThin && (
-                          <>
-                            <span className="wi-intent-count">{activeTotal.toLocaleString()} comments</span>
-                            <span className="wi-intent-count">{passiveTotal.toLocaleString()} comments</span>
-                          </>
-                        )}
-                      </div>
-                      <p className="wi-kpi-sub">{intentNote}</p>
-                    </>
-                    )
-                  ) : (
-                    <p className="wi-kpi-sub">
-                      {excerptFilterLabel
-                        ? `No comments for ${excerptFilterLabel}`
-                        : "No comments in this filter"}
-                    </p>
-                  )}
-                </article>
-                <article className="wi-kpi-card">
-                  <h3>Comments</h3>
-                  <p className="wi-kpi-value">{evidenceTotal.toLocaleString()}</p>
-                  <p className="wi-kpi-sub">
-                  {evidenceTotal
-                    ? excerptScopeNote || "Comments in this filter — not unique people"
-                    : excerptFilterLabel
-                      ? `No comments for ${excerptFilterLabel}`
-                      : "Comments in this filter — not unique people"}
-                </p>
-                </article>
-                <article className="wi-kpi-card">
-                  <h3>Top Friction</h3>
-                  <p className="wi-kpi-value wi-kpi-value--sm">
-                    {topFriction
-                      ? evidenceTotal < 10
-                        ? `${topFriction.label} · ${topFriction.evidence_volume} comments`
-                        : `${topFriction.label} ${topFriction.pct}%`
-                      : "—"}
-                  </p>
-                  <p className="wi-kpi-sub">
-                  Highest-volume blocker — not save-for-later / no-intent bookmarking
-                </p>
-                </article>
-              </div>
-            </div>
+                    );
+                  })}
+                </ul>
+              </section>
+            )}
 
             <section className="wi-dash-card wi-age-compare">
+              <h2>Opportunity Matrix</h2>
+              <p className="wi-kpi-sub" style={{ marginTop: "-0.55rem", marginBottom: "0.9rem" }}>
+                Full ranked list by evidence volume. {evidenceTotal.toLocaleString()} comments at ≥
+                {Math.round(appliedConfidence * 100)}% confidence. Share is of the rows shown.
+              </p>
+              <div className="wi-opp-wrap">
+                <div className="wi-opp-table" role="table">
+                  <div className="wi-opp-row wi-opp-row--head" role="row">
+                    <span role="columnheader">Confidence (0–10)</span>
+                    <span role="columnheader">Evidence volume</span>
+                    <span role="columnheader">Opportunity area</span>
+                    <span role="columnheader">Share</span>
+                  </div>
+                  {reasonBars.map((item, index) => (
+                    <div
+                      key={item.reason_category}
+                      className="wi-opp-row"
+                      role="row"
+                      style={{ ["--opp-rail" as string]: OPP_RAIL_COLORS[index % OPP_RAIL_COLORS.length] }}
+                    >
+                      <span role="cell">
+                        {item.confidence == null ? "—" : (item.confidence * 10).toFixed(1)}
+                      </span>
+                      <span role="cell">{item.evidence_volume.toLocaleString()}</span>
+                      <span role="cell" className="wi-opp-area">
+                        {item.label}
+                      </span>
+                      <span role="cell">{item.pct}%</span>
+                    </div>
+                  ))}
+                </div>
+                {reasonBars.length === 0 && (
+                  <p className="wi-reason-empty">
+                    Nothing in the current filters is at ≥{Math.round(appliedConfidence * 100)}%
+                    confidence. Lower the slider or clear a source — most scores sit at 45–63%.
+                  </p>
+                )}
+              </div>
+            </section>
+
+            <section className="wi-dash-card">
               <div className="wi-age-compare-head">
                 <h2>18–24 vs 25–35</h2>
                 <p className="wi-age-lead">{agePainSplit.headline}</p>
                 <p className="wi-age-source-note">{agePainSplit.sourceNote}</p>
               </div>
 
-              <div className="wi-age-pain-groups">
+              <div className="wi-age-pain-board">
                 {agePainSplit.shared.length > 0 && (
-                  <div className="wi-age-lane wi-age-lane--shared">
+                  <div className="wi-age-pain-row wi-age-pain-row--shared">
                     <p className="wi-age-pain-kicker">
                       Shared
                       <span>{agePainSplit.shared.length}</span>
                     </p>
                     <ul className="wi-shared-pains">
                       {agePainSplit.shared.map((reason) => (
-                        <li key={reason} className="wi-pain-name">
-                          {formatReason(reason)}
-                        </li>
+                        <li key={reason}>{formatReason(reason)}</li>
                       ))}
                     </ul>
                   </div>
                 )}
                 {agePainSplit.youngerOnly.length > 0 && (
-                  <div className="wi-age-lane wi-age-lane--young">
+                  <div className="wi-age-pain-row">
                     <p className="wi-age-pain-kicker">
                       18–24 also
                       <span>{agePainSplit.youngerOnly.length}</span>
                     </p>
                     <ul className="wi-shared-pains">
                       {agePainSplit.youngerOnly.map((reason) => (
-                        <li key={reason} className="wi-pain-name">
-                          {formatReason(reason)}
-                        </li>
+                        <li key={reason}>{formatReason(reason)}</li>
                       ))}
                     </ul>
                   </div>
                 )}
                 {agePainSplit.olderOnly.length > 0 && (
-                  <div className="wi-age-lane wi-age-lane--older">
+                  <div className="wi-age-pain-row">
                     <p className="wi-age-pain-kicker">
                       25–35 also
                       <span>{agePainSplit.olderOnly.length}</span>
                     </p>
                     <ul className="wi-shared-pains">
                       {agePainSplit.olderOnly.map((reason) => (
-                        <li key={reason} className="wi-pain-name">
-                          {formatReason(reason)}
-                        </li>
+                        <li key={reason}>{formatReason(reason)}</li>
                       ))}
                     </ul>
                   </div>
@@ -1011,118 +1032,12 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
               </div>
             </section>
 
-            <section className="wi-dash-card">
-              <h2>Why wishlists do not convert</h2>
-              <p className="wi-kpi-sub" style={{ marginTop: "-0.55rem", marginBottom: "0.9rem" }}>
-                {evidenceTotal.toLocaleString()} comments at ≥
-                {Math.round(appliedConfidence * 100)}% confidence. Bar length is share of the
-                reasons shown — the % on the right is that same share.
-              </p>
-              <div className="wi-reason-bars">
-                {reasonBars.map((item) => (
-                  <div key={item.reason_category} className="wi-reason-bar-row">
-                    <span className="wi-reason-bar-label wi-pain-name">{item.label}</span>
-                    <div className="wi-reason-bar-main">
-                      <div className="wi-reason-bar-track">
-                        <div
-                          className="wi-reason-bar-fill"
-                          style={{ width: `${item.pct}%` }}
-                        />
-                      </div>
-                      <span className="wi-reason-bar-pct">
-                        {item.evidence_volume.toLocaleString()} comments
-                      </span>
-                    </div>
-                    <span
-                      className="wi-share-pill"
-                      title={
-                        item.confidence == null
-                          ? "No model confidence"
-                          : `Model confidence ${Math.round(item.confidence * 100)}% (not the bar)`
-                      }
-                    >
-                      {item.pct}%
-                    </span>
-                  </div>
-                ))}
-                {reasonBars.length === 0 && (
-                  <p className="wi-reason-empty">
-                    Nothing in the current filters is at ≥{Math.round(appliedConfidence * 100)}%
-                    confidence. Lower the slider or clear a source — most scores sit at 45–63%.
-                  </p>
-                )}
-              </div>
-            </section>
-
             <details className="wi-dash-card wi-pm-calibrate">
               <summary>
                 <h2>PM calibration</h2>
-                <span>
-                  {feedback.length
-                    ? `${feedback.length} note${feedback.length === 1 ? "" : "s"}`
-                    : "Optional"}
-                </span>
+                <span>{pmNoteCount}</span>
               </summary>
-              <p className="wi-kpi-sub">
-                Internal only — not scraped user data. Use this to validate or flag a reason.
-              </p>
-              <div className="wi-pm-calibrate-grid">
-                <form
-                  onSubmit={(event) => void handleSubmitFeedback(event)}
-                  className="feedback-form wi-dash-feedback-form"
-                >
-                  <label>
-                    Reason
-                    <select
-                      value={reasonCategory}
-                      onChange={(event) => setReasonCategory(event.target.value)}
-                    >
-                      {reasonCategoryOptions.map((value) => (
-                        <option key={value} value={value}>
-                          {formatReason(value)}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Verdict
-                    <select value={verdict} onChange={(event) => setVerdict(event.target.value)}>
-                      <option value="validated">Validated</option>
-                      <option value="flagged">Flagged</option>
-                      <option value="needs_review">Needs review</option>
-                    </select>
-                  </label>
-                  <label>
-                    Notes
-                    <textarea
-                      value={notes}
-                      onChange={(event) => setNotes(event.target.value)}
-                      rows={2}
-                      placeholder="Optional note…"
-                    />
-                  </label>
-                  <button type="submit" disabled={feedbackSubmitting}>
-                    {feedbackSubmitting ? "Saving…" : "Save note"}
-                  </button>
-                  {feedbackSuccess && <p className="wi-feedback-success">{feedbackSuccess}</p>}
-                </form>
-                <ul className="wi-feedback-list">
-                  {feedback.map((item) => (
-                    <li key={item.id} className="wi-feedback-item">
-                      <div className="wi-feedback-item-top">
-                        <strong className="wi-pain-name">{formatReason(item.reason_category)}</strong>
-                        <span className={`wi-feedback-verdict wi-feedback-verdict--${item.verdict}`}>
-                          {item.verdict.replace(/_/g, " ")}
-                        </span>
-                      </div>
-                      {item.notes && <p className="wi-feedback-notes">{item.notes}</p>}
-                    </li>
-                  ))}
-                  {feedback.length === 0 && (
-                    <li className="muted">No PM notes yet.</li>
-                  )}
-                </ul>
-              </div>
+              {pmCalibrationBody}
             </details>
           </>
         )}
