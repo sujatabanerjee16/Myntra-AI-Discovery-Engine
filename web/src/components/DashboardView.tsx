@@ -58,11 +58,6 @@ const VOICE_TONES: Record<string, { bg: string; ink: string; chip: string }> = {
 
 const VOICE_TONE_FALLBACK = { bg: "#e2e8f0", ink: "#334155", chip: "#64748b" };
 
-const WORKBOOK_LABELS: Record<string, string> = {
-  "myntra-wishlist": "Myntra Wishlist",
-  "your-wishlist-habits-responses": "Wishlist Habits",
-};
-
 /** Last-resort survey sizes when the API omits respondent_counts. */
 const AGE_RESPONDENT_FALLBACK: Record<(typeof AGE_SEGMENTS)[number], number> = {
   age_18_24: 27,
