@@ -9,7 +9,7 @@ from dataclasses import dataclass
 
 from assistant.query import is_age_segment_compare_question
 from assistant.schemas import AggregateContext, Citation
-from assistant.synthesis import synthesize_grounded_answer
+from assistant.synthesis import _truncate_at_word, synthesize_grounded_answer
 from common.config import get_settings
 from storage.schemas import RetrievedChunk
 
@@ -42,10 +42,7 @@ class GeneratedAnswer:
 
 
 def _truncate(text: str, limit: int = 220) -> str:
-    cleaned = text.strip().replace("\n", " ")
-    if len(cleaned) <= limit:
-        return cleaned
-    return cleaned[: limit - 3] + "..."
+    return _truncate_at_word(text, limit)
 
 
 def _template_generate(

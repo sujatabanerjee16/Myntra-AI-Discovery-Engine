@@ -116,7 +116,9 @@ def test_normalize_answer_strips_trailing_orphan_letter():
     assert _normalize_answer("I am unsure about the fit") == "I am unsure about the fit"
     assert _normalize_answer("a") == "a"
     assert _normalize_answer("I") == "I"
-    assert _normalize_answer("q") == ""
+    assert _normalize_answer("I do not ne") == ""
+    assert _normalize_answer("the price is too high") == "the price is too high"
+    assert _normalize_answer("ht a wishlisted item") == "a wishlisted item"
 
 
 def test_collect_survey_signals_merges_orphan_suffix_duplicates():
@@ -154,6 +156,11 @@ def test_truncate_at_word_does_not_cut_mid_word():
     assert not excerpt.endswith("wee")
     rest = text[len(excerpt) :]
     assert not rest or rest[0].isspace()
+
+
+def test_truncate_at_word_drops_leading_fragment():
+    excerpt = _truncate_at_word("ht a wishlisted item somewhere else", 180)
+    assert excerpt.startswith("a wishlisted")
 
 
 def test_user_segment_question_compares_age_cohorts():

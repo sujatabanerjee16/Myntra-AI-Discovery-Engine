@@ -2863,6 +2863,9 @@ textarea {
 .wi-suggested-item-text {
   flex: 1;
   min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .wi-suggested-item-icon {
@@ -2891,6 +2894,7 @@ textarea {
 .wi-chat-messages {
   flex: 1;
   min-height: 0;
+  overflow-x: hidden;
   overflow-y: auto;
   padding: 0.75rem 1.25rem 1rem;
   display: flex;
@@ -2954,6 +2958,8 @@ textarea {
   font-size: 0.875rem;
   line-height: 1.6;
   box-shadow: var(--shadow-sm);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .wi-answer-content {
@@ -3111,6 +3117,7 @@ textarea {
 .wi-followup-chip {
   display: block;
   width: 100%;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.85);
@@ -3122,6 +3129,9 @@ textarea {
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   text-align: left;
   line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .wi-followup-chip:hover {
@@ -4158,7 +4168,11 @@ textarea {
 }
 
 .wi-ql-chip-text {
+  flex: 1;
   min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .wi-ql-chip-icon {

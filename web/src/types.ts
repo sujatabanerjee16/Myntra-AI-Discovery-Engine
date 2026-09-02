@@ -262,7 +262,7 @@ export function formatLabel(value: string): string {
     "styling decision uncertainty": "Styling Decision Uncertainty",
     "review trust": "Proof / Photos",
     "timing occasion": "Timing / Occasion",
-    "external comparison": "External Comparison",
+    "external comparison": "Comparison",
     "passive bookmarking": "Passive Bookmarking",
     "logistics friction": "Logistics Friction",
     "competitive platform preference": "Competitive Platform Preference",

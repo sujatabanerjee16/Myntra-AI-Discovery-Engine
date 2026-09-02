@@ -235,7 +235,12 @@ export default function AssistantView({
   useEffect(() => {
     const pane = messagesRef.current;
     if (!pane) return;
-    pane.scrollTop = pane.scrollHeight;
+    const last = pane.querySelector(".wi-bubble-row:last-of-type, .wi-bubble--user:last-of-type");
+    if (last instanceof HTMLElement) {
+      last.scrollIntoView({ block: "start", inline: "nearest", behavior: "instant" });
+    } else {
+      pane.scrollTop = pane.scrollHeight;
+    }
   }, [messages, loading]);
 
   const latestCitations = useMemo(() => {

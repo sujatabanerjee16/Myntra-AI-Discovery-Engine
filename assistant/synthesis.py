@@ -94,6 +94,26 @@ class SurveySignals:
 
 
 _SHORT_WORDS = {"a", "i"}
+_COMPLETE_TWO_LETTER = {
+    "am", "an", "as", "at", "be", "by", "do", "if", "in", "is", "it",
+    "me", "my", "no", "of", "on", "or", "so", "to", "up", "us", "we",
+}
+
+
+def _strip_truncated_edge_token(text: str, *, leading: bool) -> str:
+    """Drop a 1–2 letter leftover from a chunk split at the start or end."""
+    words = text.split()
+    if not words:
+        return text
+    idx = 0 if leading else -1
+    token = words[idx]
+    core = re.sub(r"[^A-Za-z]", "", token)
+    if len(core) < 1 or len(core) > 2 or not core.isalpha():
+        return text
+    if core.lower() in _SHORT_WORDS or core.lower() in _COMPLETE_TWO_LETTER:
+        return text
+    words.pop(idx)
+    return " ".join(words)
 
 
 def _normalize_answer(answer: str) -> str:
@@ -111,6 +131,12 @@ def _normalize_answer(answer: str) -> str:
         # Keep complete phrases ("anymore q"); drop short remnants ("I usually d").
         if len(cleaned.split()) < 4:
             return ""
+    before_trail = cleaned
+    cleaned = _strip_truncated_edge_token(cleaned, leading=False)
+    cleaned = cleaned.strip(" ,.;:")
+    if (orphan or cleaned != before_trail) and len(cleaned.split()) < 4:
+        return ""
+    cleaned = _strip_truncated_edge_token(cleaned, leading=True)
     if re.fullmatch(r"[A-Za-z]", cleaned) and cleaned.lower() not in _SHORT_WORDS:
         return ""
     return cleaned.strip(" ,.;:")
@@ -119,6 +145,7 @@ def _normalize_answer(answer: str) -> str:
 def _truncate_at_word(text: str, limit: int) -> str:
     """Truncate to the last complete word at or before *limit* characters."""
     cleaned = re.sub(r"\s+", " ", text.strip())
+    cleaned = _strip_truncated_edge_token(cleaned, leading=True)
     if len(cleaned) <= limit:
         return cleaned.rstrip(" ,.;")
     words: list[str] = []
@@ -127,7 +154,7 @@ def _truncate_at_word(text: str, limit: int) -> str:
         if len(candidate) > limit:
             break
         words.append(word)
-    return " ".join(words).rstrip(" ,.;")
+    return _strip_truncated_edge_token(" ".join(words).rstrip(" ,.;"), leading=False)
 
 
 def _field_for_question(question: str) -> str | None:
@@ -163,8 +190,20 @@ def _detect_intent(question: str) -> str:
     return "general"
 
 
+def _usable_phrase(value: str) -> bool:
+    words = value.split()
+    if not words:
+        return False
+    last = re.sub(r"[^A-Za-z]", "", words[-1])
+    if 1 <= len(last) <= 2 and last.lower() not in _SHORT_WORDS and last.lower() not in _COMPLETE_TWO_LETTER:
+        return False
+    if re.search(r"\bI do not$", value, re.I):
+        return False
+    return True
+
+
 def _top_values(counter: Counter[str], limit: int = 3) -> list[str]:
-    return [value for value, _count in counter.most_common(limit)]
+    return [value for value, _count in counter.most_common() if _usable_phrase(value)][:limit]
 
 
 def _collapse_prefix_duplicates(counter: Counter[str]) -> Counter[str]:
