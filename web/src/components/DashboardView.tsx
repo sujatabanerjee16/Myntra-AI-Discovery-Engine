@@ -1,20 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  getComparisons,
   getCompetitiveAnalysis,
   getCorpusStats,
   getDashboardBootstrap,
   getEvidence,
   getFilters,
   getRankedReasons,
-  getSurveyHabits,
   listInsightFeedback,
   submitInsightFeedback,
 } from "../api";
 import bundledBootstrap from "../data/dashboard-bootstrap.json";
-import { COMPETITIVE_PLATFORMS, PLATFORM_META } from "../types";
+import { COMPETITIVE_PLATFORMS, DEFAULT_SIDEBAR, PLATFORM_META } from "../types";
 import type {
-  ComparisonResponse,
   CompetitiveAnalysisResponse,
   CorpusScrapeStats,
   DashboardBootstrap,
@@ -25,15 +22,11 @@ import type {
   ReasonRankResponse,
   SidebarFilters,
   SourceId,
-  SurveyHabitsResponse,
   VoicePreviewGroup,
-  SurveyPainPreview,
 } from "../types";
 import CompetitiveAnalysisPanel from "./CompetitiveAnalysisPanel";
 import { formatReason } from "./ConfidenceBadge";
 import QuestionsView from "./QuestionsView";
-
-const AGE_SEGMENTS = ["age_18_24", "age_25_35"] as const;
 
 const OPP_RAIL_COLORS = [
   "#e11d48",
@@ -58,10 +51,20 @@ const VOICE_TONES: Record<string, { bg: string; ink: string; chip: string }> = {
 
 const VOICE_TONE_FALLBACK = { bg: "#e2e8f0", ink: "#334155", chip: "#64748b" };
 
-/** Last-resort survey sizes when the API omits respondent_counts. */
-const AGE_RESPONDENT_FALLBACK: Record<(typeof AGE_SEGMENTS)[number], number> = {
-  age_18_24: 27,
-  age_25_35: 15,
+const SOURCE_COLORS: Record<string, string> = {
+  play_store: "#fb7185",
+  youtube: "#f43f5e",
+  reddit: "#f97316",
+  product_review: "#38bdf8",
+  social: "#a78bfa",
+};
+
+const SOURCE_PLAIN: Record<string, string> = {
+  play_store: "Play Store reviews",
+  youtube: "YouTube comments",
+  reddit: "Reddit threads",
+  product_review: "Product reviews",
+  social: "Social posts",
 };
 
 const SNAPSHOT = bundledBootstrap as DashboardBootstrap;
@@ -149,12 +152,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const [options, setOptions] = useState<DashboardFilters | null>(SNAPSHOT.filters);
   const [reasons, setReasons] = useState<ReasonRankResponse | null>(SNAPSHOT.reasons);
   const [competitive, setCompetitive] = useState<CompetitiveAnalysisResponse | null>(SNAPSHOT.competitive);
-  const [comparisons, setComparisons] = useState<ComparisonResponse | null>(SNAPSHOT.comparisons);
-  const [surveyHabits, setSurveyHabits] = useState<SurveyHabitsResponse | null>(SNAPSHOT.survey_habits);
   const [corpusStats, setCorpusStats] = useState<CorpusScrapeStats | null>(SNAPSHOT.corpus_stats);
   const [feedback, setFeedback] = useState<InsightFeedbackRecord[]>(SNAPSHOT.feedback?.feedback ?? []);
   const [voicePreview, setVoicePreview] = useState<VoicePreviewGroup[]>(SNAPSHOT.voice_preview ?? []);
-  const [surveyPains, setSurveyPains] = useState<SurveyPainPreview | null>(SNAPSHOT.survey_pains ?? null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -167,10 +167,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   const [appliedConfidence, setAppliedConfidence] = useState(confidenceMin);
   const confidenceRef = useRef(appliedConfidence);
   confidenceRef.current = appliedConfidence;
-  const skipConfidenceReload = useRef(true);
   const skipFirstNetworkLoad = useRef(true);
   useEffect(() => {
-    const timer = window.setTimeout(() => setAppliedConfidence(confidenceMin), 180);
+    const timer = window.setTimeout(() => setAppliedConfidence(confidenceMin), 80);
     return () => window.clearTimeout(timer);
   }, [confidenceMin]);
 
@@ -183,14 +182,14 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         return current;
       });
     }
-    if (snap.reasons) setReasons(snap.reasons);
+    // Don't reset the matrix if the PM already moved the confidence slider.
+    if (snap.reasons && confidenceRef.current === DEFAULT_SIDEBAR.confidenceMin) {
+      setReasons(snap.reasons);
+    }
     if (snap.feedback?.feedback) setFeedback(snap.feedback.feedback);
-    if (snap.competitive !== undefined) setCompetitive(snap.competitive);
-    if (snap.comparisons !== undefined) setComparisons(snap.comparisons);
-    if (snap.survey_habits !== undefined) setSurveyHabits(snap.survey_habits);
-    if (snap.corpus_stats !== undefined) setCorpusStats(snap.corpus_stats);
+    if (snap.competitive) setCompetitive(snap.competitive);
+    if (snap.corpus_stats?.by_source?.length) setCorpusStats(snap.corpus_stats);
     if (snap.voice_preview?.length) setVoicePreview(snap.voice_preview);
-    if (snap.survey_pains?.reasons?.length) setSurveyPains(snap.survey_pains);
   }, []);
 
   const fetchLiveDashboard = useCallback(async () => {
@@ -199,26 +198,16 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
       reasonData,
       feedbackData,
       competitiveData,
-      comparisonData,
-      habitsData,
       scrapeData,
     ] = await Promise.all([
-      getFilters().catch((err) => {
-        setError(String(err));
-        return null;
-      }),
-      getRankedReasons({ ...filters, price_band: "" }, {
+      getFilters().catch(() => null),
+      getRankedReasons({ ...filters, segment: "", price_band: "" }, {
         minConfidence: confidenceRef.current,
         sources,
         intentType: "medium",
-      }).catch((err) => {
-        setError(String(err));
-        return null;
-      }),
-      listInsightFeedback().catch(() => ({ total: 0, feedback: [] as InsightFeedbackRecord[] })),
+      }).catch(() => null),
+      listInsightFeedback().catch(() => null),
       getCompetitiveAnalysis().catch(() => null),
-      getComparisons({ ...filters, segment: "", price_band: "" }).catch(() => null),
-      getSurveyHabits(filters.segment || undefined).catch(() => null),
       getCorpusStats().catch(() => null),
     ]);
     if (filterOptions) {
@@ -229,12 +218,10 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
         return current;
       });
     }
-    setReasons(reasonData ?? { run_version: null, reasons: [], scope_note: null });
-    setFeedback(feedbackData.feedback);
-    setCompetitive(competitiveData);
-    setComparisons(comparisonData);
-    setSurveyHabits(habitsData);
-    setCorpusStats(scrapeData);
+    if (reasonData) setReasons(reasonData);
+    if (feedbackData?.feedback) setFeedback(feedbackData.feedback);
+    if (competitiveData) setCompetitive(competitiveData);
+    if (scrapeData?.by_source?.length) setCorpusStats(scrapeData);
   }, [filters, sources]);
 
   const loadDashboard = useCallback(async () => {
@@ -252,8 +239,8 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     setLoading(true);
     try {
       await fetchLiveDashboard();
-    } catch (err) {
-      setError(String(err));
+    } catch {
+      /* Keep the snapshot if the live API is down. */
     } finally {
       setLoading(false);
     }
@@ -264,13 +251,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }, [loadDashboard]);
 
   useEffect(() => {
-    if (skipConfidenceReload.current) {
-      skipConfidenceReload.current = false;
-      return;
-    }
     let cancelled = false;
     setLoading(true);
-    void getRankedReasons({ ...filters, price_band: "" }, {
+    void getRankedReasons({ ...filters, segment: "", price_band: "" }, {
       minConfidence: appliedConfidence,
       sources,
       intentType: "medium",
@@ -281,8 +264,8 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
           setError(null);
         }
       })
-      .catch((err) => {
-        if (!cancelled) setError(String(err));
+      .catch(() => {
+        /* Client-side confidence filter still updates the matrix. */
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -320,8 +303,10 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }
 
   const filteredReasons = useMemo(() => {
-    return (reasons?.reasons ?? []).slice().sort((a, b) => b.evidence_volume - a.evidence_volume);
-  }, [reasons]);
+    return (reasons?.reasons ?? [])
+      .filter((item) => item.confidence == null || item.confidence + 1e-9 >= confidenceMin)
+      .sort((a, b) => b.evidence_volume - a.evidence_volume);
+  }, [reasons, confidenceMin]);
 
   const reasonBars = useMemo(() => {
     const top = filteredReasons.slice(0, 7);
@@ -356,10 +341,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     let cancelled = false;
     void Promise.all(
       voiceReasons.map(async (item) => {
-        const summary = await getEvidence(item.reason_category, { ...filters, price_band: "" });
+        const summary = await getEvidence(item.reason_category, { ...filters, segment: "", price_band: "" });
         const lines: VoicePreviewGroup["lines"] = [];
         const seen = new Set<string>();
         for (const excerpt of summary.excerpts) {
+          if (excerpt.source === "research") continue;
           const text = clipVoiceLine(excerpt.text);
           const key = text.toLowerCase();
           if (text.length < 24 || seen.has(key)) continue;
@@ -387,91 +373,41 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }, [voiceReasonKey, filters, voiceReasons]);
 
   const visibleCorpus = useMemo(() => {
-    if (!corpusStats) return null;
+    const stats = corpusStats ?? SNAPSHOT.corpus_stats;
+    if (!stats) return null;
     const selected = new Set(sources);
     const countBySource = new Map(
-      corpusStats.by_source.map((row) => [row.source, row] as const),
+      stats.by_source.map((row) => [row.source, row] as const),
     );
-    const scrapedRows = SOURCES.filter((item) => selected.has(item.id)).map((item) => {
-      const row = countBySource.get(item.id);
-      return {
-        source: item.id,
-        label: item.label,
-        documents: row?.documents ?? 0,
-        chunks: row?.chunks ?? 0,
-      };
-    });
+    const scrapedRows = SOURCES.filter((item) => selected.has(item.id))
+      .map((item) => {
+        const row = countBySource.get(item.id);
+        return {
+          source: item.id,
+          label: SOURCE_PLAIN[item.id] ?? item.label,
+          documents: row?.documents ?? 0,
+        };
+      })
+      .sort((a, b) => b.documents - a.documents);
     const scrapedDocuments = scrapedRows.reduce((sum, row) => sum + row.documents, 0);
-    const surveyRespondents = corpusStats.survey_respondents ?? 0;
-    const surveyInterviews = corpusStats.survey_interviews ?? 0;
+    const ranked = scrapedRows.filter((row) => row.documents > 0);
+    const topShare = scrapedDocuments && ranked[0]
+      ? Math.round((ranked[0].documents / scrapedDocuments) * 100)
+      : 0;
+    let scrapedMix = "Public reviews, videos, and posts.";
+    if (ranked[0] && ranked[1]) {
+      scrapedMix = `${topShare}% ${ranked[0].label}, then ${ranked[1].label}.`;
+    } else if (ranked[0]) {
+      scrapedMix = `All from ${ranked[0].label}.`;
+    } else if (scrapedRows.length) {
+      scrapedMix = "Turn a source back on in the filter rail to see counts.";
+    }
     return {
       scrapedDocuments,
-      scrapedLabels: scrapedRows.map((row) => row.label).join(", ") || "No sources selected",
-      surveyRespondents,
-      surveyInterviews,
+      scrapedMix,
       scrapedRows,
     };
   }, [corpusStats, sources]);
-
-  const ageComparison = useMemo(() => {
-    const items = comparisons?.items ?? [];
-    const respondents = comparisons?.respondent_counts ?? {};
-    return AGE_SEGMENTS.map((segment) => {
-      const allRows = items
-        .filter((item) => item.dimension === segment)
-        .sort((a, b) => b.evidence_volume - a.evidence_volume);
-      const rows = allRows.slice(0, 5);
-      const excerptTotal = allRows.reduce((sum, row) => sum + row.evidence_volume, 0);
-      const fromApi = Number(respondents[segment] ?? 0);
-      const origin = comparisons?.age_origin_counts?.[segment];
-      return {
-        segment,
-        label: formatReason(segment),
-        respondents: fromApi || (rows.length ? AGE_RESPONDENT_FALLBACK[segment] : 0),
-        surveyCount: origin?.survey ?? fromApi,
-        playStoreCount: origin?.play_store ?? 0,
-        otherScrapeCount: origin?.other_scrape ?? 0,
-        excerptTotal,
-        reasons: rows,
-      };
-    });
-  }, [comparisons]);
-
-  const agePainSplit = useMemo(() => {
-    const younger = new Set(
-      (ageComparison.find((cohort) => cohort.segment === "age_18_24")?.reasons ?? []).map(
-        (row) => row.reason_category,
-      ),
-    );
-    const older = new Set(
-      (ageComparison.find((cohort) => cohort.segment === "age_25_35")?.reasons ?? []).map(
-        (row) => row.reason_category,
-      ),
-    );
-    const shared = [...younger].filter((reason) => older.has(reason));
-    const youngerOnly = [...younger].filter((reason) => !older.has(reason));
-    const olderOnly = [...older].filter((reason) => !younger.has(reason));
-    const headline = "Shared pains, then what each age adds";
-    const youngCount = ageComparison.find((cohort) => cohort.segment === "age_18_24")?.surveyCount ?? 0;
-    const olderCount = ageComparison.find((cohort) => cohort.segment === "age_25_35")?.surveyCount ?? 0;
-    const surveyPeople = youngCount + olderCount || surveyHabits?.respondents || visibleCorpus?.surveyRespondents || 0;
-    const playStorePeople = sources.includes("play_store")
-      ? ageComparison.reduce((sum, cohort) => sum + (cohort.playStoreCount || 0), 0)
-      : 0;
-    const otherPeople = sources.some((id) => id !== "play_store")
-      ? ageComparison.reduce((sum, cohort) => sum + (cohort.otherScrapeCount || 0), 0)
-      : 0;
-    const ageSplit =
-      youngCount || olderCount ? ` ${youngCount} are 18–24, ${olderCount} are 25–35.` : "";
-    const sourceNote =
-      playStorePeople || otherPeople
-        ? `${surveyPeople} Google Form survey.` +
-          (playStorePeople ? ` ${playStorePeople} Play Store.` : "") +
-          (otherPeople ? ` ${otherPeople} other scrapes.` : "") +
-          ageSplit
-        : `${surveyPeople} Google Form survey.${ageSplit}`;
-    return { shared, youngerOnly, olderOnly, headline, sourceNote };
-  }, [ageComparison, surveyHabits, visibleCorpus, sources]);
 
   const categoryOptions = options?.categories?.length
     ? options.categories
@@ -494,7 +430,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   }, [reasonCategoryOptions, reasonCategory]);
 
   const activeFilterSummary = [
-    filters.segment ? formatReason(filters.segment) : "Age 18–24 + 25–35",
     filters.category ? formatReason(filters.category) : "All categories",
     view === "competitive" ? null : `${sources.length} source${sources.length === 1 ? "" : "s"}`,
     `≥${Math.round(confidenceMin * 100)}% conf.`,
@@ -531,12 +466,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
   };
 
   useEffect(() => {
-    if (filters.segment && !AGE_SEGMENTS.includes(filters.segment as (typeof AGE_SEGMENTS)[number])) {
+    if (filters.segment) {
       onFiltersChange({ ...filters, segment: "" });
     }
   }, [filters, onFiltersChange]);
 
-  const segmentOptions = AGE_SEGMENTS;
   const pmNoteCount = feedback.length
     ? `${feedback.length} note${feedback.length === 1 ? "" : "s"}`
     : "Optional";
@@ -626,34 +560,13 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
           {view !== "competitive" && <p className="wi-dash-active-summary">{activeFilterSummary}</p>}
           {view === "competitive" && (
             <p className="wi-dash-filter-hint">
-              Compare named competitors. Dashboard filters (age, category, source) do not apply here.
+              Compare named competitors. Dashboard filters (category, source) do not apply here.
             </p>
           )}
         </div>
 
         {view !== "competitive" && (
           <>
-        <div className="wi-dash-filter">
-          <span className="wi-dash-label">User segment</span>
-          <div className="wi-dash-pills">
-            {segmentOptions.map((value) => (
-              <button
-                key={value}
-                type="button"
-                className={`wi-dash-pill ${filters.segment === value ? "active" : ""}`}
-                onClick={() =>
-                  onFiltersChange({
-                    ...filters,
-                    segment: filters.segment === value ? "" : value,
-                  })
-                }
-              >
-                {formatReason(value)}
-              </button>
-            ))}
-          </div>
-        </div>
-
         <div className="wi-dash-filter">
           <label className="wi-dash-label" htmlFor="dash-category">
             Category
@@ -775,59 +688,29 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             {onAskQuestion && <QuestionsView onAsk={onAskQuestion} />}
 
             {visibleCorpus && (
-              <section className="wi-scrape-panel" aria-label="Survey vs scraped corpus">
-                <div className="wi-scrape-family wi-scrape-family--survey">
-                  <p className="wi-scrape-kicker">Surveys</p>
-                  <div className="wi-survey-stats">
-                    <div>
-                      <p className="wi-scrape-hero">{visibleCorpus.surveyRespondents.toLocaleString()}</p>
-                      <p className="wi-scrape-hero-label">Google Form survey</p>
-                    </div>
-                    {visibleCorpus.surveyInterviews > 0 && (
-                      <div>
-                        <p className="wi-scrape-hero">{visibleCorpus.surveyInterviews.toLocaleString()}</p>
-                        <p className="wi-scrape-hero-label">User interviews</p>
-                      </div>
-                    )}
-                  </div>
-                  {surveyPains && (surveyPains.reasons.length > 0 || surveyPains.quotes.length > 0) && (
-                    <div className="wi-survey-pains">
-                      <p className="wi-survey-pains-kicker">Pain points</p>
-                      <p className="wi-survey-pains-note">Tagged comments in the 42 forms + 6 interviews</p>
-                      {surveyPains.reasons.length > 0 && (
-                        <ul className="wi-survey-pain-tags">
-                          {surveyPains.reasons.map((item) => (
-                            <li key={item.reason_category}>
-                              <span>{formatReason(item.reason_category)}</span>
-                              <strong>{item.evidence_volume}</strong>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                      {surveyPains.quotes.length > 0 && (
-                        <ul className="wi-survey-quotes">
-                          {surveyPains.quotes.map((quote) => (
-                            <li key={`${quote.origin}-${quote.text}`}>
-                              <p>{quote.text}</p>
-                              <span>{quote.origin === "interview" ? "INTERVIEW" : "GOOGLE FORM"}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  )}
-                </div>
+              <section className="wi-scrape-panel" aria-label="Scraped shopper comments">
                 <div className="wi-scrape-family wi-scrape-family--scraped">
-                  <p className="wi-scrape-kicker">Scraped</p>
-                  <p className="wi-scrape-hero">{visibleCorpus.scrapedDocuments.toLocaleString()}</p>
-                  <p className="wi-scrape-hero-label">{visibleCorpus.scrapedLabels}</p>
+                  <div className="wi-scrape-hero-block">
+                    <p className="wi-scrape-kicker">Scraped</p>
+                    <p className="wi-scrape-hero">{visibleCorpus.scrapedDocuments.toLocaleString()}</p>
+                    <p className="wi-scrape-hero-unit">shopper comments</p>
+                    <p className="wi-scrape-hero-note">{visibleCorpus.scrapedMix}</p>
+                  </div>
                   <ul className="wi-scrape-sources">
                     {visibleCorpus.scrapedRows.map((row) => {
                       const share = visibleCorpus.scrapedDocuments
                         ? Math.round((row.documents / visibleCorpus.scrapedDocuments) * 100)
                         : 0;
+                      const color = SOURCE_COLORS[row.source] ?? "#94a3b8";
                       return (
-                        <li key={row.source} className="wi-scrape-source">
+                        <li
+                          key={row.source}
+                          className="wi-scrape-source"
+                          style={{
+                            ["--source-dot" as string]: color,
+                            ["--source-fill" as string]: color,
+                          }}
+                        >
                           <div className="wi-scrape-source-top">
                             <span>{row.label}</span>
                             <strong>
@@ -837,7 +720,7 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                           </div>
                           <div className="wi-scrape-source-track" aria-hidden="true">
                             <div
-                              className="wi-scrape-source-fill"
+                              className={`wi-scrape-source-fill${row.documents > 0 ? " wi-scrape-source-fill--on" : ""}`}
                               style={{ width: `${share}%` }}
                             />
                           </div>
@@ -881,11 +764,11 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
               </section>
             )}
 
-            <section className="wi-dash-card wi-age-compare">
+            <section className="wi-dash-card">
               <h2>Opportunity Matrix</h2>
               <p className="wi-kpi-sub" style={{ marginTop: "-0.55rem", marginBottom: "0.9rem" }}>
                 Full ranked list by evidence volume. {evidenceTotal.toLocaleString()} comments at ≥
-                {Math.round(appliedConfidence * 100)}% confidence. Share is of the rows shown.
+                {Math.round(confidenceMin * 100)}% confidence. Share is of the rows shown.
               </p>
               <div className="wi-opp-wrap">
                 <div className="wi-opp-table" role="table">
@@ -915,115 +798,10 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
                 </div>
                 {reasonBars.length === 0 && (
                   <p className="wi-reason-empty">
-                    Nothing in the current filters is at ≥{Math.round(appliedConfidence * 100)}%
+                    Nothing in the current filters is at ≥{Math.round(confidenceMin * 100)}%
                     confidence. Lower the slider or clear a source — most scores sit at 45–63%.
                   </p>
                 )}
-              </div>
-            </section>
-
-            <section className="wi-dash-card">
-              <div className="wi-age-compare-head">
-                <h2>18–24 vs 25–35</h2>
-                <p className="wi-age-lead">{agePainSplit.headline}</p>
-                <p className="wi-age-source-note">{agePainSplit.sourceNote}</p>
-              </div>
-
-              <div className="wi-age-pain-board">
-                {agePainSplit.shared.length > 0 && (
-                  <div className="wi-age-pain-row wi-age-pain-row--shared">
-                    <p className="wi-age-pain-kicker">
-                      Shared
-                      <span>{agePainSplit.shared.length}</span>
-                    </p>
-                    <ul className="wi-shared-pains">
-                      {agePainSplit.shared.map((reason) => (
-                        <li key={reason}>{formatReason(reason)}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {agePainSplit.youngerOnly.length > 0 && (
-                  <div className="wi-age-pain-row">
-                    <p className="wi-age-pain-kicker">
-                      18–24 also
-                      <span>{agePainSplit.youngerOnly.length}</span>
-                    </p>
-                    <ul className="wi-shared-pains">
-                      {agePainSplit.youngerOnly.map((reason) => (
-                        <li key={reason}>{formatReason(reason)}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {agePainSplit.olderOnly.length > 0 && (
-                  <div className="wi-age-pain-row">
-                    <p className="wi-age-pain-kicker">
-                      25–35 also
-                      <span>{agePainSplit.olderOnly.length}</span>
-                    </p>
-                    <ul className="wi-shared-pains">
-                      {agePainSplit.olderOnly.map((reason) => (
-                        <li key={reason}>{formatReason(reason)}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              <div className="wi-age-compare-grid">
-                {ageComparison.map((cohort) => {
-                  const selected = filters.segment === cohort.segment;
-                  const otherSelected = Boolean(filters.segment) && !selected;
-                  return (
-                    <article
-                      key={cohort.segment}
-                      className={`wi-age-cohort${selected ? " wi-age-cohort--active" : ""}${otherSelected ? " wi-age-cohort--muted" : ""}`}
-                    >
-                      <header className="wi-age-cohort-head">
-                        <h3>{cohort.label}</h3>
-                        <span className="wi-age-cohort-vol">
-                          {cohort.surveyCount > 0 && <span>{cohort.surveyCount} survey</span>}
-                          {cohort.playStoreCount > 0 && sources.includes("play_store") && (
-                            <span>{cohort.playStoreCount} Play Store</span>
-                          )}
-                          {cohort.otherScrapeCount > 0 &&
-                            sources.some((id) => id !== "play_store") && (
-                            <span>{cohort.otherScrapeCount} other</span>
-                          )}
-                        </span>
-                      </header>
-                      <div className="wi-age-reasons">
-                        {cohort.reasons.length === 0 ? (
-                          <p className="muted">No reasons yet</p>
-                        ) : (
-                          cohort.reasons.map((row) => (
-                            <div key={row.reason_category} className="wi-age-reason-row">
-                              <span className="wi-pain-name">{formatReason(row.reason_category)}</span>
-                              <strong>
-                                {cohort.excerptTotal
-                                  ? `${Math.round((row.evidence_volume / cohort.excerptTotal) * 100)}%`
-                                  : "—"}
-                              </strong>
-                            </div>
-                          ))
-                        )}
-                      </div>
-                      <button
-                        type="button"
-                        className={`wi-dash-hint${selected ? " active" : ""}`}
-                        onClick={() =>
-                          onFiltersChange({
-                            ...filters,
-                            segment: selected ? "" : cohort.segment,
-                          })
-                        }
-                      >
-                        {selected ? "Clear filter" : "Use this filter"}
-                      </button>
-                    </article>
-                  );
-                })}
               </div>
             </section>
 

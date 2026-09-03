@@ -56,8 +56,8 @@ const QUESTION_GROUPS: QuestionGroup[] = [
     ],
   },
   {
-    id: "segments",
-    title: "Segments & unmet needs",
+    id: "needs",
+    title: "Unmet needs",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="9" cy="8" r="3" />
@@ -67,7 +67,6 @@ const QUESTION_GROUPS: QuestionGroup[] = [
       </svg>
     ),
     questions: [
-      "How do these behaviors differ across user segments?",
       "What unmet needs emerge consistently across user conversations?",
     ],
   },

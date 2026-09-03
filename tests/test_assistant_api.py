@@ -17,7 +17,7 @@ def test_list_key_questions():
     resp = client.get("/assistant/questions")
     assert resp.status_code == 200
     body = resp.json()
-    assert len(body["questions"]) == 10
+    assert len(body["questions"]) == 9
     assert "wishlist" in body["questions"][0].lower()
 
 

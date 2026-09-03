@@ -16,15 +16,6 @@ export default function FilterBar({ filters, options, onChange, onClear }: Props
   return (
     <section className="filters">
       <label>
-        Segment
-        <select value={filters.segment} onChange={(e) => update("segment", e.target.value)}>
-          <option value="">All segments</option>
-          {options?.segments.map((value) => (
-            <option key={value} value={value}>{formatLabel(value)}</option>
-          ))}
-        </select>
-      </label>
-      <label>
         Category
         <select value={filters.category} onChange={(e) => update("category", e.target.value)}>
           <option value="">All categories</option>

@@ -6,9 +6,11 @@ import re
 from dataclasses import dataclass
 
 from assistant.query import is_age_segment_compare_question
+from assistant.questions import is_key_business_question
 from assistant.schemas import Citation
 from common.config import get_settings
-from storage.schemas import RetrievedChunk
+from common.models import SourceType
+from storage.schemas import RetrievalFilters, RetrievedChunk
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,9 +76,13 @@ def assess_evidence(
     # Topical similarity is not enough: refuse when the question asserts
     # specific entities/claims that never appear in retrieved evidence
     # (e.g. "left-handed users … on Tuesdays").
-    # Age-cohort compare questions are anaphoric ("these behaviors") and
-    # should be judged on retrieved age-tagged evidence, not those verbs.
-    if question and not is_age_segment_compare_question(question):
+    # Starter PM questions and age-cohort compares are anaphoric and should
+    # be judged on retrieved shopper evidence, not those verbs.
+    if (
+        question
+        and not is_age_segment_compare_question(question)
+        and not is_key_business_question(question)
+    ):
         distinctive = distinctive_question_terms(question)
         if distinctive:
             evidence_tokens = _evidence_token_set(chunks)
@@ -112,10 +118,10 @@ def assess_evidence(
 
 def build_insufficient_evidence_answer(question: str, assessment: EvidenceAssessment) -> str:
     """Return an honest refusal when evidence is too weak."""
+    del question, assessment
     return (
-        "I cannot provide a grounded answer to this question with the available corpus. "
-        f"{assessment.reason} "
-        "Try broadening the question, removing filters, or adding more source data."
+        "I don't have a clear enough match in shopper comments to answer that yet. "
+        "Try asking why people save items, what stops a purchase, or how they compare products."
     )
 
 
@@ -201,6 +207,8 @@ _DOMAIN_TERMS: frozenset[str] = frozenset(
         "saved items",
         "saving items",
         "save items",
+        "unmet needs",
+        "user conversations",
         # Common fashion descriptors that appear in Indian e-commerce questions
         "ethnic",
         "kurta",
@@ -492,6 +500,37 @@ _CLAIM_FRAME_TERMS: frozenset[str] = frozenset(
         "keep",
         "keeps",
         "keeping",
+        "unmet",
+        "emerge",
+        "emerges",
+        "emerging",
+        "consistently",
+        "conversation",
+        "conversations",
+        "uncertainty",
+        "uncertainties",
+        "remain",
+        "remains",
+        "remaining",
+        "identify",
+        "identified",
+        "postpone",
+        "postponed",
+        "postponing",
+        "genuine",
+        "mechanism",
+        "bookmarking",
+        "role",
+        "validation",
+        "information",
+        "seek",
+        "seeking",
+        "outside",
+        "shortlisted",
+        "shortlisting",
+        "eventually",
+        "consistently",
+        "likes",
     }
 )
 
@@ -551,6 +590,8 @@ def question_in_scope(question: str) -> bool:
     """
     lowered = question.lower()
     # Canned segment Qs are anaphoric ("these behaviors") and omit "wishlist".
+    if is_key_business_question(question):
+        return True
     if is_age_segment_compare_question(question):
         return True
     if any(" " in term and term in lowered for term in _DOMAIN_TERMS):
@@ -565,13 +606,65 @@ def question_in_scope(question: str) -> bool:
 
 def build_out_of_scope_answer(question: str) -> str:
     """Return an honest refusal when a question is outside the assistant's domain."""
+    del question
     return (
-        "That question is outside what this assistant can answer. I only cover "
-        "wishlist behavior, purchase conversion, and fashion e-commerce insights "
-        "(e.g. Myntra, Nykaa, Ajio) grounded in shopper feedback. "
-        "Try asking about why users wishlist items, what blocks purchases, or how "
-        "platforms compare."
+        "I can help with wishlist and shopping questions — for example why people "
+        "save items, what blocks a purchase, or how Myntra compares with Nykaa and Ajio."
     )
+
+
+PUBLIC_SHOPPER_SOURCES = frozenset(
+    {
+        SourceType.play_store,
+        SourceType.youtube,
+        SourceType.reddit,
+        SourceType.product_review,
+        SourceType.social,
+    }
+)
+
+
+def is_public_shopper_chunk(chunk: RetrievedChunk) -> bool:
+    """True for Play Store / Reddit / YouTube / review / social lines.
+
+    Survey forms and interviews can still inform the answer, but they should
+    not appear in the evidence drawer as raw Q&A.
+    """
+    if chunk.source not in PUBLIC_SHOPPER_SOURCES:
+        return False
+    ref = str(getattr(chunk, "source_ref", "") or "").lower()
+    return "interview" not in ref
+
+
+def public_shopper_filters() -> RetrievalFilters:
+    """Retrieval filter that only returns public shopper-comment sources."""
+    return RetrievalFilters(sources=[item.value for item in PUBLIC_SHOPPER_SOURCES])
+
+
+def append_public_chunks(
+    primary: list[RetrievedChunk],
+    extra: list[RetrievedChunk],
+    *,
+    min_public: int = 3,
+) -> list[RetrievedChunk]:
+    """Keep original rank order and append extra public comments for citation chips."""
+    merged = list(primary)
+    seen = {str(chunk.chunk_id) for chunk in merged}
+    public_count = sum(1 for chunk in merged if is_public_shopper_chunk(chunk))
+    if public_count >= min_public:
+        return merged
+    for chunk in extra:
+        if public_count >= min_public:
+            break
+        if not is_public_shopper_chunk(chunk):
+            continue
+        key = str(chunk.chunk_id)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(chunk)
+        public_count += 1
+    return merged
 
 
 def citations_from_chunks(
@@ -579,10 +672,12 @@ def citations_from_chunks(
     *,
     max_citations: int = 5,
 ) -> list[Citation]:
-    """Build citation objects from retrieved chunks."""
+    """Build citation objects from public shopper comments only."""
     citations: list[Citation] = []
-    for chunk in chunks[:max_citations]:
-        excerpt = chunk.text.strip().replace("\n", " ")
+    for chunk in chunks:
+        if not is_public_shopper_chunk(chunk):
+            continue
+        excerpt = re.sub(r"\s+", " ", chunk.text.strip())
         if len(excerpt) > 240:
             excerpt = excerpt[:237] + "..."
         citations.append(
@@ -593,6 +688,8 @@ def citations_from_chunks(
                 score=chunk.score,
             )
         )
+        if len(citations) >= max_citations:
+            break
     return citations
 
 
@@ -626,19 +723,13 @@ def build_limitations(
     reason_categories: list[str],
 ) -> str:
     """Describe source coverage caveats for the answer."""
-    sources = sorted({chunk.source.value for chunk in chunks})
-    source_text = ", ".join(sources) if sources else "none"
-
-    parts = [
-        "Answers are based on public/research feedback only (Phase 1); "
-        "they are directional, not ground-truth conversion data.",
-        f"Evidence sources in this answer: {source_text}.",
-    ]
-    if run_version:
-        parts.append(f"Analytics run version: {run_version}.")
-    if reason_categories:
-        parts.append("Question hints at categories: " + ", ".join(reason_categories) + ".")
-    if len(chunks) < 3:
-        parts.append("Limited number of supporting excerpts; treat conclusions cautiously.")
-
-    return " ".join(parts)
+    del run_version, reason_categories
+    public = [chunk for chunk in chunks if is_public_shopper_chunk(chunk)]
+    if not public:
+        return "This is based on shopper comments, not internal purchase numbers. Treat it as directional."
+    if len(public) < 3:
+        return (
+            "This is based on a small set of public shopper comments, not internal "
+            "purchase numbers. Treat it as directional."
+        )
+    return "This is based on public shopper comments, not internal purchase numbers. Treat it as directional."

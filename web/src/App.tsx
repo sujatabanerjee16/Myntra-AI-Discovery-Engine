@@ -36,12 +36,12 @@ function FashionBanner() {
         </p>
         <ul className="fashion-hero-highlights">
           <li>
-            <strong>2 cohorts</strong>
-            <span>Age 18–24 vs 25–35</span>
+            <strong>Scraped evidence</strong>
+            <span>Play Store, Reddit, reviews</span>
           </li>
           <li>
-            <strong>Primary research</strong>
-            <span>Wishlist + habits surveys</span>
+            <strong>Opportunity matrix</strong>
+            <span>Why a save does not buy</span>
           </li>
           <li>
             <strong>Grounded answers</strong>

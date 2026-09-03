@@ -25,8 +25,16 @@ def _keyword_overlap(query: str, text: str) -> float:
 def _matches_filters(chunk: dict, filters: RetrievalFilters | None) -> bool:
     if filters is None:
         return True
-    if filters.source is not None and chunk["source"] != filters.source.value:
+    source = chunk.get("source")
+    if hasattr(source, "value"):
+        source = source.value
+    source = str(source or "").lower()
+    if filters.source is not None and source != filters.source.value:
         return False
+    if filters.sources:
+        allowed = {str(item).lower() for item in filters.sources}
+        if source not in allowed:
+            return False
     if filters.category is not None and chunk.get("category") != filters.category:
         return False
     if filters.occasion is not None and chunk.get("occasion") != filters.occasion:

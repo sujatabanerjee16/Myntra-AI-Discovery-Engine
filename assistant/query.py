@@ -7,6 +7,7 @@ import re
 from analytics.intent import detect_intent
 from analytics.platforms import tag_platforms
 from analytics.taxonomy import REASON_CATEGORIES, classify_reason
+from assistant.questions import is_key_business_question
 from assistant.schemas import ParsedQuery
 from common.models import SourceType
 from storage.schemas import RetrievalFilters
@@ -24,14 +25,6 @@ _SOURCE_ALIASES: dict[str, SourceType] = {
 }
 
 _SEGMENT_KEYWORDS: dict[str, str] = {
-    "age 18-24": "age_18_24",
-    "18-24": "age_18_24",
-    "18 to 24": "age_18_24",
-    "younger shoppers": "age_18_24",
-    "age 25-35": "age_25_35",
-    "25-35": "age_25_35",
-    "25-34": "age_25_35",
-    "25 to 35": "age_25_35",
     "price sensitive": "price_sensitive",
     "budget": "price_sensitive",
     "quality focused": "quality_focused",
@@ -173,8 +166,11 @@ def understand_query(
     if fashion_platforms:
         search_query = f"{normalized} wishlist {' '.join(fashion_platforms)}"
     if compare_ages:
+        search_query = f"{search_query} research survey interview wishlist"
+    if is_key_business_question(normalized):
         search_query = (
-            f"{search_query} age band 18-24 age band 25-35 research survey wishlist"
+            f"{search_query} wishlist purchase fit size price review sale "
+            "photos compare"
         )
 
     return ParsedQuery(
@@ -183,5 +179,5 @@ def understand_query(
         filters=filters,
         platforms=fashion_platforms or None,
         reason_categories=reason_categories,
-        intent_hint="age_segments" if compare_ages else intent_type.value,
+        intent_hint=intent_type.value,
     )

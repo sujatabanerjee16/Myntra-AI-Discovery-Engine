@@ -18,7 +18,7 @@ def test_boilerplate_connectors_do_not_dilute_grounded_content():
 
 def test_refusal_scores_one_when_expected():
     score = score_answer_faithfulness(
-        "I cannot provide a grounded answer to this question with the available corpus.",
+        "I don't have a clear enough match in shopper comments to answer that yet.",
         evidence_texts=[],
         should_refuse=True,
     )

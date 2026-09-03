@@ -163,7 +163,7 @@ def test_truncate_at_word_drops_leading_fragment():
     assert excerpt.startswith("a wishlisted")
 
 
-def test_user_segment_question_compares_age_cohorts():
+def test_user_segment_question_uses_research_without_naming_cohorts():
     young = _chunk(
         "Q: Age band\nA: 18-24\n\nQ: What usually stops you from buying wishlist items?\n"
         "A: I am waiting for a sale, I am waiting for the right occasion"
@@ -174,31 +174,22 @@ def test_user_segment_question_compares_age_cohorts():
         "A: The price is too high, I am unsure about the fit"
     )
     older.segment = "age_25_35"
-    aggregates = AggregateContext(
-        run_version="test",
-        segment_comparisons=[
-            {"dimension": "age_18_24", "reason_category": "timing_occasion", "evidence_volume": 20},
-            {"dimension": "age_25_35", "reason_category": "fit_sizing_uncertainty", "evidence_volume": 20},
-            {"dimension": "age_25_35", "reason_category": "price_sensitivity_waiting", "evidence_volume": 12},
-        ],
-    )
     answer = synthesize_grounded_answer(
-        "How do these behaviors differ across user segments?",
+        "What unmet needs emerge consistently across user conversations?",
         [young, older],
-        aggregates,
     )
     lowered = answer.lower()
-    assert "18–24" in answer or "18-24" in lowered
-    assert "25–35" in answer or "25-35" in lowered
-    assert "price sensitive" not in lowered
-    assert "quality concerned" not in lowered
+    assert "sale" in lowered or "occasion" in lowered or "price" in lowered or "fit" in lowered
+    assert "18–24" not in answer and "18-24" not in lowered
+    assert "25–35" not in answer and "25-35" not in lowered
 
 
 def test_understand_query_does_not_lock_segment_compare():
     assert is_age_segment_compare_question("How do these behaviors differ across user segments?")
     parsed = understand_query("How do these behaviors differ across user segments?")
-    assert parsed.intent_hint == "age_segments"
+    assert parsed.intent_hint != "age_segments"
     assert parsed.filters is None or parsed.filters.segment is None
+    assert "research" in parsed.search_query.lower()
 
 
 def test_synthesize_blockers_preserves_capital_i():
@@ -208,3 +199,35 @@ def test_synthesize_blockers_preserves_capital_i():
     )
     assert " i " not in f" {answer} "
     assert "I am waiting" in answer or "I do not need" in answer or "I change" in answer
+
+
+def test_key_questions_are_plain_english_and_capitalized():
+    import re
+
+    from assistant.questions import KEY_QUESTIONS
+
+    chunks = [_chunk(_SURVEY_TEXT), _chunk(_SURVEY_TEXT_2, score=0.62)]
+    banned = ("corpus", "retrieved", "grounded", "aggregate analytics", "18-24", "25-35")
+    for question in KEY_QUESTIONS:
+        answer = synthesize_grounded_answer(question, chunks)
+        assert answer, question
+        letter = next((char for char in answer if char.isalpha()), "")
+        assert letter.isupper(), answer
+        for sentence in re.split(r"(?<=[.!?])\s+", answer):
+            token = next((char for char in sentence if char.isalpha()), "")
+            assert not token or token.isupper(), f"{question} -> {sentence}"
+        lowered = answer.lower().replace("–", "-").replace("—", "-")
+        for phrase in banned:
+            assert phrase not in lowered, f"{phrase} in {answer}"
+
+
+def test_strip_answer_meta_drops_inline_confidence():
+    from assistant.synthesis import strip_answer_meta
+
+    cleaned = strip_answer_meta(
+        "The most cited blocker is high price (confidence 0.84, volume 397). "
+        "Price sensitivity is also common."
+    )
+    assert "confidence" not in cleaned.lower()
+    assert "volume" not in cleaned.lower()
+    assert "high price" in cleaned.lower()

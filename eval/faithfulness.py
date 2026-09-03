@@ -36,10 +36,13 @@ def _is_refusal(answer: str) -> bool:
     lowered = answer.lower()
     markers = (
         "cannot provide a grounded answer",
+        "don't have a clear enough match",
+        "do not have a clear enough match",
         "insufficient evidence",
         "not enough evidence",
         "no relevant evidence",
         "outside what this assistant",
+        "i can help with wishlist",
     )
     return any(marker in lowered for marker in markers)
 

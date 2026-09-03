@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -103,11 +105,8 @@ def build_grounded_context(
         lines = ["## Ranked non-conversion reasons (aggregate facts)"]
         for item in aggregates.ranked_reasons:
             lines.append(
-                "- {category}: volume={volume}, confidence={confidence}, sources={sources}".format(
+                "- {category} (common save-not-buy reason)".format(
                     category=item["reason_category"],
-                    volume=item["evidence_volume"],
-                    confidence=item.get("confidence"),
-                    sources=", ".join(item.get("sources") or []),
                 )
             )
         sections.append("\n".join(lines))
@@ -116,23 +115,20 @@ def build_grounded_context(
         lines = ["## Emerging themes (aggregate facts)"]
         for item in aggregates.theme_clusters:
             lines.append(
-                "- {label} ({category}): volume={volume}, confidence={confidence}".format(
+                "- {label} ({category})".format(
                     label=item["label"],
                     category=item.get("reason_category"),
-                    volume=item["evidence_volume"],
-                    confidence=item.get("confidence"),
                 )
             )
         sections.append("\n".join(lines))
 
     if aggregates.segment_comparisons:
-        lines = ["## Age cohort comparison (Age 18–24 vs Age 25–35 only)"]
+        lines = ["## Additional shopper evidence (aggregate facts)"]
         for item in aggregates.segment_comparisons[:10]:
             lines.append(
-                "- {segment}: {reason} volume={volume}".format(
+                "- {segment}: {reason}".format(
                     segment=item.get("dimension"),
                     reason=item.get("reason_category"),
-                    volume=item.get("evidence_volume"),
                 )
             )
         sections.append("\n".join(lines))
@@ -156,11 +152,11 @@ def build_grounded_context(
         lines = ["## Retrieved evidence excerpts"]
         for index, chunk in enumerate(chunks, start=1):
             excerpt = chunk.text.strip().replace("\n", " ")
+            excerpt = re.sub(r"Age band:\s*[\d\s\-–]+[.\s]*", "", excerpt, flags=re.I)
             if len(excerpt) > 400:
                 excerpt = excerpt[:397] + "..."
             lines.append(
-                f"[{index}] chunk_id={chunk.chunk_id} source={chunk.source.value} "
-                f"score={chunk.score}: {excerpt}"
+                f"[{index}] source={chunk.source.value}: {excerpt}"
             )
         sections.append("\n".join(lines))
 

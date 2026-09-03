@@ -23,6 +23,18 @@ def test_apply_source_filter():
     assert "research" in sql
 
 
+def test_apply_sources_allowlist():
+    stmt = select(Chunk, Document).join(Document)
+    filtered = apply_retrieval_filters(
+        stmt,
+        RetrievalFilters(sources=["reddit", "play_store"]),
+    )
+    sql = str(filtered.compile(compile_kwargs={"literal_binds": True}))
+    assert "documents.source" in sql
+    assert "reddit" in sql
+    assert "play_store" in sql
+
+
 def test_apply_metadata_filters():
     stmt = select(Chunk, Document).join(Document)
     filtered = apply_retrieval_filters(

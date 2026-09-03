@@ -58,7 +58,7 @@ def test_retrieval_hit_at_k():
 
 def test_faithfulness_refusal_scoring():
     score = score_answer_faithfulness(
-        "I cannot provide a grounded answer to this question with the available corpus.",
+        "I don't have a clear enough match in shopper comments to answer that yet.",
         [],
         should_refuse=True,
     )

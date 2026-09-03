@@ -43,6 +43,8 @@ _INTENT_KEYWORDS: dict[str, tuple[str, ...]] = {
         "friction",
         "do not buy",
         "does not convert",
+        "postpone",
+        "postponing",
     ),
     "intent": (
         "purchase intent",
@@ -52,6 +54,17 @@ _INTENT_KEYWORDS: dict[str, tuple[str, ...]] = {
         "active",
         "real intent",
         "casual",
+        "genuine purchase",
+    ),
+    "unmet_needs": (
+        "unmet needs",
+        "user conversations",
+        "across user conversations",
+    ),
+    "uncertainties": (
+        "uncertainties remain",
+        "identified a product",
+        "uncertainties",
     ),
     "age_segments": (
         "user segment",
@@ -178,13 +191,10 @@ def parse_qa_pairs(text: str) -> list[tuple[str, str]]:
 
 def _detect_intent(question: str) -> str:
     lowered = question.lower()
-    # Age-cohort compare must win over generic "differ"/"compare" wording.
-    if any(keyword in lowered for keyword in _INTENT_KEYWORDS["age_segments"]):
-        if any(token in lowered for token in ("differ", "compare", "versus", "across", "between", "segment")):
-            return "age_segments"
-    for intent, keywords in _INTENT_KEYWORDS.items():
+    for intent in ("unmet_needs", "uncertainties", "add_motivation", "blockers", "intent", "age_segments"):
         if intent == "age_segments":
             continue
+        keywords = _INTENT_KEYWORDS.get(intent, ())
         if any(keyword in lowered for keyword in keywords):
             return intent
     return "general"
@@ -266,9 +276,49 @@ def _sentence(text: str) -> str:
     cleaned = text.strip()
     if not cleaned:
         return ""
+    cleaned = capitalize_leading(cleaned)
     if cleaned[-1] not in ".!?":
         cleaned += "."
     return cleaned
+
+
+def capitalize_leading(text: str) -> str:
+    """Uppercase the first letter in a phrase, even after a quote."""
+    for index, char in enumerate(text):
+        if char.isalpha():
+            return text[:index] + char.upper() + text[index + 1 :]
+    return text
+
+
+def capitalize_sentences(text: str) -> str:
+    """Ensure each sentence starts with a capital letter."""
+    cleaned = re.sub(r"\s+", " ", text.strip())
+    if not cleaned:
+        return cleaned
+    parts = re.split(r"(?<=[.!?])\s+", cleaned)
+    return " ".join(capitalize_leading(part.strip()) for part in parts if part.strip())
+
+
+_ANSWER_META_RE = re.compile(
+    r"\s*\(\s*confidence\s*[\d.]+(?:\s*,\s*volume\s*[\d.]+)?\s*\)",
+    re.IGNORECASE,
+)
+_ANSWER_META_BARE_RE = re.compile(
+    r"\bconfidence\s*[\d.]+(?:\s*,\s*volume\s*[\d.]+)",
+    re.IGNORECASE,
+)
+_ANSWER_ANALYTICS_RE = re.compile(
+    r"\s*Aggregate analytics rank[^.]*\.",
+    re.IGNORECASE,
+)
+
+
+def strip_answer_meta(text: str) -> str:
+    """Drop copied confidence/volume stats from the visible answer."""
+    cleaned = _ANSWER_META_RE.sub("", text)
+    cleaned = _ANSWER_META_BARE_RE.sub("", cleaned)
+    cleaned = _ANSWER_ANALYTICS_RE.sub("", cleaned)
+    return re.sub(r"\s{2,}", " ", cleaned).strip()
 
 
 _PRONOUN_I_RE = re.compile(r"\bi\b")
@@ -318,8 +368,8 @@ def _synthesize_add_motivation(signals: SurveySignals) -> list[str]:
             detail = f"saved items often remain for {_humanize_phrase(retention[0])}"
         sentences.append(
             _sentence(
-                f"Research respondents indicate {detail}, reflecting delayed decision-making, "
-                "comparison, and future revisits rather than immediate checkout"
+                f"Shoppers say {detail}, which points to delayed decisions, "
+                "comparison, and later revisits rather than buying immediately"
             )
         )
     else:
@@ -415,9 +465,9 @@ def _synthesize_intent(signals: SurveySignals, aggregates: AggregateContext | No
         if active is not None and passive is not None:
             sentences.append(
                 _sentence(
-                    f"Evidence distinguishes active shortlist behavior from passive bookmarking, "
-                    f"with {category} showing {active} active-shortlist and {passive} "
-                    "passive-bookmark signals in aggregate data"
+                    "Some saves look close to a buy, while others are just bookmarks "
+                    f"for later. {_humanize_reason(category).capitalize()} is the "
+                    "strongest pattern in that mix"
                 )
             )
 
@@ -470,7 +520,28 @@ def _chunk_age_band(chunk: RetrievedChunk) -> str | None:
     return None
 
 
+_REASON_PLAIN = {
+    "price_sensitivity_waiting": "price waiting",
+    "logistics_friction": "delivery hassle",
+    "fit_sizing_uncertainty": "fit and size doubt",
+    "external_comparison": "checking other apps",
+    "quality_trust_doubt": "quality doubts",
+    "review_trust": "proof and photos",
+    "timing_occasion": "waiting for an occasion",
+    "styling_decision_uncertainty": "not being sure how it will look",
+    "passive_bookmarking": "saving without a plan to buy",
+}
+
+_SNIPPET_PREFIX_RE = re.compile(
+    r"^(?:ios app store review|public ig reply|public thread|comment on [^:]+:)\s*",
+    re.IGNORECASE,
+)
+
+
 def _humanize_reason(value: str) -> str:
+    key = value.replace(" ", "_").strip().lower()
+    if key in _REASON_PLAIN:
+        return _REASON_PLAIN[key]
     return value.replace("_", " ").strip()
 
 
@@ -558,14 +629,14 @@ def _synthesize_general(
 
     if aggregates and aggregates.ranked_reasons:
         categories = [
-            str(item.get("reason_category", "")).replace("_", " ")
+            _humanize_reason(str(item.get("reason_category", "")))
             for item in aggregates.ranked_reasons[:3]
             if item.get("reason_category")
         ]
         if categories:
             sentences.append(
                 _sentence(
-                    "Across retrieved evidence, recurring themes include "
+                    "The same themes keep showing up: "
                     f"{_as_mid_sentence(_format_join(categories))}"
                 )
             )
@@ -589,20 +660,91 @@ def _synthesize_general(
         )
 
     for snippet in signals.plain_text_snippets[:2]:
-        excerpt = _truncate_at_word(snippet, 180)
-        if excerpt:
+        excerpt = _SNIPPET_PREFIX_RE.sub("", snippet).strip(" -—")
+        excerpt = _truncate_at_word(excerpt, 160)
+        if excerpt and len(excerpt.split()) >= 6:
             sentences.append(
-                _sentence(f"Public feedback also notes that {_as_mid_sentence(excerpt)}")
+                _sentence(f"Shoppers also say {_as_mid_sentence(excerpt)}")
             )
 
     if not sentences:
         sentences.append(
             _sentence(
-                "Retrieved evidence points to wishlist use as a save-for-later step "
-                "with purchase delayed by price, fit, and comparison factors"
+                "Wishlist is mostly a save-for-later step. Price, fit, and comparison "
+                "are what delay the buy"
             )
         )
 
+    return sentences[:5]
+
+
+def _synthesize_unmet_needs(signals: SurveySignals, aggregates: AggregateContext | None) -> list[str]:
+    sentences: list[str] = [
+        _sentence(
+            "Shoppers keep asking for more certainty before they buy a saved item: "
+            "a fair price, a reliable fit, and proof the product looks like the photos"
+        )
+    ]
+    blockers = _top_values(signals.fields.get("blockers", Counter()), limit=3)
+    if blockers:
+        sentences.append(
+            _sentence(
+                "The gaps they name most often are "
+                f"{_as_mid_sentence(_format_join(blockers))}"
+            )
+        )
+    improvements = _top_values(signals.fields.get("improvement_suggestions", Counter()), limit=3)
+    if improvements:
+        sentences.append(
+            _sentence(
+                "What they want Myntra to add or fix is "
+                f"{_as_mid_sentence(_format_join(improvements))}"
+            )
+        )
+    if aggregates and aggregates.ranked_reasons:
+        categories = [
+            _humanize_reason(str(item.get("reason_category", "")))
+            for item in aggregates.ranked_reasons[:3]
+            if item.get("reason_category")
+        ]
+        if categories:
+            sentences.append(
+                _sentence(
+                    "Those needs show up as "
+                    f"{_as_mid_sentence(_format_join(categories))}"
+                )
+            )
+    return sentences[:5]
+
+
+def _synthesize_uncertainties(signals: SurveySignals, aggregates: AggregateContext | None) -> list[str]:
+    sentences: list[str] = [
+        _sentence(
+            "Even after someone likes a product, they still hesitate on fit, "
+            "whether the photos are honest, and whether the price will drop"
+        )
+    ]
+    blockers = _top_values(signals.fields.get("blockers", Counter()), limit=3)
+    if blockers:
+        sentences.append(
+            _sentence(
+                "The leftover doubts they mention are "
+                f"{_as_mid_sentence(_format_join(blockers))}"
+            )
+        )
+    if aggregates and aggregates.ranked_reasons:
+        labels = [
+            _humanize_reason(str(item.get("reason_category", "")))
+            for item in aggregates.ranked_reasons[:3]
+            if item.get("reason_category")
+        ]
+        if labels:
+            sentences.append(
+                _sentence(
+                    "Those doubts cluster around "
+                    f"{_as_mid_sentence(_format_join(labels))}"
+                )
+            )
     return sentences[:5]
 
 
@@ -610,15 +752,10 @@ def _append_aggregate_context(sentences: list[str], aggregates: AggregateContext
     if not aggregates or not aggregates.ranked_reasons or len(sentences) >= 6:
         return
     top = aggregates.ranked_reasons[0]
-    category = str(top.get("reason_category", "")).replace("_", " ")
-    confidence = top.get("confidence")
-    volume = top.get("evidence_volume")
-    if category and confidence is not None:
+    category = _humanize_reason(str(top.get("reason_category", "")).strip())
+    if category:
         sentences.append(
-            _sentence(
-                f"Aggregate analytics rank {category} among the strongest non-conversion "
-                f"drivers (confidence {float(confidence):.2f}, volume {volume})"
-            )
+            _sentence(f"The most common reason a save does not become a buy is {category}")
         )
 
 
@@ -629,22 +766,23 @@ def synthesize_grounded_answer(
 ) -> str:
     """Synthesize a concise PM-ready answer from retrieved evidence."""
     if not chunks:
-        return "No evidence excerpts were available to synthesize an answer."
+        return "No shopper comments were available to build an answer."
 
     signals = collect_survey_signals(chunks)
     intent = _detect_intent(question)
 
-    if intent == "age_segments":
-        sentences = _synthesize_age_segments(chunks, aggregates)
-        return " ".join(sentences[:6])
     if intent == "add_motivation":
         sentences = _synthesize_add_motivation(signals)
     elif intent == "blockers":
         sentences = _synthesize_blockers(signals)
     elif intent == "intent":
         sentences = _synthesize_intent(signals, aggregates)
+    elif intent == "unmet_needs":
+        sentences = _synthesize_unmet_needs(signals, aggregates)
+    elif intent == "uncertainties":
+        sentences = _synthesize_uncertainties(signals, aggregates)
     else:
         sentences = _synthesize_general(signals, aggregates)
 
     _append_aggregate_context(sentences, aggregates)
-    return " ".join(sentences[:6])
+    return capitalize_sentences(strip_answer_meta(" ".join(sentences[:6])))

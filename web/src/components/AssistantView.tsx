@@ -15,7 +15,6 @@ const FALLBACK_QUESTIONS = [
   "What information do users seek outside Myntra/AJIO before purchasing?",
   "What role do fit, size, styling, price, reviews, occasion and social validation play?",
   "When do users use the wishlist as genuine purchase intent versus simply as a bookmarking mechanism?",
-  "How do these behaviors differ across user segments?",
   "What unmet needs emerge consistently across user conversations?",
 ];
 
@@ -83,9 +82,38 @@ function PlatformIcon({ platform }: { platform: string }) {
 }
 
 function citationLabel(citation: Citation, index: number): string {
-  const source = citation.source || "Source";
-  const short = source.replace(/_/g, " ");
+  const labels: Record<string, string> = {
+    play_store: "Play Store",
+    youtube: "YouTube",
+    reddit: "Reddit",
+    product_review: "Product review",
+    social: "Social",
+    research: "Shopper comment",
+  };
+  const short = labels[citation.source] ?? (citation.source || "Source").replace(/_/g, " ");
   return `${short} #${index + 1}`;
+}
+
+const PUBLIC_EVIDENCE_SOURCES = new Set(["play_store", "youtube", "reddit", "product_review", "social"]);
+
+function isPublicEvidence(citation: Citation): boolean {
+  return PUBLIC_EVIDENCE_SOURCES.has(citation.source);
+}
+
+function stripAnswerMeta(text: string): string {
+  return text
+    .replace(/\s*\(\s*confidence\s*[\d.]+(?:\s*,\s*volume\s*[\d.]+)?\s*\)/gi, "")
+    .replace(/\bconfidence\s*[\d.]+(?:\s*,\s*volume\s*[\d.]+)/gi, "")
+    .replace(/\baggregate analytics rank[^.]*\./gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+function capitalizePhrase(text: string): string {
+  const match = /[A-Za-z]/.exec(text);
+  if (!match || match.index == null) return text;
+  const index = match.index;
+  return text.slice(0, index) + text.charAt(index).toUpperCase() + text.slice(index + 1);
 }
 
 function inferTags(citation: Citation): string[] {
@@ -102,7 +130,10 @@ function inferTags(citation: Citation): string[] {
 
 /** Split merged survey/chat excerpts into readable Q/A or sentence blocks. */
 function formatEvidenceExcerpt(excerpt: string): { kind: "qa" | "text"; question?: string; answer?: string; text?: string }[] {
-  const cleaned = excerpt.replace(/\s+/g, " ").trim();
+  const cleaned = excerpt
+    .replace(/Age band:\s*[\d\s\-–]+[.\s]*/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
   if (!cleaned) return [];
 
   const hasQa = /(?:^|\s)Q\s*[:.]/i.test(cleaned) && /(?:^|\s)A\s*[:.]/i.test(cleaned);
@@ -124,8 +155,13 @@ function formatEvidenceExcerpt(excerpt: string): { kind: "qa" | "text"; question
           blocks.push({ kind: "qa", question: currentQ, answer: "" });
         }
         currentQ = segment.replace(/^Q\s*[:.]?\s*\d*[.)]?\s*/i, "").trim() || segment;
+        if (/^age band$/i.test(currentQ)) currentQ = "";
       } else if (/^A\s*[:.]/i.test(segment)) {
         const answer = segment.replace(/^A\s*[:.]\s*/i, "").trim();
+        if (!currentQ && /^(18\s*[-–]\s*24|25\s*[-–]\s*3[45])$/.test(answer)) {
+          currentQ = "";
+          continue;
+        }
         blocks.push({ kind: "qa", question: currentQ, answer });
         currentQ = "";
       } else if (currentQ) {
@@ -162,19 +198,19 @@ function EvidenceExcerpt({ excerpt }: { excerpt: string }) {
             {block.question ? (
               <p className="wi-evidence-q">
                 <span className="wi-evidence-label">Q</span>
-                <span>{block.question}</span>
+                <span>{capitalizePhrase(block.question)}</span>
               </p>
             ) : null}
             {block.answer ? (
               <p className="wi-evidence-a">
                 <span className="wi-evidence-label wi-evidence-label--a">A</span>
-                <span>{block.answer}</span>
+                <span>{capitalizePhrase(block.answer)}</span>
               </p>
             ) : null}
           </div>
         ) : (
           <p key={index} className="wi-evidence-line">
-            {block.text}
+            {capitalizePhrase(block.text ?? "")}
           </p>
         ),
       )}
@@ -246,8 +282,8 @@ export default function AssistantView({
   const latestCitations = useMemo(() => {
     for (let i = messages.length - 1; i >= 0; i -= 1) {
       const msg = messages[i];
-      if (msg.role === "assistant" && msg.response.citations.length > 0) {
-        return msg.response.citations;
+      if (msg.role === "assistant") {
+        return msg.response.citations.filter(isPublicEvidence);
       }
     }
     return [];
@@ -295,18 +331,24 @@ export default function AssistantView({
 
   const renderAnswerText = (response: AssistantAskResponse) => {
     const confidencePct = Math.round(response.confidence * 100);
+    const publicCitations = response.citations.filter(isPublicEvidence);
+    const outOfScope =
+      publicCitations.length === 0 &&
+      response.confidence === 0 &&
+      !response.insufficient_evidence &&
+      response.retrieved_chunk_count === 0;
+    const cleanedAnswer = stripAnswerMeta(response.answer);
     return (
       <div className="wi-answer-content">
         <div className="wi-answer-text">
-          {response.answer.split('\n').map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
+          {cleanedAnswer.split("\n").map((paragraph, i) => (
+            <p key={i}>{capitalizePhrase(paragraph.trim())}</p>
           ))}
         </div>
-        
-        {response.citations.length > 0 && (
+        {!outOfScope && (
           <div className="wi-answer-footer">
             <div className="wi-citations-group">
-              {response.citations.map((citation, index) => (
+              {publicCitations.map((citation, index) => (
                 <button
                   key={citation.chunk_id}
                   type="button"
@@ -423,19 +465,6 @@ export default function AssistantView({
                   {msg.response.insufficient_evidence && (
                     <div className="wi-low-evidence">Low evidence — treat this answer cautiously.</div>
                   )}
-                  {msg.response.limitations && (
-                    <div className="wi-limitations">
-                      <div className="wi-limitations-header">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <line x1="12" y1="8" x2="12" y2="12"></line>
-                          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                        <strong>Limitations</strong>
-                      </div>
-                      <p>{msg.response.limitations}</p>
-                    </div>
-                  )}
                 </div>
               </div>
             ),
@@ -528,7 +557,7 @@ export default function AssistantView({
           <div className="wi-evidence-list">
             {latestCitations.length === 0 ? (
               <p className="wi-evidence-empty muted">
-                Citations from the latest answer will appear here.
+                Citations from public shopper comments will appear here.
               </p>
             ) : (
               latestCitations.map((citation, index) => {
@@ -539,7 +568,7 @@ export default function AssistantView({
                       <PlatformIcon platform={citation.source} />
                       <div>
                         <div className="wi-evidence-source">
-                          Source: {citation.source.replace(/_/g, " ")}
+                          Source: {citationLabel(citation, index).replace(/ #\d+$/, "")}
                         </div>
                         <div className="wi-evidence-meta">
                           {citationLabel(citation, index)} · score {Math.round(citation.score * 100)}%

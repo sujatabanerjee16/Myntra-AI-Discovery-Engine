@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from common.cache import get_cached_retrieval, retrieval_cache_key, set_cached_retrieval
 from common.config import get_settings
-from common.models import Chunk, Document
+from common.models import Chunk, Document, SourceType
 from storage.schemas import RetrievalFilters, RetrievedChunk
 
 
@@ -30,6 +30,15 @@ def apply_retrieval_filters(
 
     if filters.source is not None:
         stmt = stmt.where(Document.source == filters.source)
+    if filters.sources:
+        allowed: list[SourceType] = []
+        for raw in filters.sources:
+            try:
+                allowed.append(SourceType(str(raw)))
+            except ValueError:
+                continue
+        if allowed:
+            stmt = stmt.where(Document.source.in_(allowed))
     if filters.category is not None:
         stmt = stmt.where(Chunk.category == filters.category)
     if filters.occasion is not None:

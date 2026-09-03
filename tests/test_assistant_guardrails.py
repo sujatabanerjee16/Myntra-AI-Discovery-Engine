@@ -82,9 +82,30 @@ def test_question_in_scope_accepts_hinglish_shopping():
     assert question_in_scope("write me a python function to sort a list") is False
 
 
+def test_question_in_scope_accepts_starter_questions():
+    from assistant.questions import KEY_QUESTIONS
+
+    for question in KEY_QUESTIONS:
+        assert question_in_scope(question) is True
+
+
 def test_question_in_scope_accepts_user_segment_compare():
     assert question_in_scope("How do these behaviors differ across user segments?") is True
     assert question_in_scope("How do wishlist behaviors differ between Age 18–24 and Age 25–35?") is True
+
+
+def test_assess_evidence_allows_starter_questions_without_claim_words():
+    chunks = [
+        _chunk(0.88, "Users wait for sales before purchasing wishlist items."),
+        _chunk(0.74, "Fit and photos still make people hesitate after they like an item."),
+    ]
+    for question in (
+        "What unmet needs emerge consistently across user conversations?",
+        "What uncertainties remain after users have identified a product they like?",
+    ):
+        result = assess_evidence(chunks, question=question)
+        assert result.sufficient is True, question
+        assert result.unsupported_terms == ()
 
 
 def test_assess_evidence_allows_user_segment_compare_without_claim_words():
@@ -115,5 +136,35 @@ def test_build_limitations_mentions_sources():
         run_version="analytics-test",
         reason_categories=["price_sensitivity_waiting"],
     )
-    assert "research" in text
-    assert "analytics-test" in text
+    assert "shopper comments" in text.lower()
+    assert "research" not in text.lower()
+    assert "analytics-test" not in text
+
+
+def test_citations_skip_research_interviews():
+    from assistant.guardrails import citations_from_chunks
+
+    research = _chunk(0.9, "Q: What stops you? A: Waiting for a sale")
+    public = _chunk(0.8, "Waiting for a sale on a wishlisted dress.")
+    public.source = SourceType.play_store
+    public.source_ref = "play_store:review:1"
+    cites = citations_from_chunks([research, public])
+    assert len(cites) == 1
+    assert cites[0].source == "play_store"
+    assert "Q:" not in cites[0].excerpt
+
+
+def test_append_public_chunks_keeps_research_first():
+    from assistant.guardrails import append_public_chunks
+
+    research = _chunk(0.9, "Q: What stops you? A: Waiting for a sale")
+    reddit = _chunk(0.7, "Price is the only reason I still have it saved.")
+    reddit.source = SourceType.reddit
+    reddit.source_ref = "reddit:thread:1"
+    play = _chunk(0.6, "Waiting for a sale on wishlist items.")
+    play.source = SourceType.play_store
+    play.source_ref = "play_store:review:2"
+
+    merged = append_public_chunks([research], [reddit, play], min_public=3)
+    assert merged[0].source == SourceType.research
+    assert [item.source for item in merged[1:]] == [SourceType.reddit, SourceType.play_store]

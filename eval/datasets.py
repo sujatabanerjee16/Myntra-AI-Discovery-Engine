@@ -123,7 +123,7 @@ def default_faithfulness_cases() -> list[FaithfulnessEvalCase]:
         FaithfulnessEvalCase(
             question="Is there evidence about Mars colonization?",
             answer=(
-                "I cannot provide a grounded answer to this question with the available corpus."
+                "I don't have a clear enough match in shopper comments to answer that yet."
             ),
             evidence_texts=[],
             should_refuse=True,
