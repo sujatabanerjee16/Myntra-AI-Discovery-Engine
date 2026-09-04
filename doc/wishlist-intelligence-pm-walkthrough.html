@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title>Wishlist Intelligence — how a Myntra PM uses it</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; overflow: hidden; }
+      body {
+        font-family: Assistant, "Segoe UI", sans-serif;
+        background: #07080d;
+        color: #fff;
+      }
+      .wrap {
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 16px 10px;
+      }
+      .meta {
+        width: min(1440px, 100%);
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+      .kicker {
+        margin: 0;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #ff8aa8;
+        font-weight: 800;
+      }
+      .title { margin: 2px 0 0; font-size: 18px; font-weight: 800; }
+      .sub {
+        margin: 4px 0 0;
+        color: #9aa0b4;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.35;
+        max-width: 52rem;
+      }
+      .clock { color: #9aa0b4; font-size: 13px; font-weight: 700; white-space: nowrap; padding-top: 4px; }
+      .screen {
+        width: min(1440px, 100%);
+        flex: 1 1 auto;
+        min-height: 0;
+        background: #12141c;
+        border: 1px solid #2a2d3d;
+        border-radius: 14px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+      }
+      video, .poster {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #0f172a;
+      }
+      video::-webkit-media-controls,
+      video::-webkit-media-controls-enclosure { display: none !important; }
+      .poster { pointer-events: none; }
+      .ctrl {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px 12px;
+        background: linear-gradient(180deg, transparent, rgba(7, 8, 13, 0.88) 42%);
+      }
+      .ctrl-btn {
+        border: 0;
+        background: #fff;
+        color: #282c3f;
+        font: 800 12px Assistant, sans-serif;
+        padding: 7px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+      .poster[hidden] { display: none; }
+      .bar {
+        flex: 1;
+        height: 6px;
+        margin: 0;
+        accent-color: #ff3f6c;
+        cursor: pointer;
+      }
+      .hint { color: #9aa0b4; font-size: 11px; font-weight: 700; white-space: nowrap; }
+      .err {
+        display: none;
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 16px;
+        z-index: 4;
+        color: #fecdd3;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="meta">
+        <div>
+          <p class="kicker">PM walkthrough · three tabs</p>
+          <h1 class="title">Wishlist Intelligence — how a Myntra PM uses it</h1>
+          <p class="sub">
+            Dashboard (1,217 unique posts &amp; reviews) · Competitive Analysis · Discovery Chat.
+            No Age Comparison tab. Survey forms stay in RAG only.
+          </p>
+        </div>
+        <div class="clock" id="time">0:00 / 0:00</div>
+      </div>
+      <div class="screen">
+        <img
+          class="poster"
+          id="poster"
+          src="wishlist-intelligence-pm-poster.png?v=24"
+          alt="Wishlist Intelligence dashboard"
+        />
+        <video
+          id="demo"
+          src="wishlist-intelligence-pm-walkthrough.webm?v=24"
+          muted
+          playsinline
+          disablePictureInPicture
+          disableRemotePlayback
+          controlslist="nodownload nofullscreen noremoteplayback noplaybackrate novolume"
+          preload="auto"
+          poster="wishlist-intelligence-pm-poster.png?v=24"
+        ></video>
+        <div class="ctrl">
+          <button class="ctrl-btn" id="toggle" type="button">Play</button>
+          <input class="bar" id="seek" type="range" min="0" max="1000" value="0" />
+          <span class="hint">Space</span>
+        </div>
+        <p class="err" id="err">The video file did not load. Open this page in Chrome or Edge.</p>
+      </div>
+    </div>
+    <script>
+      const video = document.getElementById("demo");
+      const screen = document.querySelector(".screen");
+      const poster = document.getElementById("poster");
+      const err = document.getElementById("err");
+      const toggle = document.getElementById("toggle");
+      const seek = document.getElementById("seek");
+      const time = document.getElementById("time");
+      video.disablePictureInPicture = true;
+      video.disableRemotePlayback = true;
+
+      const fmt = (s) => {
+        const m = Math.floor(s / 60);
+        const r = Math.floor(s % 60);
+        return m + ":" + String(r).padStart(2, "0");
+      };
+
+      const sync = () => {
+        const duration = video.duration || 0;
+        const current = video.currentTime || 0;
+        if (duration) seek.value = String(Math.round((current / duration) * 1000));
+        time.textContent = fmt(current) + " / " + fmt(duration);
+        toggle.textContent = video.paused ? "Play" : "Pause";
+      };
+
+      const hidePoster = () => {
+        poster.hidden = true;
+      };
+
+      const start = () => {
+        video.play().then(hidePoster).catch(() => {
+          poster.hidden = false;
+        });
+      };
+
+      const togglePlayback = () => {
+        if (video.paused) start();
+        else video.pause();
+      };
+
+      screen.addEventListener("click", (event) => {
+        if (event.target.closest("input, .ctrl-btn, .err")) return;
+        togglePlayback();
+      });
+      toggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        togglePlayback();
+      });
+      document.addEventListener("keydown", (event) => {
+        const tag = (event.target && event.target.tagName) || "";
+        if (tag === "TEXTAREA" || tag === "SELECT") return;
+        if (tag === "INPUT" && event.target.type !== "range") return;
+        if (event.key === " " || event.key === "k" || event.key === "K") {
+          event.preventDefault();
+          togglePlayback();
+        }
+      });
+      seek.addEventListener("click", (event) => event.stopPropagation());
+      seek.addEventListener("input", () => {
+        if (!video.duration) return;
+        video.currentTime = (Number(seek.value) / 1000) * video.duration;
+      });
+      video.addEventListener("playing", hidePoster);
+      video.addEventListener("timeupdate", sync);
+      video.addEventListener("loadedmetadata", sync);
+      video.addEventListener("pause", sync);
+      video.addEventListener("error", () => {
+        err.style.display = "block";
+      });
+    </script>
+  </body>
+</html>
