@@ -471,19 +471,79 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
     }
   }, [filters, onFiltersChange]);
 
+  const pmCounts = useMemo(() => {
+    const counts = { validated: 0, flagged: 0, needs_review: 0, total: feedback.length };
+    for (const item of feedback) {
+      if (item.verdict === "validated") counts.validated += 1;
+      else if (item.verdict === "flagged") counts.flagged += 1;
+      else if (item.verdict === "needs_review") counts.needs_review += 1;
+    }
+    return counts;
+  }, [feedback]);
+
   const pmNoteCount = feedback.length
     ? `${feedback.length} note${feedback.length === 1 ? "" : "s"}`
-    : "Optional";
+    : "No notes yet";
+
+  const formatFeedbackWhen = (iso: string) => {
+    try {
+      return new Date(iso).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+    } catch {
+      return iso.slice(0, 10);
+    }
+  };
+
   const pmCalibrationBody = (
     <>
       <p className="wi-kpi-sub">
-        Internal only — not scraped user data. Use this to validate or flag a reason.
+        Internal PM loop — not scraped user data. Validate a reason when public evidence looks
+        solid, flag when it looks wrong, or mark needs review. Each verdict nudges confidence for
+        that reason.
       </p>
+
+      <div className="wi-pm-impact" aria-label="How verdicts change confidence">
+        <div className="wi-pm-impact-card wi-pm-impact-card--validated">
+          <strong>Validated</strong>
+          <span>+0.05 confidence</span>
+          <em>Keep — evidence looks right</em>
+        </div>
+        <div className="wi-pm-impact-card wi-pm-impact-card--flagged">
+          <strong>Flagged</strong>
+          <span>−0.12 confidence</span>
+          <em>Down-rank — looks wrong or thin</em>
+        </div>
+        <div className="wi-pm-impact-card wi-pm-impact-card--review">
+          <strong>Needs review</strong>
+          <span>−0.03 confidence</span>
+          <em>Park — more interviews / checks</em>
+        </div>
+      </div>
+
+      <div className="wi-pm-summary" aria-label="Calibration summary">
+        <span>
+          <strong>{pmCounts.total}</strong> total
+        </span>
+        <span className="wi-pm-summary--validated">
+          <strong>{pmCounts.validated}</strong> validated
+        </span>
+        <span className="wi-pm-summary--flagged">
+          <strong>{pmCounts.flagged}</strong> flagged
+        </span>
+        <span className="wi-pm-summary--review">
+          <strong>{pmCounts.needs_review}</strong> needs review
+        </span>
+      </div>
+
       <div className="wi-pm-calibrate-grid">
         <form
           onSubmit={(event) => void handleSubmitFeedback(event)}
           className="feedback-form wi-dash-feedback-form"
         >
+          <p className="wi-pm-form-title">Add a calibration note</p>
           <label>
             Reason
             <select
@@ -500,9 +560,9 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
           <label>
             Verdict
             <select value={verdict} onChange={(event) => setVerdict(event.target.value)}>
-              <option value="validated">Validated</option>
-              <option value="flagged">Flagged</option>
-              <option value="needs_review">Needs review</option>
+              <option value="validated">Validated (+0.05)</option>
+              <option value="flagged">Flagged (−0.12)</option>
+              <option value="needs_review">Needs review (−0.03)</option>
             </select>
           </label>
           <label>
@@ -510,31 +570,49 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             <textarea
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
-              rows={2}
-              placeholder="Optional note…"
+              rows={4}
+              placeholder="Why this verdict? e.g. Beauty barrier looks right — flag for interview follow-up."
             />
           </label>
           <button type="submit" disabled={feedbackSubmitting}>
-            {feedbackSubmitting ? "Saving…" : "Save note"}
+            {feedbackSubmitting ? "Saving…" : "Save calibration note"}
           </button>
           {feedbackSuccess && <p className="wi-feedback-success">{feedbackSuccess}</p>}
         </form>
-        <ul className="wi-feedback-list">
-          {feedback.map((item) => (
-            <li key={item.id} className="wi-feedback-item">
-              <div className="wi-feedback-item-top">
-                <strong className="wi-pain-name">{formatReason(item.reason_category)}</strong>
-                <span className={`wi-feedback-verdict wi-feedback-verdict--${item.verdict}`}>
-                  {item.verdict.replace(/_/g, " ")}
-                </span>
-              </div>
-              {item.notes && <p className="wi-feedback-notes">{item.notes}</p>}
-            </li>
-          ))}
-          {feedback.length === 0 && (
-            <li className="muted">No PM notes yet.</li>
-          )}
-        </ul>
+
+        <div className="wi-pm-history">
+          <div className="wi-pm-history-head">
+            <p className="wi-pm-form-title">Recent notes</p>
+            <span>{pmNoteCount}</span>
+          </div>
+          <ul className="wi-feedback-list">
+            {feedback.map((item) => (
+              <li key={item.id} className="wi-feedback-item">
+                <div className="wi-feedback-item-top">
+                  <strong className="wi-pain-name">{formatReason(item.reason_category)}</strong>
+                  <span className={`wi-feedback-verdict wi-feedback-verdict--${item.verdict}`}>
+                    {item.verdict.replace(/_/g, " ")}
+                  </span>
+                </div>
+                {item.notes && <p className="wi-feedback-notes">{item.notes}</p>}
+                <p className="wi-feedback-item-meta">
+                  {item.reviewer || "pm"}
+                  {" · "}
+                  {formatFeedbackWhen(item.created_at)}
+                  {item.adjusted_confidence != null && (
+                    <>
+                      {" · "}
+                      confidence → {item.adjusted_confidence.toFixed(2)}
+                    </>
+                  )}
+                </p>
+              </li>
+            ))}
+            {feedback.length === 0 && (
+              <li className="muted">No PM notes yet — validate or flag a reason to start the loop.</li>
+            )}
+          </ul>
+        </div>
       </div>
     </>
   );
@@ -688,13 +766,13 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             {onAskQuestion && <QuestionsView onAsk={onAskQuestion} />}
 
             {visibleCorpus && (
-              <section className="wi-scrape-panel" aria-label="Scraped shopper comments">
+              <section className="wi-scrape-panel" aria-label="Scraped unique posts and reviews">
                 <div className="wi-scrape-family wi-scrape-family--scraped">
                   <div className="wi-scrape-hero-block">
                     <p className="wi-scrape-kicker">Scraped</p>
                     <p className="wi-scrape-hero">{visibleCorpus.scrapedDocuments.toLocaleString()}</p>
-                    <p className="wi-scrape-hero-unit">shopper comments</p>
-                    <p className="wi-scrape-hero-note">{visibleCorpus.scrapedMix}</p>
+                    <p className="wi-scrape-hero-unit">unique posts &amp; reviews</p>
+                    <p className="wi-scrape-hero-note">{visibleCorpus.scrapedMix} One post = one here.</p>
                   </div>
                   <ul className="wi-scrape-sources">
                     {visibleCorpus.scrapedRows.map((row) => {
@@ -767,14 +845,15 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
             <section className="wi-dash-card">
               <h2>Opportunity Matrix</h2>
               <p className="wi-kpi-sub" style={{ marginTop: "-0.55rem", marginBottom: "0.9rem" }}>
-                Full ranked list by evidence volume. {evidenceTotal.toLocaleString()} comments at ≥
-                {Math.round(confidenceMin * 100)}% confidence. Share is of the rows shown.
+                Ranked by classified evidence — {evidenceTotal.toLocaleString()} excerpts at ≥
+                {Math.round(confidenceMin * 100)}% confidence. Long posts can count more than once,
+                so this is not the scrape strip total. Share is of the rows shown.
               </p>
               <div className="wi-opp-wrap">
                 <div className="wi-opp-table" role="table">
                   <div className="wi-opp-row wi-opp-row--head" role="row">
                     <span role="columnheader">Confidence (0–10)</span>
-                    <span role="columnheader">Evidence volume</span>
+                    <span role="columnheader">Excerpts</span>
                     <span role="columnheader">Opportunity area</span>
                     <span role="columnheader">Share</span>
                   </div>
@@ -805,13 +884,13 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
               </div>
             </section>
 
-            <details className="wi-dash-card wi-pm-calibrate">
-              <summary>
+            <section className="wi-dash-card wi-pm-calibrate" aria-label="PM calibration">
+              <div className="wi-pm-calibrate-head">
                 <h2>PM calibration</h2>
                 <span>{pmNoteCount}</span>
-              </summary>
+              </div>
               {pmCalibrationBody}
-            </details>
+            </section>
           </>
         )}
 

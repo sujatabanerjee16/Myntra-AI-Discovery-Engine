@@ -180,7 +180,6 @@ def test_answer_question_backfills_public_source_chips(
         ],
         theme_clusters=[],
         competitive=[],
-        segment_comparisons=[],
     )
 
     session = MagicMock()

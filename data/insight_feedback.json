@@ -1,6 +1,66 @@
 {
   "feedback": [
     {
+      "id": "59d9825d-2e94-4b49-9cdb-42a484895c96",
+      "insight_id": null,
+      "reason_category": "fit_sizing_uncertainty",
+      "verdict": "validated",
+      "notes": "PM QA note from browser",
+      "reviewer": "pm",
+      "adjusted_confidence": 0.892,
+      "created_at": "2026-09-04T13:35:00.867090+00:00"
+    },
+    {
+      "id": "081560e3-4189-4e64-9d32-999ab753ac61",
+      "insight_id": null,
+      "reason_category": "price_sensitivity_waiting",
+      "verdict": "validated",
+      "notes": "PM QA",
+      "reviewer": "pm-qa",
+      "adjusted_confidence": 0.892,
+      "created_at": "2026-09-04T13:33:44.044142+00:00"
+    },
+    {
+      "id": "a29eeec9-079c-4d76-a1e0-569a50e629fe",
+      "insight_id": null,
+      "reason_category": "external_comparison",
+      "verdict": "flagged",
+      "notes": "Walkthrough: Beauty top barrier looks right \u2014 flag for review.",
+      "reviewer": "pm",
+      "adjusted_confidence": 0.722,
+      "created_at": "2026-09-04T00:38:22.523845+00:00"
+    },
+    {
+      "id": "a9fbee4f-5474-45a7-acfd-7eedc8c0579f",
+      "insight_id": null,
+      "reason_category": "external_comparison",
+      "verdict": "flagged",
+      "notes": "Walkthrough: Beauty top barrier looks right \u2014 flag for review.",
+      "reviewer": "pm",
+      "adjusted_confidence": 0.722,
+      "created_at": "2026-09-03T16:31:50.309827+00:00"
+    },
+    {
+      "id": "a38b7464-86a9-4583-8a26-aa522cd182e9",
+      "insight_id": null,
+      "reason_category": "external_comparison",
+      "verdict": "validated",
+      "notes": "More user interviews required to understand this.",
+      "reviewer": "pm",
+      "adjusted_confidence": 0.892,
+      "created_at": "2026-09-03T11:48:05.406195+00:00"
+    },
+    {
+      "id": "06fb08b6-5861-4b5f-9dac-a9bd2339ebf1",
+      "insight_id": null,
+      "reason_category": "external_comparison",
+      "verdict": "flagged",
+      "notes": "Walkthrough: Beauty top barrier looks right \u2014 flag for review.",
+      "reviewer": "pm",
+      "adjusted_confidence": 0.722,
+      "created_at": "2026-09-02T18:24:06.307868+00:00"
+    },
+    {
       "id": "6d85ef5b-ee53-4499-83fc-e7102d314cdc",
       "insight_id": null,
       "reason_category": "external_comparison",

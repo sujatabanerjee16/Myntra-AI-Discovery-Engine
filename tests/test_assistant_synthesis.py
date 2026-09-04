@@ -2,7 +2,7 @@
 
 from uuid import uuid4
 
-from assistant.query import is_age_segment_compare_question, understand_query
+from assistant.query import understand_query
 from assistant.schemas import AggregateContext
 from assistant.synthesis import (
     _as_mid_sentence,
@@ -184,12 +184,10 @@ def test_user_segment_question_uses_research_without_naming_cohorts():
     assert "25–35" not in answer and "25-35" not in lowered
 
 
-def test_understand_query_does_not_lock_segment_compare():
-    assert is_age_segment_compare_question("How do these behaviors differ across user segments?")
+def test_understand_query_does_not_special_case_segment_compare():
     parsed = understand_query("How do these behaviors differ across user segments?")
     assert parsed.intent_hint != "age_segments"
-    assert parsed.filters is None or parsed.filters.segment is None
-    assert "research" in parsed.search_query.lower()
+    assert parsed.search_query == "How do these behaviors differ across user segments?"
 
 
 def test_synthesize_blockers_preserves_capital_i():

@@ -5,7 +5,6 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from assistant.query import is_age_segment_compare_question
 from assistant.questions import is_key_business_question
 from assistant.schemas import Citation
 from common.config import get_settings
@@ -76,13 +75,9 @@ def assess_evidence(
     # Topical similarity is not enough: refuse when the question asserts
     # specific entities/claims that never appear in retrieved evidence
     # (e.g. "left-handed users … on Tuesdays").
-    # Starter PM questions and age-cohort compares are anaphoric and should
-    # be judged on retrieved shopper evidence, not those verbs.
-    if (
-        question
-        and not is_age_segment_compare_question(question)
-        and not is_key_business_question(question)
-    ):
+    # Starter PM questions are anaphoric and should be judged on retrieved
+    # shopper evidence, not claim verbs in the prompt.
+    if question and not is_key_business_question(question):
         distinctive = distinctive_question_terms(question)
         if distinctive:
             evidence_tokens = _evidence_token_set(chunks)
@@ -591,8 +586,6 @@ def question_in_scope(question: str) -> bool:
     lowered = question.lower()
     # Canned segment Qs are anaphoric ("these behaviors") and omit "wishlist".
     if is_key_business_question(question):
-        return True
-    if is_age_segment_compare_question(question):
         return True
     if any(" " in term and term in lowered for term in _DOMAIN_TERMS):
         return True

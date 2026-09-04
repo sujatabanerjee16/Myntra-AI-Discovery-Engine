@@ -49,7 +49,7 @@ Research workbooks stay in the corpus for RAG. They are **not** a dashboard tile
 | --- | --- |
 | `GET /insights/filters` | Available filter values |
 | `GET /insights/reasons` | Ranked reasons (`min_confidence`, sources) |
-| `GET /insights/comparisons` | Category / source comparisons |
+| `GET /insights/heatmap` | Friction heatmap |
 | `GET /insights/heatmap` | Friction heatmap cells |
 | `GET /insights/evidence` | Public evidence excerpts |
 | `GET /insights/corpus-stats` | Scraped document counts by source |

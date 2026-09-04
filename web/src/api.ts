@@ -1,6 +1,5 @@
 import type {
   AssistantAskResponse,
-  ComparisonResponse,
   CompetitiveAnalysisResponse,
   ConversionMetricResponse,
   CorpusScrapeStats,
@@ -18,7 +17,6 @@ import type {
   IntentBreakdownResponse,
   QualityDashboardResponse,
   ReasonRankResponse,
-  SurveyHabitsResponse,
   TrendsResponse,
   DashboardBootstrap,
 } from "./types";
@@ -143,14 +141,6 @@ export async function getRankedReasons(
       })}`,
     ),
   );
-}
-
-export async function getComparisons(filters: FilterState): Promise<ComparisonResponse> {
-  return fetchJson(apiUrl(`/insights/comparisons${buildQuery({ group_by: "segment", ...filterParams(filters) })}`));
-}
-
-export async function getSurveyHabits(segment?: string): Promise<SurveyHabitsResponse> {
-  return fetchJson(apiUrl(`/insights/survey-habits${buildQuery({ segment })}`));
 }
 
 export async function getCorpusStats(): Promise<CorpusScrapeStats> {

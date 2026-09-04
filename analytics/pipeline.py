@@ -434,11 +434,5 @@ def export_analytics_json(result: AnalyticsResult, output_path: str | Path) -> P
         "competitive": result.competitive,
         "competitive_summary": result.competitive_summary,
     }
-    try:
-        from api.json_dashboard import research_respondent_counts
-
-        payload["respondent_counts"] = research_respondent_counts()
-    except Exception:
-        payload["respondent_counts"] = {}
     path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
     return path

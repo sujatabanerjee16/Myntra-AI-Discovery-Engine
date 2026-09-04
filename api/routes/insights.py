@@ -10,7 +10,6 @@ from analytics.pipeline import run_semantic_analytics_db
 from analytics.schemas import (
     AnalyticsRunRequest,
     AnalyticsRunResult,
-    ComparisonResponse,
     CompetitiveAnalysisResponse,
     CorpusScrapeStats,
     DashboardFiltersResponse,
@@ -22,7 +21,6 @@ from analytics.schemas import (
     ReasonRankItem,
     ReasonRankResponse,
     ThemeClusterItem,
-    SurveyHabitsResponse,
     ThemeClusterResponse,
     TrendsResponse,
 )
@@ -42,9 +40,6 @@ from api.dashboard_queries import (
 )
 from api.dashboard_queries import (
     get_intent_breakdown as db_get_intent_breakdown,
-)
-from api.dashboard_queries import (
-    get_segment_comparisons as db_get_segment_comparisons,
 )
 from api.dashboard_queries import (
     get_trends as db_get_trends,
@@ -321,45 +316,6 @@ def corpus_scrape_stats() -> CorpusScrapeStats:
     from api.json_store import load_corpus_scrape_stats
 
     return CorpusScrapeStats.model_validate(load_corpus_scrape_stats())
-
-
-@router.get("/insights/survey-habits", response_model=SurveyHabitsResponse)
-def survey_purchase_habits(segment: str | None = None) -> SurveyHabitsResponse:
-    """Self-reported buy-habit counts from the two survey Excel files."""
-    from api.survey_habits import get_survey_purchase_habits
-
-    return SurveyHabitsResponse.model_validate(get_survey_purchase_habits(segment=segment))
-
-
-@router.get("/insights/comparisons", response_model=ComparisonResponse)
-def segment_comparisons(
-    run_version: str | None = None,
-    group_by: str = Query(default="segment", pattern="^(segment|category)$"),
-    segment: str | None = None,
-    category: str | None = None,
-    reason_category: str | None = None,
-    session: Session = Depends(get_session),
-) -> ComparisonResponse:
-    """Compare non-conversion reasons across segments or categories."""
-    return backend.call_with_json_fallback(
-        session,
-        db_call=lambda s: db_get_segment_comparisons(
-            s,
-            run_version=run_version,
-            group_by=group_by,
-            segment=segment,
-            category=category,
-            reason_category=reason_category,
-        ),
-        json_call=lambda: json_dash.get_segment_comparisons(
-            run_version=run_version,
-            group_by=group_by,
-            segment=segment,
-            category=category,
-            reason_category=reason_category,
-        ),
-        label="segment_comparisons",
-    )
 
 
 @router.get("/insights/heatmap", response_model=HeatmapResponse)

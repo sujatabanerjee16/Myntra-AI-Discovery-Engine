@@ -122,17 +122,6 @@ def build_grounded_context(
             )
         sections.append("\n".join(lines))
 
-    if aggregates.segment_comparisons:
-        lines = ["## Additional shopper evidence (aggregate facts)"]
-        for item in aggregates.segment_comparisons[:10]:
-            lines.append(
-                "- {segment}: {reason}".format(
-                    segment=item.get("dimension"),
-                    reason=item.get("reason_category"),
-                )
-            )
-        sections.append("\n".join(lines))
-
     if aggregates.competitive:
         lines = ["## Competitive wishlist comparison (Myntra vs Nykaa vs Ajio)"]
         for item in aggregates.competitive[:12]:

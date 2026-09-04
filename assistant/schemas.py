@@ -29,7 +29,6 @@ class AggregateContext(BaseModel):
     theme_clusters: list[dict[str, object]] = Field(default_factory=list)
     competitive: list[dict[str, object]] = Field(default_factory=list)
     competitive_summary: dict[str, object] = Field(default_factory=dict)
-    segment_comparisons: list[dict[str, object]] = Field(default_factory=list)
 
 
 class Citation(BaseModel):

@@ -100,28 +100,6 @@ def test_research_bundle_via_registry(tmp_path):
     assert AGE_25_35 in bands
 
 
-def test_survey_purchase_habits_from_excel():
-    from api.survey_habits import get_survey_purchase_habits
-
-    payload = get_survey_purchase_habits()
-    assert payload["respondents"] == 42
-    assert payload["checkout_rate_available"] is False
-    files = {row["file"] for row in payload["workbooks"]}
-    assert "Myntra Wishlist.xlsx" in files
-    assert "Your Wishlist Habits (Responses).xlsx" in files
-    young = get_survey_purchase_habits(segment="age_18_24")
-    assert young["respondents"] == 27
-    for book in payload["workbooks"]:
-        assert sum(row["count"] for row in book["answers"]) == book["n"]
-
-
-def test_research_respondent_counts_from_corpus():
-    from api.json_dashboard import research_respondent_counts
-
-    counts = research_respondent_counts()
-    assert counts["age_18_24"] == 27
-    assert counts["age_25_35"] == 15
-    assert counts["age_18_24"] + counts["age_25_35"] == 42
 
 
 def test_survey_card_count_matches_age_split():
@@ -131,15 +109,6 @@ def test_survey_card_count_matches_age_split():
     assert stats["survey_respondents"] == 42
     assert sum(row["respondents"] for row in stats["survey_by_workbook"]) == 42
 
-
-def test_age_origin_counts_split_survey_and_play_store():
-    from api.json_dashboard import age_band_origin_counts
-
-    origins = age_band_origin_counts()
-    assert origins["age_18_24"]["survey"] == 27
-    assert origins["age_25_35"]["survey"] == 15
-    assert origins["age_18_24"]["play_store"] >= 0
-    assert "other_scrape" in origins["age_18_24"]
 
 
 def test_reasons_http_source_and_confidence_filters():

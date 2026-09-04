@@ -89,8 +89,8 @@ def test_question_in_scope_accepts_starter_questions():
         assert question_in_scope(question) is True
 
 
-def test_question_in_scope_accepts_user_segment_compare():
-    assert question_in_scope("How do these behaviors differ across user segments?") is True
+def test_question_in_scope_accepts_wishlist_age_wording_without_special_case():
+    # No dedicated age-compare path; wishlist vocabulary keeps the question in scope.
     assert question_in_scope("How do wishlist behaviors differ between Age 18–24 and Age 25–35?") is True
 
 
@@ -108,17 +108,17 @@ def test_assess_evidence_allows_starter_questions_without_claim_words():
         assert result.unsupported_terms == ()
 
 
-def test_assess_evidence_allows_user_segment_compare_without_claim_words():
+def test_assess_evidence_no_longer_bypasses_claim_check_for_age_wording():
     chunks = [
-        _chunk(0.88, "Age band: 18-24. I am waiting for a sale and the right occasion."),
-        _chunk(0.74, "Age band: 25-35. The price is too high and I am unsure about fit."),
+        _chunk(0.88, "I am waiting for a sale and the right occasion."),
+        _chunk(0.74, "The price is too high and I am unsure about fit."),
     ]
     result = assess_evidence(
         chunks,
-        question="How do these behaviors differ across user segments?",
+        question="How do wishlist behaviors differ between Age 18–24 and Age 25–35 left-handed Tuesday buyers?",
     )
-    assert result.sufficient is True
-    assert result.unsupported_terms == ()
+    assert result.sufficient is False
+    assert result.unsupported_terms
 
 
 def test_understand_query_detects_reason_and_source():

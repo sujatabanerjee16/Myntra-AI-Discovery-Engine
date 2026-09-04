@@ -6,8 +6,6 @@ from uuid import uuid4
 from fastapi.testclient import TestClient
 
 from analytics.schemas import (
-    ComparisonItem,
-    ComparisonResponse,
     DashboardFiltersResponse,
     EvidenceExcerpt,
     EvidenceSummaryResponse,
@@ -109,19 +107,7 @@ def test_evidence_summary_endpoint():
     assert resp.json()["excerpts"][0]["chunk_id"] == str(chunk_id)
 
 
-def test_comparisons_and_intent_endpoints():
-    comparison = ComparisonResponse(
-        run_version="analytics-test",
-        group_by="segment",
-        items=[
-            ComparisonItem(
-                dimension="price_sensitive",
-                reason_category="price_sensitivity_waiting",
-                evidence_volume=10,
-                confidence=0.75,
-            )
-        ],
-    )
+def test_intent_and_trends_endpoints():
     intent = IntentBreakdownResponse(
         run_version="analytics-test",
         total_active=20,
@@ -142,15 +128,12 @@ def test_comparisons_and_intent_endpoints():
         yield MagicMock()
 
     with patch("api.backend.use_json_backend", return_value=False):
-        with patch("api.routes.insights.db_get_segment_comparisons", return_value=comparison):
-            with patch("api.routes.insights.db_get_intent_breakdown", return_value=intent):
-                with patch("api.routes.insights.db_get_trends", return_value=trends):
-                    app.dependency_overrides[get_session] = override_session
-                    comp_resp = client.get("/insights/comparisons")
-                    intent_resp = client.get("/insights/intent")
-                    trends_resp = client.get("/insights/trends")
+        with patch("api.routes.insights.db_get_intent_breakdown", return_value=intent):
+            with patch("api.routes.insights.db_get_trends", return_value=trends):
+                app.dependency_overrides[get_session] = override_session
+                intent_resp = client.get("/insights/intent")
+                trends_resp = client.get("/insights/trends")
 
-    assert comp_resp.status_code == 200
     assert intent_resp.json()["total_active"] == 20
     assert trends_resp.status_code == 200
 

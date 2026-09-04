@@ -7,8 +7,6 @@ import uuid
 from collections import defaultdict
 
 from analytics.schemas import (
-    ComparisonItem,
-    ComparisonResponse,
     CompetitiveAnalysisResponse,
     DashboardFiltersResponse,
     EvidenceExcerpt,
@@ -423,122 +421,6 @@ def get_filtered_reason_ranks(
     items.sort(key=lambda item: item.evidence_volume, reverse=True)
     return items
 
-
-def research_respondent_counts() -> dict[str, int]:
-    """Count unique Excel survey rows per age band.
-
-    Interviews, open-text extras, and Excel rows with no 18–24 / 25–35 age
-    (including a blank habits submission) are not counted.
-    """
-    seen: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
-    for chunk in load_corpus_chunks():
-        source = chunk.get("source")
-        if hasattr(source, "value"):
-            source = source.value
-        if source != "research":
-            continue
-        meta = chunk.get("metadata") or {}
-        if meta.get("kind") == "interview" or meta.get("workbook") == "interview-docx":
-            continue
-        segment = chunk.get("segment") or meta.get("age_band")
-        if segment not in seen:
-            continue
-        ref = str(chunk.get("source_ref") or "")
-        if ":open:" in ref or "interview" in ref:
-            continue
-        row_key = ref
-        if meta.get("workbook") is not None and meta.get("row_index") is not None:
-            row_key = f"{meta.get('workbook')}:{meta.get('row_index')}"
-        elif ":row:" not in ref:
-            continue
-        seen[segment].add(str(row_key))
-    return {key: len(refs) for key, refs in seen.items()}
-
-
-def age_band_origin_counts() -> dict[str, dict[str, int]]:
-    """Unique aged items per band: survey rows vs Play Store vs other scrapes."""
-    survey = research_respondent_counts()
-    play_store: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
-    other: dict[str, set[str]] = {"age_18_24": set(), "age_25_35": set()}
-    for chunk in load_corpus_chunks():
-        source = chunk.get("source")
-        if hasattr(source, "value"):
-            source = source.value
-        source = str(source or "")
-        if source == "research":
-            continue
-        meta = chunk.get("metadata") or {}
-        segment = chunk.get("segment") or meta.get("age_band")
-        if segment not in play_store:
-            continue
-        ref = str(chunk.get("source_ref") or "")
-        if not ref:
-            continue
-        if source == "play_store":
-            play_store[segment].add(ref)
-        else:
-            other[segment].add(ref)
-    return {
-        band: {
-            "survey": int(survey.get(band, 0)),
-            "play_store": len(play_store[band]),
-            "other_scrape": len(other[band]),
-        }
-        for band in ("age_18_24", "age_25_35")
-    }
-
-
-def get_segment_comparisons(
-    *,
-    run_version: str | None = None,
-    group_by: str = "segment",
-    segment: str | None = None,
-    category: str | None = None,
-    reason_category: str | None = None,
-) -> ComparisonResponse:
-    payload = _payload()
-    dimension_key = "segment" if group_by == "segment" else "category"
-    groups: dict[tuple[str, str], dict] = defaultdict(
-        lambda: {"evidence_volume": 0, "confidences": [], "active": 0, "passive": 0}
-    )
-
-    for row in _insights(segment=segment, category=category, reason_category=reason_category):
-        dim = row.get(dimension_key)
-        reason = row.get("reason_category")
-        if not dim or not reason:
-            continue
-        key = (str(dim), str(reason))
-        bucket = groups[key]
-        volume = int(row.get("evidence_volume") or 0)
-        bucket["evidence_volume"] += volume
-        if row.get("confidence") is not None:
-            bucket["confidences"].append(float(row["confidence"]))
-        if row.get("intent_type") == "active_shortlist":
-            bucket["active"] += volume
-        else:
-            bucket["passive"] += volume
-
-    items = [
-        ComparisonItem(
-            dimension=dim,
-            reason_category=reason,
-            evidence_volume=bucket["evidence_volume"],
-            confidence=round(sum(bucket["confidences"]) / len(bucket["confidences"]), 3)
-            if bucket["confidences"]
-            else None,
-            active_shortlist_count=bucket["active"],
-            passive_bookmark_count=bucket["passive"],
-        )
-        for (dim, reason), bucket in groups.items()
-    ]
-    items.sort(key=lambda item: item.evidence_volume, reverse=True)
-    return ComparisonResponse(
-        run_version=payload.get("run_version"),
-        group_by=group_by,
-        items=items,
-        respondent_counts=research_respondent_counts() if group_by == "segment" else {},
-        age_origin_counts=age_band_origin_counts() if group_by == "segment" else {},
-    )
 
 
 def get_friction_heatmap(
@@ -1004,10 +886,9 @@ _BOOTSTRAP_SOURCES = ["play_store", "youtube", "reddit", "product_review", "soci
 
 def get_dashboard_bootstrap() -> dict:
     """One payload for the first dashboard paint (filters + reasons + extras)."""
-    from analytics.schemas import ReasonRankResponse, SurveyHabitsResponse
+    from analytics.schemas import ReasonRankResponse
     from api.json_feedback import list_feedback
     from api.json_store import load_corpus_scrape_stats
-    from api.survey_habits import get_survey_purchase_habits
 
     payload = _payload()
     reasons, note = rank_reasons_for_dashboard(
@@ -1037,7 +918,6 @@ def get_dashboard_bootstrap() -> dict:
     except Exception:  # noqa: BLE001
         conversion = None
 
-    habits = get_survey_purchase_habits()
     stats = load_corpus_scrape_stats()
     return {
         "filters": get_dashboard_filters().model_dump(mode="json"),
@@ -1046,10 +926,8 @@ def get_dashboard_bootstrap() -> dict:
             reasons=reasons,
             scope_note=note,
         ).model_dump(mode="json"),
-        "comparisons": get_segment_comparisons(group_by="segment").model_dump(mode="json"),
         "competitive": get_competitive_analysis().model_dump(mode="json"),
         "corpus_stats": stats,
-        "survey_habits": SurveyHabitsResponse.model_validate(habits).model_dump(mode="json"),
         "conversion": conversion,
         "feedback": list_feedback().model_dump(mode="json"),
         "voice_preview": get_voice_preview(sources=_BOOTSTRAP_SOURCES),

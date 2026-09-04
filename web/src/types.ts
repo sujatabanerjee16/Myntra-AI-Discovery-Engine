@@ -22,42 +22,6 @@ export interface ReasonRankResponse {
   scope_note?: string | null;
 }
 
-export interface ComparisonItem {
-  dimension: string;
-  reason_category: string;
-  evidence_volume: number;
-  confidence: number | null;
-  active_shortlist_count: number;
-  passive_bookmark_count: number;
-}
-
-export interface ComparisonResponse {
-  run_version: string | null;
-  group_by: string;
-  items: ComparisonItem[];
-  respondent_counts?: Record<string, number>;
-  age_origin_counts?: Record<string, { survey: number; play_store: number; other_scrape: number }>;
-}
-
-export interface SurveyHabitAnswer {
-  label: string;
-  count: number;
-}
-
-export interface SurveyHabitWorkbook {
-  file: string;
-  n: number;
-  question: string | null;
-  answers: SurveyHabitAnswer[];
-}
-
-export interface SurveyHabitsResponse {
-  respondents: number;
-  self_reported: boolean;
-  checkout_rate_available: boolean;
-  workbooks: SurveyHabitWorkbook[];
-}
-
 export interface CorpusSourceCount {
   source: string;
   documents: number;
@@ -293,8 +257,6 @@ export function formatLabel(value: string): string {
     "passive bookmarking": "Passive Bookmarking",
     "logistics friction": "Logistics Friction",
     "competitive platform preference": "Competitive Platform Preference",
-    "age 18 24": "Age 18–24",
-    "age 25 35": "Age 25–35",
   };
   if (aliases[normalized]) return aliases[normalized];
   return normalized.replace(/\b\w/g, (char) => char.toUpperCase());
@@ -426,10 +388,8 @@ export interface InsightFeedbackListResponse {
 export interface DashboardBootstrap {
   filters: DashboardFilters;
   reasons: ReasonRankResponse;
-  comparisons: ComparisonResponse | null;
   competitive: CompetitiveAnalysisResponse | null;
   corpus_stats: CorpusScrapeStats | null;
-  survey_habits: SurveyHabitsResponse | null;
   conversion: ConversionMetricResponse | null;
   feedback: InsightFeedbackListResponse;
   voice_preview?: VoicePreviewGroup[];

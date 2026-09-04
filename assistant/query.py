@@ -59,24 +59,6 @@ _PRICE_BAND_KEYWORDS: dict[str, str] = {
 }
 
 
-def is_age_segment_compare_question(question: str) -> bool:
-    """True when the question asks how behaviors differ across the two age cohorts."""
-    lowered = question.lower().replace("–", "-").replace("—", "-")
-    mentions_segments = (
-        "user segment" in lowered
-        or "user segments" in lowered
-        or "age" in lowered
-        or "18-24" in lowered
-        or "25-35" in lowered
-        or "25-34" in lowered
-    )
-    asks_to_compare = any(
-        token in lowered
-        for token in ("differ", "compare", "versus", " vs ", "across", "between")
-    )
-    return mentions_segments and asks_to_compare
-
-
 def _find_alias(text: str, aliases: dict[str, str]) -> str | None:
     lowered = text.lower()
     for phrase, value in sorted(aliases.items(), key=lambda item: len(item[0]), reverse=True):
@@ -123,14 +105,12 @@ def understand_query(
     intent_type = detect_intent(normalized)
     fashion_platforms = _detect_fashion_platforms(normalized)
 
-    compare_ages = is_age_segment_compare_question(normalized)
     inferred = RetrievalFilters(
         source=_find_alias(normalized, _SOURCE_ALIASES),
         category=_find_alias(normalized, _CATEGORY_KEYWORDS),
         occasion=_find_alias(normalized, _OCCASION_KEYWORDS),
         price_band=_find_alias(normalized, _PRICE_BAND_KEYWORDS),
-        # A compare-both question must not lock retrieval to a single age band.
-        segment=None if compare_ages else _find_alias(normalized, _SEGMENT_KEYWORDS),
+        segment=_find_alias(normalized, _SEGMENT_KEYWORDS),
     )
 
     merged = explicit_filters
@@ -165,8 +145,6 @@ def understand_query(
     search_query = normalized
     if fashion_platforms:
         search_query = f"{normalized} wishlist {' '.join(fashion_platforms)}"
-    if compare_ages:
-        search_query = f"{search_query} research survey interview wishlist"
     if is_key_business_question(normalized):
         search_query = (
             f"{search_query} wishlist purchase fit size price review sale "
