@@ -1,6 +1,6 @@
 # Phase 4 — Grounded RAG Assistant
 
-Answers business questions using only retrieved corpus evidence and dashboard aggregates, with citations and confidence.
+Answers business questions using retrieved corpus evidence and dashboard aggregates. Every in-scope answer shows **public source chips** and a **Confidence: N%** badge.
 
 ## Pipeline
 
@@ -23,7 +23,7 @@ Load corpus and run semantic analytics first (Phases 2–3):
 alembic upgrade head
 python -m storage.load_corpus --json-path data/scraped_corpus.json
 python -m analytics.run
-uvicorn api.main:app --reload
+uvicorn api.main:app --reload --host 127.0.0.1 --port 8010
 ```
 
 Set `GROQ_API_KEY` in `.env` for LLM generation. Without it, the assistant uses a deterministic template synthesizer (useful for local dev and tests).
@@ -40,7 +40,7 @@ Set `GROQ_API_KEY` in `.env` for LLM generation. Without it, the assistant uses 
 ### Example: ask a question
 
 ```bash
-curl -X POST http://localhost:8000/assistant/ask \
+curl -X POST http://127.0.0.1:8010/assistant/ask \
   -H "Content-Type: application/json" \
   -d "{\"question\": \"What prevents wishlisted products from being purchased?\"}"
 ```
@@ -52,10 +52,10 @@ Optional body fields:
 
 ## Guardrails
 
-- Refuses or flags answers when retrieval scores are below configured thresholds.
-- Requires citations linked to retrieved chunk IDs.
-- Surfaces source limitations and aggregate run version on every response.
-- No Groq key → template synthesis from top excerpts (still grounded, no speculation).
+- Refuses in plain English when retrieval scores are below configured thresholds.
+- Requires citations linked to retrieved chunk IDs. Chat chips are **public sources only** (Play Store, Reddit, YouTube, reviews, social). Research/interviews may inform the answer; they do not appear in Show evidence.
+- Confidence is a **percentage badge**, never `(confidence 0.84, volume 397)` in the prose.
+- No Groq key (or model 404) → template synthesis from top excerpts (still grounded, no speculation).
 
 ## Configuration
 
@@ -64,17 +64,17 @@ Optional body fields:
 | `RETRIEVAL_TOP_K` | 8 | Initial vector retrieval count |
 | `RAG_RERANK_TOP_K` | 6 | Excerpts passed to the LLM |
 | `RAG_MIN_CHUNKS` | 1 | Minimum retrieved excerpts |
-| `RAG_MIN_TOP_SCORE` | 0.40 | Minimum best-match score |
-| `RAG_MIN_AVG_SCORE` | 0.35 | Minimum average retrieval score |
+| `RAG_MIN_TOP_SCORE` | 0.38 | Minimum best-match score |
+| `RAG_MIN_AVG_SCORE` | 0.32 | Minimum average retrieval score |
 | `GROQ_API_KEY` | — | Groq API key for generation |
 | `GROQ_MODEL` | llama-3.3-70b-versatile | Groq model name |
 
 ## Key questions supported
 
-The assistant is designed to answer the nine stakeholder questions in [`doc/context.md`](./context.md) §9, for example:
+The assistant always treats the nine starter questions in [`assistant/questions.py`](../assistant/questions.py) / [`doc/context.md`](./context.md) §9 as in-domain, for example:
 
 1. Why do users add fashion products to their wishlist?
-2. What prevents wishlisted products from being purchased?
-3. When is the wishlist real purchase intent vs casual bookmarking?
+2. What prevents wishlisted products from eventually being purchased?
+3. What unmet needs emerge consistently across user conversations?
 
-Each answer includes supporting excerpts, confidence, and explicit limitations about public-evidence coverage.
+It does **not** treat “How do 18–24 vs 25–35 differ?” as a starter question. Each in-scope answer includes public excerpts plus `Confidence: N%`.

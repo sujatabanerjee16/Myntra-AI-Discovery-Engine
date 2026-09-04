@@ -89,16 +89,15 @@ Embedding batching remains in `ingestion/stages/embed.py` (`batch_size=16`). The
 
 ---
 
-## Quality Dashboard (web)
+## Quality surfaces
 
-The React app adds a **Quality** tab showing:
+The live app has three tabs (Dashboard, Competitive Analysis, Discovery Chat). There is **no Quality tab**. Review eval and cost via API:
 
-- Latest eval metrics vs targets
-- Guardrail thresholds
-- Cache hit rates
-- Recent RAG traces and pipeline runs
+- Latest eval metrics vs targets — `GET /observability/quality`
+- Guardrail thresholds and cache hit rates — `GET /observability/cost-controls`
+- Recent RAG traces and pipeline runs — `GET /observability/traces/{id}`, `GET /observability/pipeline-runs`
 
-Run the API and web dev server as in Phase 5; open the **Quality** tab or call `GET /observability/quality`.
+PM calibration (validate / flag a reason) lives on the **Dashboard**.
 
 ---
 
@@ -108,4 +107,4 @@ Run the API and web dev server as in Phase 5; open the **Quality** tab or call `
 - [x] RAG traces and pipeline runs auditable via DB + API
 - [x] Guardrail thresholds tuned from eval feedback
 - [x] Embedding and retrieval caching for cost control
-- [x] Quality/cost dashboard for PM and engineering review
+- [x] Quality/cost metrics available via observability API (no Quality tab in the live UI)

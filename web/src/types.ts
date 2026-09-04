@@ -219,7 +219,7 @@ export type PlatformId = "myntra" | "nykaa" | "ajio" | "other";
 
 /**
  * Shared sidebar filter state, lifted to <App /> so a single filter rail
- * drives both the dashboard charts and the Ask AI assistant.
+ * drives the dashboard charts and Discovery Chat.
  */
 export interface SidebarFilters {
   priceMin: number;

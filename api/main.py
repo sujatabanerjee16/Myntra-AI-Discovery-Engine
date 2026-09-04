@@ -136,7 +136,7 @@ def _mount_walkthrough() -> None:
 
 
 def _mount_dashboard() -> None:
-    """Serve the production-built dashboard alongside the API on port 8000."""
+    """Serve the production-built dashboard alongside the API (local default: 8010)."""
     if not WEB_DIST.is_dir():
         return
 

@@ -1,14 +1,16 @@
 # AI-Powered Wishlist Conversion Discovery Engine
 
 An evidence-grounded discovery engine that helps Myntra understand **why users wishlist fashion
-products but do not purchase them within 30 days**. It combines an **Insight Dashboard** with a
-**Grounded RAG Assistant**, built on public/research feedback.
+products but do not purchase them within 30 days**. The app has three tabs: a scrape-only
+**Dashboard** (1,217 public comments + Opportunity Matrix), **Competitive Analysis**, and
+**Discovery Chat** (platform chips + `Confidence: N%`). Research surveys stay in RAG — they are
+not a dashboard tile.
 
 See the planning docs in [`doc/`](./doc):
 
 - [`doc/ProblemStatement.md`](./doc/ProblemStatement.md)
 - [`doc/context.md`](./doc/context.md)
-- [`doc/Architecture.md`](./doc/Architecture.md)
+- [`doc/architecture.md`](./doc/architecture.md)
 - [`doc/ImplementationPlan.md`](./doc/ImplementationPlan.md)
 - [`doc/deployment-plan.md`](./doc/deployment-plan.md) — Vercel (frontend) + Render (FastAPI backend)
 
@@ -30,7 +32,7 @@ See the planning docs in [`doc/`](./doc):
 ```
 
 Technology (Phase 1): **Python**, **PostgreSQL + pgvector**, **FastAPI**, **React**,
-**BGE** embeddings, and **Groq**-hosted LLM. See [`doc/Architecture.md`](./doc/Architecture.md) §6.
+**BGE** embeddings, and **Groq**-hosted LLM (template fallback if Groq is unavailable). See [`doc/architecture.md`](./doc/architecture.md) §6.
 
 ---
 
@@ -84,10 +86,10 @@ alembic upgrade head
 6. **Run the API**
 
 ```bash
-uvicorn api.main:app --reload
+uvicorn api.main:app --reload --host 127.0.0.1 --port 8010
 ```
 
-Visit http://localhost:8000/health and http://localhost:8000/docs.
+Visit http://127.0.0.1:8010/health and http://127.0.0.1:8010/docs. Vite (`npm run dev`) proxies `/api` to this port.
 
 7. **Run the web shell** (optional in Phase 0)
 
@@ -117,9 +119,8 @@ Sources enabled in this phase:
 
 | Source | Connector | Notes |
 | --- | --- | --- |
-| **Myntra Wishlist.xlsx** | `research` | Primary user research (always included) |
-| **Google Play Store** | `play_store` | Myntra app reviews filtered to priority signals |
-| Reddit | — | **Excluded** per project scope |
+| **Play Store / Reddit / YouTube / reviews / social** | scrape | Dashboard KPI (1,217 comments) |
+| **Research Excel + interviews** | `research` | RAG only — not a dashboard tile |
 
 Only feedback related to these priority signals is kept from public sources:
 
@@ -203,21 +204,23 @@ Full details: [`doc/RAGAssistant.md`](./doc/RAGAssistant.md).
 
 ---
 
-## Phase 5 — Insight Dashboard
+## Phase 5 — Insight Dashboard + Discovery Chat
 
-Interactive React dashboard with ranked reasons, intent views, friction heatmaps, segment comparisons, evidence drill-down, and an integrated assistant tab.
+Three-tab React app: scrape strip + Opportunity Matrix, Competitive Analysis, Discovery Chat
+(public chips + Confidence %). No Google Form tile. No age board.
 
 ```bash
-uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
+uvicorn api.main:app --reload --host 127.0.0.1 --port 8010
 cd web && npm install && npm run dev
 ```
 
-**Dashboard URLs**
+**Local URLs**
 
 | URL | When to use |
 | --- | --- |
-| http://127.0.0.1:8000 | Always works after `npm run build` (API serves the UI) |
-| http://127.0.0.1:5173 | Vite dev server with hot reload (must run `npm run dev`) |
+| http://127.0.0.1:8010 | API (and built UI from `web/dist` if present) |
+| http://127.0.0.1:5173 | Vite dev server with hot reload (`npm run dev`) |
+| http://127.0.0.1:8010/walkthrough | PM walkthrough video |
 
 Windows shortcut: `.\scripts\start-dev.ps1`
 
@@ -239,7 +242,7 @@ python -m eval.run
 alembic upgrade head
 
 uvicorn api.main:app --reload
-cd web && npm run dev   # open Quality tab
+cd web && npm run dev   # three tabs: Dashboard, Competitive Analysis, Discovery Chat
 ```
 
 Key endpoints: `GET /observability/quality`, `GET /observability/cost-controls`, `POST /observability/eval/run`.
@@ -277,7 +280,7 @@ Integrate Myntra internal wishlist/funnel events, compute the **30-day conversio
 alembic upgrade head
 python -m internal.run
 uvicorn api.main:app --reload
-cd web && npm run dev   # open Conversion tab
+cd web && npm run dev   # PM calibration lives on the Dashboard, not a Conversion tab
 ```
 
 Key endpoints: `GET /internal/conversion`, `GET /internal/corroboration`, `POST /internal/feedback`.

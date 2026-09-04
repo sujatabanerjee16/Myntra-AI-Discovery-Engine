@@ -1,6 +1,6 @@
 # Phase-Wise Implementation Plan
 
-> This plan operationalizes the architecture in [`Architecture.md`](./Architecture.md), grounded in [`context.md`](./context.md) and [`ProblemStatement.md`](./ProblemStatement.md). It sequences the build into phases, each with objectives, tasks, deliverables, and exit criteria. Phases are ordered by dependency; later phases assume earlier ones are complete.
+> This plan operationalizes the architecture in [`architecture.md`](./architecture.md), grounded in [`context.md`](./context.md) and [`ProblemStatement.md`](./ProblemStatement.md). It sequences the build into phases, each with objectives, tasks, deliverables, and exit criteria. Phases are ordered by dependency; later phases assume earlier ones are complete.
 
 ---
 
@@ -22,7 +22,7 @@
 | 2 | Storage & Data Layer | Vector + analytical + document stores wired (platform filters) |
 | 3 | Semantic Analytics Layer | Taxonomy, clustering, intent, platform/motive, competitive aggregates, confidence |
 | 4 | RAG Assistant | Grounded, cited Q&A over the corpus (incl. competitive questions) |
-| 5 | Insight Dashboard + Ask AI (single page) | Ranked reasons, comparisons, heatmaps, competitive views + docked Ask AI |
+| 5 | Insight Dashboard + Discovery Chat | Scrape strip, Opportunity Matrix, competitive tab, cited chat |
 | 6 | Evaluation & Hardening | Quality, guardrails, observability (incl. competitive claim faithfulness) |
 | 7 | Corpus Scale-Out | All sources, competitor connectors, incremental refresh |
 | 8 | Extensibility (Future) | Internal data + ground-truth metric |
@@ -37,7 +37,7 @@
 - Initialize repo structure (monorepo: `ingestion/`, `analytics/`, `api/`, `web/`, `docs/`).
 - Choose and provision Phase 1 stack: Python, PostgreSQL + pgvector, FastAPI, React.
 - Set up environment/config management and secrets handling.
-- Define the core data models from `Architecture.md` §5 (`Document`, `Chunk`, `Insight`, `CompetitiveAggregate`, `AnswerTrace`) as schema/migrations — including **platform**, **wishlist_motive**, and **comparison_scope** fields.
+- Define the core data models from `architecture.md` §5 (`Document`, `Chunk`, `Insight`, `CompetitiveAggregate`, `AnswerTrace`) as schema/migrations — including **platform**, **wishlist_motive**, and **comparison_scope** fields.
 - Define the configurable competitor set (default: Nykaa, Ajio) and platform enum.
 - Set up linting, formatting, testing, and CI scaffolding.
 
@@ -139,23 +139,23 @@
 
 ---
 
-## Phase 5 — Insight Dashboard + Ask AI (Single Page)
+## Phase 5 — Insight Dashboard + Discovery Chat
 
-**Objective:** Give teams a visual, filterable view of non-conversion insight and competitive wishlist comparison **on the same page as Ask AI** (suggested questions + grounded chat).
+**Objective:** Give teams a scrape-only ranked view of non-conversion plus competitive comparison and a cited chat tab.
 
 **Tasks**
-- Build **Insights API** endpoints: ranked reasons, segment/category comparisons, heatmaps, trends, evidence summaries, plus **competitive comparison** (motives/barriers by platform; shared vs unique).
-- Build React dashboard: charts, uncertainty/friction heatmaps, intent-type views, filters (category, occasion, price band, segment, **platform**).
-- Add a **Competitive Analysis** view: Myntra vs Nykaa vs Ajio (and other) wishlist motive/barrier charts with evidence drill-down.
-- **Embed Ask AI on the same page** as the dashboard (docked panel): suggested starter questions + grounded chat with citations — not a separate route/tab as the primary UX.
-- Add **drill-down** to source excerpts and **confidence/evidence-volume** indicators.
-- On narrow viewports, Ask AI may collapse to a drawer/FAB while remaining part of the same page experience.
+- Build **Insights API** endpoints: ranked reasons, category/source filters, plus **competitive comparison** (motives/barriers by platform).
+- Build React **Dashboard**: scrape strip (1,217 comments), Opportunity Matrix, shopper comments, min-confidence slider. **No Google Form tile. No age board.**
+- Add a **Competitive Analysis** tab: Myntra vs Nykaa vs Ajio motive/barrier charts.
+- Add **Discovery Chat**: starter questions from `assistant/questions.py`; every in-scope answer shows platform chips + `Confidence: N%`.
+- Evidence drawer = public comments only. Research can ground the answer off-camera.
+- Add internal PM calibration (validate / flag).
 
 **Deliverables**
-- Interactive **unified page** covering `context.md` §10.1 outputs, including competitive views and Ask AI.
+- Interactive **three-tab** app covering `context.md` §10 outputs.
 
 **Exit criteria**
-- A PM can filter, compare segments and platforms, view heatmaps and competitive charts, ask suggested/custom AI questions, and drill down to evidence — **all without leaving the page**.
+- A PM can filter scrapes, rank the matrix, compare platforms, and ask a starter question that returns chips + a confidence badge — without mixing survey 42 into the 1,217 KPI.
 
 **Dependencies:** Phase 3 (data) and ideally Phase 4 (assistant backend).
 
@@ -173,7 +173,7 @@
 - Add cost controls: embedding cache, batch enrichment, retrieval caching.
 
 **Deliverables**
-- Evaluation report + dashboards for quality/cost; tuned guardrails and thresholds (incl. competitive).
+- Evaluation report + observability API for quality/cost; tuned guardrails and thresholds (incl. competitive).
 
 **Exit criteria**
 - Grounding faithfulness and retrieval relevance meet agreed targets; competitive answers remain evidence-bound; traces are auditable.
@@ -188,19 +188,17 @@
 
 **Tasks**
 - Add remaining connectors: YouTube comments, product reviews, social conversations, primary research inputs.
-- Ingest **dual research Excel workbooks** (`Myntra Wishlist.xlsx` + `Your Wishlist Habits (Responses).xlsx`) with normalized age segments `age_18_24` and `age_25_35`.
-- Prefer survey `age_band` metadata over behavioral segment heuristics during enrichment.
+- Ingest **dual research Excel workbooks** (`Myntra Wishlist.xlsx` + `Your Wishlist Habits (Responses).xlsx`) as `source=research` for RAG. Stamp `age_band` on chunks if present; **do not** expose age cards on the dashboard.
 - Add / expand **competitor app connectors** (e.g. Nykaa, Ajio Play Store reviews) where publicly available and in-scope.
 - Enable **incremental refresh** scheduling per source.
-- Validate dedupe/quality across sources; recompute aggregates, competitive views, and confidence.
+- Validate dedupe/quality across sources; recompute scrape-only dashboard aggregates and competitive views.
 - Optionally begin migration path from pgvector to a dedicated vector DB if volume demands.
 
 **Deliverables**
-- Full multi-source, multi-platform corpus with scheduled refresh; updated dashboard + assistant coverage.
-- Age-cohort comparisons (18–24 vs 25–35) available in segment filters and suggested Ask AI questions.
+- Full multi-source, multi-platform corpus with scheduled refresh; scrape strip + cited chat stay honest about what is public vs research.
 
 **Exit criteria**
-- All six source types flow through the pipeline and appear in insights with source-level evidence; competitive views have sufficient platform-tagged evidence for directional claims.
+- All six source types flow through the pipeline. Public sources appear on the scrape strip and as chat chips. Research informs chat only. Competitive views have enough platform-tagged evidence for directional claims.
 
 **Dependencies:** Phase 6.
 
@@ -208,7 +206,7 @@
 
 ## Phase 8 — Extensibility (Future / Beyond Phase 1)
 
-**Objective:** Prepare for internal data and ground-truth metrics (per `Architecture.md` §8).
+**Objective:** Prepare for internal data and ground-truth metrics (per `architecture.md` §8).
 
 **Tasks**
 - Add connectors for Myntra event/funnel/behavioral data into the analytical store.
@@ -234,7 +232,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 ─┬─→ Phase 4 ─┐
                                        └─→ Phase 5 ─┴─→ Phase 6 → Phase 7 → Phase 8
 ```
 
-Phase 4 (assistant) and Phase 5 (dashboard) both depend on Phase 3 and can proceed in parallel once the semantic layer is ready; both feed into Phase 6 hardening.
+Phase 4 (Discovery Chat) and Phase 5 (Dashboard + Competitive) both depend on Phase 3 and can proceed in parallel; both feed into Phase 6 hardening.
 
 ---
 
@@ -243,7 +241,7 @@ Phase 4 (assistant) and Phase 5 (dashboard) both depend on Phase 3 and can proce
 | Milestone | Achieved after | Signals |
 | --- | --- | --- |
 | **M1 — End-to-end thin slice** | Phase 4 | One question answered with cited evidence from a small corpus |
-| **M2 — Usable insight product** | Phase 5 | Unified page: dashboard + Ask AI usable by a PM (incl. basic competitive view) on the sample corpus |
+| **M2 — Usable insight product** | Phase 5 | Three-tab app: scrape dashboard + competitive + cited chat on the sample corpus |
 | **M3 — Trustworthy system** | Phase 6 | Meets grounding/retrieval quality targets; competitive claims stay evidence-bound; observable |
 | **M4 — Full Phase 1 corpus** | Phase 7 | All six sources live with refresh; competitor-aware coverage sufficient for directional comparisons |
 | **M5 — Internal-data ready** | Phase 8 | Ground-truth metric + validated reasons |
@@ -260,7 +258,7 @@ Phase 4 (assistant) and Phase 5 (dashboard) both depend on Phase 3 and can proce
 | Assistant hallucination | Loss of trust | Strict grounding guardrails, citation enforcement, eval on faithfulness |
 | Invented competitor metrics | Loss of credibility | Explicit guardrail: no private competitor stats; cite platform-tagged evidence only |
 | Taxonomy drift/instability | Inconsistent categorization | Derive from corpus, review, version the taxonomy (incl. motives) |
-| Segment inference without internal data | Weak segmentation | Prefer explicit survey age bands (`age_18_24` / `age_25_35`); treat behavioral segments as directional |
+| Mixing survey n=42 with scrape n=1,217 | Fake KPI / age cards | Keep research in RAG; dashboard KPI is scrape-only |
 | Cost of embeddings/LLM | Budget overrun | Caching, batching, model selection per Architecture §6 |
 | Scope creep in Phase 1 | Delivery risk | Thin vertical slice first; defer breadth to Phase 7 |
 
@@ -271,13 +269,13 @@ Phase 4 (assistant) and Phase 5 (dashboard) both depend on Phase 3 and can proce
 | Requirement (context.md) | Delivered in |
 | --- | --- |
 | Ranked non-conversion reasons | Phase 3 + Phase 5 |
-| Segment/category comparisons | Phase 3 (tagging) + Phase 5 (UI) |
+| Category / source / confidence filters | Phase 3 (tagging) + Phase 5 (UI) |
 | Intent-type views | Phase 3 + Phase 5 |
 | Competitive wishlist comparison (Myntra vs Nykaa/Ajio) | Phase 3 (platform/motive + aggregates) + Phases 4–5 |
 | Shared vs platform-specific themes | Phase 3 + Phase 5 |
-| Unified single-page Dashboard + Ask AI | Phase 5 |
-| Evidence-backed grounded answers | Phase 4 |
-| Confidence & source limitations | Phase 3 (scoring) + Phases 4/5 (surfacing) |
+| Three-tab Dashboard + Competitive + Discovery Chat | Phase 5 |
+| Evidence-backed grounded answers | Phase 4 (chips + Confidence %) |
+| Confidence on every chat answer | Phase 3 (scoring) + Phases 4/5 (footer badge) |
 | Full multi-source / competitor-aware corpus | Phase 7 |
 | Internal-data integration + target metric | Phase 8 |
 
@@ -285,4 +283,4 @@ Phase 4 (assistant) and Phase 5 (dashboard) both depend on Phase 3 and can proce
 
 ## Summary
 
-The plan builds the engine as a **dependency-ordered sequence**: foundations and a thin ingestion slice first (with early platform awareness), then storage, then the semantic analytics core — including **platform tagging, wishlist-motive classification, and competitive aggregates** — followed by the two user experiences (assistant and dashboard) in parallel with competitive Q&A and views, then hardening, corpus/competitor scale-out, and finally extensibility toward internal data and the ground-truth conversion metric. Each phase yields a usable, evidence-grounded increment aligned with the architecture and the competitive analysis capability of the AI-powered engine.
+The plan builds the engine as a **dependency-ordered sequence**: foundations and a thin ingestion slice first, then storage, then the semantic core (taxonomy, platform tags, competitive aggregates), then **Dashboard / Competitive / Discovery Chat** in parallel, then hardening, corpus scale-out, and extensibility toward internal data. Research stays in RAG. The dashboard KPI stays scrape-only. Each phase yields an evidence-grounded increment.

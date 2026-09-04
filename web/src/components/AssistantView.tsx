@@ -235,7 +235,7 @@ interface AssistantViewProps {
   onClose?: () => void;
   /** Competitor platforms (myntra/nykaa/ajio/other) from the shared filter rail. */
   platforms?: string[];
-  /** A question to auto-run on mount (e.g. picked from the Explore Questions tab). */
+  /** A question to auto-run on mount (e.g. picked from the Explore Questions card). */
   initialQuestion?: string;
 }
 
@@ -318,7 +318,7 @@ export default function AssistantView({
     }
   };
 
-  // Auto-run a question passed in from the Explore Questions tab. The ref guard
+  // Auto-run a question passed in from the Explore Questions card. The ref guard
   // keeps React 18 StrictMode's double effect invocation from asking twice.
   useEffect(() => {
     const q = initialQuestion?.trim();

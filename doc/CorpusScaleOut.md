@@ -8,7 +8,7 @@ Phase 7 broadens the ingestion pipeline to **all six source types** with increme
 
 | Source | Connector | Default data |
 | --- | --- | --- |
-| `research` | Dual Excel surveys + open-text answers | `Myntra Wishlist.xlsx` + `Your Wishlist Habits (Responses).xlsx` (age bands → `age_18_24` / `age_25_35`) |
+| `research` | Dual Excel surveys + interviews | `Myntra Wishlist.xlsx` + `Your Wishlist Habits (Responses).xlsx` — RAG only, not a dashboard tile |
 | `play_store` | Google Play Store scraper | Live scrape (filtered) |
 | `reddit` | Public Reddit search JSON | `data/seeds/reddit.json` |
 | `youtube` | YouTube Data API (optional) | `data/seeds/youtube.json` |
@@ -89,6 +89,7 @@ Set `VECTOR_BACKEND=qdrant` to prepare for a dedicated vector DB; the Qdrant ada
 ## Exit criteria
 
 - [x] All six source types have connectors and seed/live paths
+- [x] Public sources power the scrape strip; research stays off the dashboard KPI
 - [x] Incremental per-source refresh scheduling
 - [x] Cross-source dedupe/quality validation
 - [x] Analytics/confidence recompute on refresh

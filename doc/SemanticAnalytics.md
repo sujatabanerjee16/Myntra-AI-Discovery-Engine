@@ -41,3 +41,5 @@ python -m analytics.run
 - `theme_clusters` — emerging theme groupings
 
 Every insight includes: `reason_category`, `intent_type`, `journey_stage`, `segment`, `category`, `evidence_chunk_ids`, `confidence`, and `sources`.
+
+Dashboard / chat labels (not the raw enum): `external_comparison` → **Research & Comparison**, `review_trust` → **Proof / Photos**. Age tags on research chunks do not become dashboard filters.

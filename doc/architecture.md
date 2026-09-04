@@ -26,8 +26,8 @@ The architecture must be:
 │                                                                                │
 │   ┌────────────────────────────────────────────────────────────────────┐  │
 │   │              Unified single-page Presentation                       │  │
-│   │  Insight Dashboard (charts, filters, competitive views)             │  │
-│   │       + Ask AI dock (suggested questions + grounded chat)           │  │
+│   │  Dashboard · Competitive Analysis · Discovery Chat (three tabs)     │  │
+│   │  Scrape strip + Opportunity Matrix + cited chat                    │  │
 │   └───────────▲────────────────────────────────▲───────────────────────┘  │
 └──────────────┼────────────────────────────────┼──────────────────────────┘
                │ REST/GraphQL                    │ REST / streaming
@@ -106,7 +106,7 @@ Transforms enriched chunks into structured insight. Runs as batch/offline jobs a
 - **Clustering** — unsupervised grouping of related behaviors/unmet needs to discover emerging themes.
 - **Intent detection** — classify **active shortlist** vs **passive bookmarking**.
 - **Journey-stage mapping** — map conversations to stages in the wishlist→purchase journey.
-- **Segment tagging** — infer category, occasion, price band, and user-segment tags. Primary research surveys carry an explicit **age band** (`age_18_24`, `age_25_35`); enrichment prefers that metadata over behaviorally inferred segments so dashboard filters and RAG can compare cohorts.
+- **Segment tagging** — infer category, occasion, price band, and behavioral tags (price / fit / quality). Primary research surveys still carry an **age band** (`age_18_24`, `age_25_35`) on chunks so RAG can use that metadata. The **dashboard does not** expose Age 18–24 vs 25–35 cards or filters — those visuals mixed a 42-person Google Form with 1,217 scrapes.
 - **Platform tagging** — detect and normalize platform mentions: `myntra`, `nykaa`, `ajio`, `other` (configurable list).
 - **Wishlist-motive classification** — label *why* users wishlist on a platform (see `context.md` §8.1: assortment, price/sale waiting, brand/exclusive, category strength, trust, UX, social/inspiration).
 - **Competitive comparison aggregation** — build shared vs platform-specific motive/barrier distributions and evidence-backed competitive insight records.
@@ -117,13 +117,14 @@ Transforms enriched chunks into structured insight. Runs as batch/offline jobs a
 Two backend services (can share a codebase/monorepo):
 
 - **Insights API** — serves dashboard queries: ranked reasons, segment/category comparisons, heatmaps, trends, evidence summaries with confidence, and **competitive wishlist comparison** endpoints (motives/barriers by platform; shared vs unique themes). Mostly reads from the analytical store.
-- **RAG Orchestrator** — powers the assistant using a **retrieve → rerank → ground → generate** flow (see §4.2). Understands competitive intents (e.g. “Myntra vs Nykaa wishlist motives”), applies platform metadata filters, injects competitive aggregates, and enforces grounding: no answer without retrieved evidence; every claim carries citations.
+- **RAG Orchestrator** — powers Discovery Chat using a **retrieve → rerank → ground → generate** flow (see §4.2). Understands competitive intents (e.g. “Myntra vs Nykaa wishlist motives”), injects competitive aggregates, and enforces grounding: no answer without retrieved evidence. Every in-scope answer shows **public source chips** (Play Store / Reddit / YouTube / reviews / social) and a **Confidence: N%** badge. Survey/interview lines may inform the answer but do not appear as evidence chips.
 
 ### 3.5 Presentation Layer
 
-- **Unified single page** — Insight Dashboard and Ask AI share one page so users explore charts and ask questions without switching routes.
-- **Insight Dashboard** — interactive charts, friction/uncertainty heatmaps, intent-type views, filters (category, occasion, price band, segment, **platform**), **competitive comparison views**, drill-down to source excerpts, and confidence/evidence-volume indicators.
-- **Ask AI (Grounded RAG Assistant)** — docked panel on the same page with **suggested starter questions**, concise evidence-backed answers, inline source references, drill-downs (including by competitor), and explicit source/competitive-coverage limitation notes. On narrow viewports the Ask AI panel may collapse into a drawer/FAB while remaining part of the same page experience.
+- **Unified single page, three tabs** — **Dashboard**, **Competitive Analysis**, and **Discovery Chat** share one app so a PM can rank, compare, then ask without leaving the product.
+- **Dashboard** — scrape strip (**1,217 shopper comments**: Play Store, Reddit, YouTube, reviews, social), Opportunity Matrix (volume + confidence, filterable by category / source / min-confidence slider), shopper-comment examples, and internal PM calibration. **No Google Form tile. No age-board.** Survey vs scrape never share a KPI.
+- **Competitive Analysis** — Myntra vs Nykaa vs Ajio motives and barriers from platform mentions.
+- **Discovery Chat** — starter questions + grounded answers. Every in-scope bubble shows the same footer: platform chips + `Confidence: N%`. Evidence drawer lists public comments only.
 
 ---
 
@@ -149,24 +150,28 @@ user question
    → retrieve top-k chunks from vector store (+ metadata filters, incl. platform)
    → rerank for relevance
    → assemble grounded context (chunks + reason aggregates + competitive aggregates)
-   → Groq-hosted LLM generates answer constrained to retrieved evidence
-   → attach citations, confidence, and source / competitive-coverage limitations
+   → Groq-hosted LLM (or template fallback) generates answer constrained to retrieved evidence
+   → attach public citations + Confidence: N%  (never paste confidence/volume into the prose)
    → return to user
 ```
 
 **Guardrails:**
-- If retrieval yields insufficient evidence, the assistant says so rather than speculating.
+- If retrieval yields insufficient evidence, the assistant says so in plain English rather than speculating.
 - Answers must cite retrieved excerpts; unsupported claims are disallowed.
 - Competitive claims must not invent private competitor metrics; they must cite platform-tagged evidence.
 - Aggregated dashboard facts (including competitive aggregates) can be injected as additional grounded context.
+- Research/interview Q&A may ground the answer; it must not appear in Show evidence or as a dashboard KPI.
 
 ### 4.3 Dashboard query flow (online)
 
 ```
-user selects filters (incl. platform) → Insights API → analytical store aggregation
-   → ranked reasons / segment comparisons / competitive comparisons / heatmaps
-     + confidence → render
+user selects category / scrape-source / min-confidence
+   → Insights API (or dashboard-bootstrap.json snapshot)
+   → Opportunity Matrix + scrape strip + competitive views
+   → render
 ```
+
+Age-band filters are **not** on this path. Confidence slider filters matrix rows client-side and refetches ranked reasons.
 
 ### 4.4 Competitive analysis flow (AI engine)
 
@@ -250,35 +255,27 @@ platform-tagged chunks + motive/barrier labels
 | `answer` | Generated answer |
 | `citations` | Excerpt references |
 | `confidence` | Overall confidence |
-| `limitations` | Source/coverage/competitive-coverage caveats |
+| `limitations` | Internal caveat string (not shown in the chat bubble) |
 
 ---
 
-## 5.6 Primary research age segments
+## 5.6 Primary research (RAG only — not a dashboard tile)
 
-Research connectors load **two** Excel workbooks by default:
+Research connectors still load **two** Excel workbooks plus interviews:
 
 | Workbook | Role |
 | --- | --- |
-| `Myntra Wishlist.xlsx` | Myntra-focused wishlist survey (age column → mostly 25–35) |
-| `Your Wishlist Habits (Responses).xlsx` | Cross-app wishlist habits survey (age column → mostly 18–24) |
+| `Myntra Wishlist.xlsx` | Myntra-focused wishlist survey |
+| `Your Wishlist Habits (Responses).xlsx` | Cross-app wishlist habits survey |
 
-Survey age answers normalize to dashboard/RAG segments:
+Those rows land as `source=research` with optional `age_band` metadata. They **inform Discovery Chat** when retrieved. They do **not**:
 
-| Survey label | Segment key | UI label |
-| --- | --- | --- |
-| 18–24 | `age_18_24` | Age 18–24 |
-| 25–34 / 25–35 | `age_25_35` | Age 25–35 |
+- appear on the scrape strip (that KPI is **1,217 public comments**),
+- share a number with Play Store / Reddit counts,
+- drive Age 18–24 vs 25–35 cards or a segment dropdown,
+- show up as interview Q&A in the evidence drawer.
 
-Enrichment **prefers** `metadata.age_band` over behaviorally inferred segments (price/fit/quality), so segment filters and Ask AI questions about age cohorts retrieve the right research evidence.
-
-### Age-band behavior (directional, latest surveys)
-
-**Age 18–24 (n≈27 in habits survey):** Myntra-heavy wishlist use; top blockers are occasion waiting, sale waiting, forgetting, and choice overload among similar saves; strongest decision help is **real customer photos/videos** (many also say nothing would change their mind without a price change).
-
-**Age 25–35 (habits n≈6 + Myntra survey n≈9):** More trust/photo/review doubt, fit uncertainty, and explicit **price too high** as primary non-purchase reason; decision help is more mixed (styling, reminders, fit confidence, other).
-
-Treat volume imbalance as a confidence caveat when comparing cohorts.
+UI reason labels (dashboard + chat): **Research & Comparison** (taxonomy `external_comparison`), **Proof / Photos** (taxonomy `review_trust`).
 
 ---
 
@@ -297,7 +294,7 @@ Treat volume imbalance as a confidence caveat when comparing cohorts.
 | LLM | Groq (hosted, e.g. Llama-family models) with JSON/structured output | Fast, low-latency grounded generation with citations |
 | Backend API | FastAPI | Async, typed, quick to build |
 | Dashboard frontend | React + charting lib (Recharts/ECharts) | Interactive visual analytics |
-| Ask AI frontend | React chat UI **docked on the same page** as the dashboard | Unified single-page experience; suggested questions + grounded chat |
+| Chat frontend | React **Discovery Chat** tab on the same app | Starter questions + chips + Confidence: N% |
 
 ---
 
@@ -331,16 +328,16 @@ The architecture is deliberately staged so it can grow without redesign:
 | Product requirement (context.md) | Architectural component |
 | --- | --- |
 | Ranked non-conversion reasons | Semantic layer (taxonomy) → analytical store → Insights API → dashboard |
-| Segment/category comparisons | Segment tagging → analytical store → dashboard filters |
+| Category / source / confidence filters | Insights API + client-side confidence slider → Opportunity Matrix |
 | Intent-type views | Intent detection → Insight model → dashboard |
 | Competitive wishlist comparison (Myntra vs Nykaa/Ajio) | Platform tagging + motive classification → CompetitiveAggregate → Insights API + RAG |
-| Shared vs platform-specific themes | Competitive comparison aggregation → dashboard + assistant |
-| Evidence-backed answers | RAG Orchestrator + vector store + citations |
-| Confidence & source limitations | Confidence scoring + AnswerTrace + UI indicators |
+| Shared vs platform-specific themes | Competitive comparison aggregation → Competitive tab + chat |
+| Evidence-backed answers | RAG Orchestrator + public citation chips + Confidence: N% |
+| Confidence on every answer | `compute_answer_confidence` → chat footer badge (not inline decimals) |
 | Future internal-data integration | Extensible ingestion + analytical store (roadmap §8) |
 
 ---
 
 ## 10. Summary
 
-The system is a **layered, evidence-grounded architecture**: an incremental **ingestion pipeline** feeds a **document/vector/analytical storage layer**, a **semantic analytics layer** structures feedback into a reason taxonomy with platform tags, wishlist motives, and confidence, and two serving paths — an **Insights API** and a **RAG Orchestrator** — power a **unified single-page** experience (dashboard charts + **Ask AI** suggested questions and grounded chat, including competitive views). Every layer is modular and extensible so Phase 1's public-evidence engine can later incorporate internal behavioral data and broader competitor coverage without redesign.
+The system is a **layered, evidence-grounded architecture**: an incremental **ingestion pipeline** feeds a **document/vector/analytical storage layer**, a **semantic analytics layer** structures feedback into a reason taxonomy with platform tags, wishlist motives, and confidence, and two serving paths — an **Insights API** and a **RAG Orchestrator** — power a **three-tab** app: scrape-only **Dashboard**, **Competitive Analysis**, and **Discovery Chat** (public chips + Confidence %). Research stays in the corpus for grounding; it is never mixed into the 1,217-comment scrape KPI. Every layer is modular so Phase 1 can later add internal behavioral data without redesign.

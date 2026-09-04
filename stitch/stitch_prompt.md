@@ -1,11 +1,12 @@
-# Google Stitch Prompt — Wishlist Intelligence (Unified Single Page)
+# Google Stitch Prompt — Wishlist Intelligence (historical brief)
 
-> Paste the prompt in the `PROMPT` block below into Google Stitch. It supersedes the earlier
-> two-screen concept (separate `wishlist_intelligence_insight_dashboard` and
-> `wishlist_intelligence_ai_assistant`) with a single **unified page** that matches
-> [`doc/Architecture.md`](../doc/Architecture.md) §3.5 / §5 and
-> [`doc/ImplementationPlan.md`](../doc/ImplementationPlan.md) Phase 5:
-> Insight Dashboard + Competitive Analysis + docked **Ask AI**, all on one page.
+> **Shipped UX (do not treat the prompt below as current spec):** three top-nav tabs —
+> **Dashboard** (scrape strip + Opportunity Matrix, no Google Form tile, no age board),
+> **Competitive Analysis**, and **Discovery Chat** (public source chips + `Confidence: N%`).
+> Local: Vite `5173` → API `8010`. See [`doc/architecture.md`](../doc/architecture.md).
+>
+> The `PROMPT` block is the original Stitch brief (docked Ask AI, single scroll page). Keep it
+> only as design history.
 
 ---
 

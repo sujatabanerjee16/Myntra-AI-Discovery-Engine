@@ -13,11 +13,11 @@
 | **Core question** | Why do users wishlist fashion products but fail to purchase within 30 days? |
 | **Competitive question** | Why do people wishlist on Myntra vs competitors (Nykaa, Ajio, etc.)? |
 | **Target metric** | Wishlist-to-purchase conversion within 30 days (+ directional competitive motive/barrier comparison) |
-| **Deliverables** | **Unified single page:** Insight Dashboard + Ask AI (suggested questions + grounded chat), incl. competitive views |
+| **Deliverables** | **Three-tab app:** Dashboard (scrape strip + Opportunity Matrix) · Competitive Analysis · Discovery Chat |
 | **Primary users** | Growth PMs, User Research/Insights/Analytics, competitive/category strategy, business stakeholders |
 | **Data phase 1** | Public conversations + approved research inputs (no internal behavioral data yet); multi-platform mentions tagged |
 | **Guiding principle** | Evidence-backed, explainable insights — not generic summaries or raw sentiment |
-| **UX principle** | Dashboard charts and Ask AI live on **one page** so users explore visually and conversationally without context-switching |
+| **UX principle** | Rank on Dashboard, compare on Competitive, ask on Discovery Chat — same app, no mixed survey/scrape KPI |
 
 ---
 
@@ -56,7 +56,7 @@ The system should turn scattered feedback into **structured, PM-usable opportuni
 
 - Identify and rank recurring **non-conversion reasons**.
 - Distinguish **purchase-intent wishlisting** from **passive bookmarking**.
-- Compare patterns across **categories, occasions, price bands, intent types, and user segments**.
+- Compare patterns across **categories, occasions, price bands, intent types, and scrape sources**.
 - Compare **wishlist motives and barriers for Myntra vs competitors** (Nykaa, Ajio, and other tagged platforms).
 - Surface **shared vs platform-specific** themes that inform differentiation and conversion work.
 - Surface the **most plausible opportunity areas** tied to the 30-day conversion metric.
@@ -96,12 +96,12 @@ The system should turn scattered feedback into **structured, PM-usable opportuni
 
 ## 6. Solution Architecture (Hybrid Insight Architecture)
 
-The system is composed of cooperating layers plus a **unified single-page** user experience (dashboard + Ask AI).
+The system is composed of cooperating layers plus a **three-tab** user experience (Dashboard · Competitive · Discovery Chat).
 
 ```
                  ┌──────────────────────────────────────────────────────────┐
-                 │         Unified single-page user experience               │
-                 │   Insight Dashboard  +  Ask AI (suggested Qs + chat)      │
+                 │         Unified three-tab user experience                 │
+                 │   Dashboard  ·  Competitive  ·  Discovery Chat            │
                  └───────────────▲───────────────────────▲──────────────────┘
                                  │                       │
         ┌────────────────────────┴───────────────────────┴────────────────────┐
@@ -119,18 +119,18 @@ The system is composed of cooperating layers plus a **unified single-page** user
         └──────────────────────────────────────────────────────────────────────┘
 ```
 
-### 6.1 Dashboard Layer (+ Ask AI on the same page)
+### 6.1 Dashboard Layer
 
-Surfaces quantified, comparable insight **and** Ask AI on one page:
+Surfaces quantified, comparable **scraped** insight:
 
-- top reasons for wishlist non-conversion
-- variation by category, occasion, price band, intent type, user segment
-- recurring uncertainties: fit, quality, styling, price sensitivity, trust, timing
-- **competitive wishlist comparison** (Myntra vs Nykaa, Ajio, etc.)
-- **shared vs platform-specific** motive and barrier themes
-- evidence strength / confidence by source and by platform (when tagged)
-- emerging themes and opportunity areas over time
-- **Ask AI panel** — suggested starter questions + grounded chat, docked on the same page as the charts (not a separate route)
+- scrape strip: **1,217 shopper comments** (Play Store, Reddit, YouTube, reviews, social) — never mixed with the 42-person Google Form
+- Opportunity Matrix: ranked non-conversion reasons at a min-confidence slider (default ≥50%)
+- shopper-comment examples (one public line per reason)
+- variation by **category** and **scrape source** (not age 18–24 vs 25–35 cards)
+- recurring uncertainties: fit, quality, styling, price sensitivity, **Proof / Photos**, timing, **Research & Comparison**
+- internal PM calibration (validate / flag) — not scraped user data
+- **Competitive Analysis** tab: Myntra vs Nykaa vs Ajio motives and barriers
+- **Discovery Chat** tab: starter questions + grounded answers with the same footer every time (platform chips + `Confidence: N%`)
 
 ### 6.2 Semantic Analytics Layer
 
@@ -143,17 +143,16 @@ Transforms raw feedback into structured intelligence:
 - **tags platforms** mentioned (Myntra, Nykaa, Ajio, …) and classifies **wishlist motives** per platform
 - supports comparative analysis across segments, contexts, **and competitors**
 
-### 6.3 Grounded RAG Assistant (Ask AI)
+### 6.3 Grounded RAG Assistant (Discovery Chat)
 
-Answers questions with retrieved evidence, embedded in the dashboard page:
+Answers questions with retrieved evidence on its own tab:
 
-- answers predefined and ad hoc business **and competitive** questions
-- shows **suggested Ask AI questions** next to dashboard insights
-- retrieves relevant evidence from the curated corpus (including multi-platform mentions)
-- synthesizes findings from the dashboard + semantic layer
-- gives transparent, explainable answers **with source references**
-- avoids unsupported claims / free-form speculation
-- stays on the **same page** as the dashboard so users do not leave their analytics context
+- answers the canned starter questions and ad hoc business **and competitive** questions
+- retrieves from the curated corpus (scrapes + research); **Show evidence** lists public comments only
+- synthesizes findings from retrieved excerpts + dashboard aggregates
+- every in-scope answer shows **platform chips** and a **Confidence: N%** badge — never `(confidence 0.84, volume 397)` in the prose
+- refuses in plain English when evidence is too thin; does not invent a conversion rate
+- research/interviews may inform the wording; they are not evidence chips or a dashboard tile
 
 ### 6.4 Competitive Analysis (AI engine capability)
 
@@ -179,7 +178,7 @@ Default Phase 1 competitor set (configurable): **Nykaa**, **Ajio**, plus an **Ot
 - YouTube comments
 - Product reviews
 - Social conversations
-- Primary user research inputs (dual Excel surveys; age bands → `age_18_24` / `age_25_35`)
+- Primary user research inputs (dual Excel surveys + interviews; `source=research` — RAG only, not a dashboard tile)
 - Conversations that explicitly compare or mention multiple fashion/lifestyle platforms
 
 ### 7.2 Priority signals to capture
@@ -212,9 +211,9 @@ A structured taxonomy is central to the semantic layer. A suggested starting set
 | **Price sensitivity / waiting** | waiting for sale, price too high, expecting a discount, comparing prices |
 | **Quality & trust doubt** | worried about material/quality, distrust of product photos or reviews |
 | **Styling / decision uncertainty** | unsure how to style, indecisive between options, needs validation |
-| **Review trust** | too few reviews, conflicting reviews, suspected fake reviews |
+| **Proof / Photos** (`review_trust`) | too few reviews, conflicting reviews, suspected fake reviews, wants real customer photos |
 | **Timing / occasion** | saving for a future occasion, not needed yet, seasonal timing |
-| **External comparison** | checking other apps/sites, seeking opinions outside Myntra |
+| **Research & Comparison** (`external_comparison`) | checking other apps/sites, seeking opinions outside Myntra |
 | **Passive bookmarking** | saving for inspiration, no real intent to buy soon |
 | **Logistics / friction** | delivery time, return policy concerns, payment friction |
 | **Competitive / platform preference** | preferring another app for wishlist; switching platforms for price, assortment, or category |
@@ -241,47 +240,46 @@ These motive tags power **Myntra vs competitor** dashboard charts and competitiv
 
 ## 9. Key Questions the Engine Must Answer
 
-1. Why do users add fashion products to their wishlist?
-2. What prevents wishlisted products from being purchased?
-3. What uncertainties remain after a user identifies a product they like?
-4. What causes users to postpone the purchase?
-5. When is the wishlist real purchase intent vs casual bookmarking?
-6. How do users compare shortlisted products?
-7. What information do users seek outside Myntra before purchasing?
-8. How do behaviors vary across categories, intents, and user segments?
-8a. How do wishlist behaviors differ between **Age 18–24** and **Age 25–35** (primary research)?
-9. What unmet needs appear repeatedly across conversations?
-10. **Why do users wishlist on Myntra vs Nykaa, Ajio, or other competitors?**
-11. **Which wishlist motives are shared across platforms, and which are platform-specific?**
-12. **Where does Myntra appear stronger or weaker than competitors on wishlist-related frictions?**
+Starter questions in Discovery Chat (`assistant/questions.py`):
 
-Each should be answerable via **dashboard exploration**, **filtered evidence views** (including by platform), and **grounded chatbot responses**.
+1. Why do users add fashion products to their wishlist?
+2. What prevents wishlisted products from eventually being purchased?
+3. What uncertainties remain after users have identified a product they like?
+4. What causes users to postpone a purchase?
+5. How do users compare multiple shortlisted products?
+6. What information do users seek outside Myntra/AJIO before purchasing?
+7. What role do fit, size, styling, price, reviews, occasion and social validation play?
+8. When do users use the wishlist as genuine purchase intent versus simply as a bookmarking mechanism?
+9. What unmet needs emerge consistently across user conversations?
+
+Competitive (dashboard tab + chat):
+
+10. Why do users wishlist on Myntra vs Nykaa, Ajio, or other competitors?
+11. Which wishlist motives are shared across platforms, and which are platform-specific?
+12. Where does Myntra appear stronger or weaker than competitors on wishlist-related frictions?
+
+The engine **does not** treat “How do 18–24 vs 25–35 differ?” as a dashboard or starter-chat question. Age metadata stays on research chunks for retrieval; it is not a first-class UI split.
 
 ---
 
 ## 10. Key Outputs
 
-### 10.1 Dashboard + Ask AI outputs (single page)
+### 10.1 Dashboard + Competitive outputs
 
-- ranked non-conversion reason categories
-- segment and category comparisons
-- uncertainty and friction heatmaps
-- intent-type views ("active shortlist" vs "passive bookmarking")
-- **competitive wishlist motive / barrier comparison** (Myntra vs Nykaa, Ajio, etc.)
-- **shared vs platform-specific theme views**
-- source-level evidence summaries
-- confidence scores and evidence-volume indicators (including by platform where available)
-- **Ask AI suggested questions** visible alongside dashboard charts
-- inline grounded chat answers with citations (same page)
+- scrape strip (1,217 comments by source share)
+- ranked Opportunity Matrix (volume, 0–10 confidence, share)
+- shopper-comment examples from public sources
+- category + scrape-source + min-confidence filters
+- **competitive wishlist motive / barrier comparison** (Myntra vs Nykaa vs Ajio)
+- Explore-questions card that opens Discovery Chat
+- PM calibration notes (internal)
 
-### 10.2 Chat assistant outputs (Ask AI panel)
+### 10.2 Discovery Chat outputs
 
-- concise answers to stakeholder questions, including competitive questions
-- evidence-backed synthesis across multiple sources and platforms
-- drill-down explanations by category, segment, occasion, **or competitor**
-- supporting excerpts / references from retrieved conversations
-- transparent indication of source and competitive-coverage limitations
-- all of the above available **without leaving the dashboard page**
+- concise answers to the starter questions and follow-ups
+- the **same footer on every in-scope answer**: `[Reddit #1]` / `[Play Store #1]` / … plus **Confidence: N%**
+- evidence drawer of public excerpts only
+- no invented conversion rate; thin evidence is refused in plain English
 ---
 
 ## 11. Constraints & Principles
@@ -297,7 +295,7 @@ Each should be answerable via **dashboard exploration**, **filtered evidence vie
 ### 11.2 Transparency & reliability
 
 - Insights must be **evidence-backed and explainable**.
-- Outputs must indicate **confidence level and source limitations**.
+- Outputs must indicate **confidence as a percentage badge** and cite **public platforms**, not bury decimals in the answer text.
 - Competitive claims must show **which platforms were mentioned** and attribution confidence.
 - Avoid overstating conclusions from isolated anecdotes.
 - The assistant must stay **grounded** in retrieved evidence and the structured insight layers.
@@ -313,7 +311,7 @@ The discovery engine succeeds if it can:
 - highlight the most plausible opportunity areas tied to the target metric
 - compare patterns across sources, categories, and user segments
 - **compare wishlist motives and barriers for Myntra vs competitors with cited evidence**
-- provide a **unified single-page** dashboard + Ask AI experience (suggested questions + grounded chat alongside charts)
+- provide a **three-tab** Dashboard + Competitive + Discovery Chat experience (scrape KPI, cited chat)
 - generate credible, PM-usable insights rather than raw summaries
 
 ---
@@ -361,4 +359,4 @@ The discovery engine succeeds if it can:
 
 ## 15. Summary
 
-The goal is a **credible, structured, and scalable wishlist conversion insight system** for Myntra, with a built-in **competitive analysis** capability. By combining a **dashboard**, a **semantic analytics layer**, and a **grounded RAG assistant**, the system helps researchers and PMs understand *why wishlist intent often fails to convert into purchase within 30 days*, and *why users wishlist on Myntra versus competitors like Nykaa and Ajio*. It should uncover the real frictions, uncertainties, and unmet needs between product interest and purchase — and present them in a form that is **measurable, explainable, actionable, and competitively aware**.
+The goal is a **credible, structured, and scalable wishlist conversion insight system** for Myntra, with a built-in **competitive analysis** capability. By combining a **scrape-only dashboard**, a **semantic analytics layer**, and **Discovery Chat**, the system helps researchers and PMs understand *why wishlist intent often fails to convert into purchase within 30 days*, and *why users wishlist on Myntra versus competitors like Nykaa and Ajio*. Survey forms stay in RAG. Scrapes own the dashboard KPI. Every chat answer cites a platform and a confidence score.

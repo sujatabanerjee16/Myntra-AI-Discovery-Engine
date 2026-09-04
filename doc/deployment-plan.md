@@ -12,7 +12,8 @@
 │  Vercel (frontend)         │ ─────────────────────▶ │  Render (FastAPI backend)   │
 │  web/  → React + Vite SPA  │   VITE_API_BASE        │  api.main:app (uvicorn)     │
 │  wishlist-*.vercel.app     │                        │  JSON fallback corpus       │
-└────────────────────────────┘                        │  + Groq for Ask AI          │
+│  (static bootstrap)        │                        │  + Groq; template fallback  │
+└────────────────────────────┘                        │    if the model 404s        │
                                                       └──────────────┬──────────────┘
                                                                      │ optional later
                                                       ┌──────────────▼──────────────┐
@@ -23,7 +24,7 @@
 
 | Layer | Host | What deploys |
 | ----- | ---- | ------------ |
-| Frontend | **Vercel** | `web/` (Vite build → static assets) |
+| Frontend | **Vercel** | `web/` (Vite build → static assets + `dashboard-bootstrap.json`) |
 | Backend API | **Render** (Web Service) | FastAPI via `uvicorn api.main:app` |
 | Data (Phase 1 demo) | Bundled with backend | `data/insights.json`, `data/scraped_corpus.json` (`USE_JSON_FALLBACK=true`) |
 | LLM | Groq (external) | `GROQ_API_KEY` on the backend only |
@@ -74,7 +75,7 @@ If you specifically need a Streamlit surface later, treat it as an **optional op
 | `DATABASE_URL` | *(optional / local)* | Used locally with Neon. Not required on free Render while `USE_JSON_FALLBACK=true` |
 | `INSIGHTS_JSON_PATH` | `data/insights.json` | |
 | `SCRAPED_JSON_PATH` | `data/scraped_corpus.json` | |
-| `GROQ_API_KEY` | *(secret)* | Required for Ask AI |
+| `GROQ_API_KEY` | *(secret)* | Preferred for Discovery Chat; template synthesis still answers if Groq is down |
 | `GROQ_MODEL` | `llama-3.3-70b-versatile` | |
 | `CORS_ORIGINS` | `https://myntra-ai-discovery-engine-five.vercel.app` | Comma-separated; include preview URLs if needed |
 | `PYTHON_VERSION` | `3.12.8` | Required — Render’s default (e.g. 3.14) breaks `pydantic-core` |
@@ -184,10 +185,11 @@ npx vercel --prod
 1. Backend `/health` returns OK on Render.
 2. Backend `/insights/reasons` returns non-empty reasons (JSON present).
 3. Vercel site loads; browser Network tab shows API calls to the Render host (not `/api` on Vercel).
-4. Dashboard filters and competitive view load.
-5. Ask AI returns a grounded answer (requires valid `GROQ_API_KEY`).
-6. CORS: no browser `blocked by CORS policy` errors.
-7. Secrets: `.env` never committed; only platform secret stores used.
+4. Dashboard scrape strip shows **1,217 shopper comments** (no Google Form tile). Opportunity Matrix and Competitive tab load.
+5. Discovery Chat returns a grounded answer with **platform chips + Confidence: N%**. Groq is preferred; template synthesis is the local fallback if the model is unavailable.
+6. PM walkthrough plays at `http://127.0.0.1:8010/walkthrough` (or `/pm-demo/wishlist-intelligence-pm-walkthrough.html` on the API host).
+7. CORS: no browser `blocked by CORS policy` errors.
+8. Secrets: `.env` never committed; only platform secret stores used.
 
 ---
 

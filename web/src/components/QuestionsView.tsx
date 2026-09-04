@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface QuestionsViewProps {
-  /** Called when a user picks a question; parent forwards it to the Ask AI dock. */
+  /** Called when a user picks a question; parent opens Discovery Chat with it. */
   onAsk: (question: string) => void;
 }
 

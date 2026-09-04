@@ -49,4 +49,4 @@ Metadata filters: `source`, `category`, `occasion`, `price_band`, `segment`, `si
 | `GET /storage/aggregates/signals` | Priority-signal counts |
 | `GET /storage/aggregates/dimensions` | Segment/category heatmap inputs |
 
-See OpenAPI docs at `/docs` when the API is running.
+See OpenAPI docs at http://127.0.0.1:8010/docs when the API is running. Research-only filters are valid for retrieval; they do not become dashboard tiles.

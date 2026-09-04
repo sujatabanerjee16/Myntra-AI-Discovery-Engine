@@ -13,7 +13,7 @@ Load wishlist/funnel events from JSON (sample: `data/seeds/internal_wishlist_eve
 | `user_hash` | Anonymized user identifier |
 | `product_id` | Wishlisted/purchased SKU |
 | `event_type` | `wishlist_add`, `purchase`, `product_view`, … |
-| `segment` | Age band (`age_18_24`, `age_25_35`) from research surveys when present; else behavioral (price_sensitive, fit_uncertain, …) |
+| `segment` | Behavioral tag when present (price_sensitive, fit_uncertain, …). Research age bands may exist on events; they are **not** dashboard cards. |
 | `event_at` | Event timestamp (ISO-8601) |
 
 ```bash
@@ -62,10 +62,10 @@ Verdicts adjust confidence:
 
 ## Dashboard
 
-The React app adds a **Conversion** tab showing:
-- 30-day conversion rate
-- Reason corroboration table
-- PM feedback form and history
+The live app has three tabs. There is **no Conversion tab**.
+
+- 30-day conversion and corroboration stay on the internal API (`GET /internal/conversion`, `GET /internal/corroboration`).
+- PM feedback (validate / flag a reason) is the **PM calibration** block on the Dashboard.
 
 ---
 

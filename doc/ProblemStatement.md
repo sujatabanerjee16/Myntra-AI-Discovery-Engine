@@ -16,8 +16,8 @@ A wishlist is a strong but incomplete signal of intent. It indicates that a user
 
 Rather than producing generic summaries or sentiment snapshots, the system should combine:
 
-- a **single-page** experience with a dashboard that quantifies and compares recurring non-conversion reasons **and competitive wishlist motives**, alongside **Ask AI** suggested questions and grounded chat, and
-- a grounded AI assistant that answers specific business, research, and competitive questions using evidence retrieved from the underlying corpus.
+- a **three-tab** app: scrape-only **Dashboard** (1,217 public comments + Opportunity Matrix), **Competitive Analysis**, and **Discovery Chat**, and
+- a grounded assistant that answers business and competitive questions from retrieved evidence, with **platform chips + Confidence: N%** on every in-scope answer.
 
 The engine will analyze large-scale public and research-driven user feedback from sources such as app reviews, Reddit discussions, YouTube comments, social conversations, product reviews, and primary user research inputs — including conversations that explicitly mention **Myntra and/or competitors**. Its purpose is to surface actionable opportunity areas that may influence wishlist-to-purchase conversion and competitive differentiation.
 
@@ -25,18 +25,22 @@ The engine will analyze large-scale public and research-driven user feedback fro
 
 Design and implement a lightweight AI-powered discovery engine with two integrated experiences:
 
-### 1. Insight Dashboard + Ask AI (single page)
+### 1. Insight Dashboard + Competitive Analysis
 
-A **unified single-page experience** that combines:
+The **Dashboard** tab shows:
 
-- the insight dashboard (charts, filters, competitive views), and
-- **Ask AI** — suggested questions and the grounded chat assistant
+- a scrape strip of **1,217 shopper comments** (Play Store, Reddit, YouTube, reviews, social)
+- the Opportunity Matrix (volume, confidence, share) with category / source / min-confidence filters
+- public shopper-comment examples
+- internal PM calibration
 
-Users should see analytics and Ask AI **on the same page** (e.g. dashboard main canvas + docked Ask AI panel), without navigating to a separate assistant route. Suggested starter questions appear inline so PMs can explore visually and conversationally in one view.
+It does **not** show a Google Form tile or Age 18–24 vs 25–35 cards. Survey vs scrape never share a KPI.
 
-### 2. Grounded AI Assistant (Ask AI)
+The **Competitive Analysis** tab compares Myntra vs Nykaa vs Ajio motives and barriers.
 
-A chatbot powered by a semantic retrieval and reasoning layer that answers specific questions about wishlist behavior, non-conversion drivers, unmet user needs, and **competitive wishlist comparison** using evidence-backed responses — surfaced as the **Ask AI** panel on the same page as the dashboard.
+### 2. Grounded AI Assistant (Discovery Chat)
+
+A chatbot that answers wishlist, non-conversion, unmet-need, and competitive questions from retrieved evidence. Every in-scope answer uses the **same footer**: public source chips + `Confidence: N%`. Research/interviews may inform the wording; they do not appear in Show evidence.
 
 Together, these should help Myntra:
 
@@ -45,8 +49,7 @@ Together, these should help Myntra:
 - uncover why wishlisted items are not purchased within 30 days
 - detect recurring barriers, uncertainties, and postponement triggers
 - **compare wishlist motives and frictions across Myntra and competitors**
-- compare patterns across categories, intents, and user segments
-- **compare age cohorts Age 18–24 vs Age 25–35** using primary research surveys with explicit age fields
+- compare patterns across categories, scrape sources, and platforms
 - generate structured, PM-usable insights instead of raw summaries
 
 
@@ -72,18 +75,17 @@ Specifically: among users who add fashion products to their wishlist, what share
 
 The solution should follow a hybrid insight architecture:
 
-### 1. Dashboard Layer (+ Ask AI on one page)
+### 1. Dashboard Layer
 
 The dashboard should show:
 
-- top reasons for wishlist non-conversion
-- variation by category, occasion, price band, intent type, and user segment
-- **age-band segments** from primary research: `age_18_24` and `age_25_35`
-- recurring uncertainties such as fit, quality, styling, price sensitivity, trust, and timing
-- **competitive wishlist comparison** — motive and barrier distributions for Myntra vs Nykaa, Ajio, and other tagged platforms
-- evidence strength and confidence by source (and by platform where tagged)
-- emerging themes and opportunity areas over time
-- **Ask AI** — suggested questions and grounded chat **on the same page** as the charts (docked panel; not a separate primary route)
+- scrape strip (1,217 public comments by source)
+- top reasons for wishlist non-conversion (Opportunity Matrix)
+- variation by category and scrape source (confidence slider)
+- recurring uncertainties such as fit, quality, styling, price sensitivity, **Proof / Photos**, timing, **Research & Comparison**
+- **competitive wishlist comparison** on its own tab — Myntra vs Nykaa vs Ajio
+- evidence strength and confidence by source
+- **Discovery Chat** — starter questions and grounded chat with chips + Confidence %
 
 
 ### 2. Semantic Analytics Layer
@@ -106,8 +108,8 @@ The chatbot should:
 - answer predefined and ad hoc business and competitive questions
 - retrieve relevant evidence from the curated corpus (including multi-platform mentions)
 - synthesize findings from the dashboard and semantic layer
-- provide transparent, explainable answers with supporting source references
-- avoid unsupported claims or free-form speculation
+- provide transparent answers with **platform chips** and a **Confidence: N%** badge
+- avoid unsupported claims, invented conversion rates, or free-form speculation
 
 
 
@@ -121,7 +123,7 @@ Collect and analyze public and research-based conversations relevant to online f
 
 - Google Play Store reviews (Myntra and, where relevant, competitor apps)
 - Reddit posts and comments
-- Primary user research inputs (dual Excel surveys; age bands → `age_18_24` / `age_25_35`)
+- Primary user research inputs (dual Excel surveys + interviews; used in RAG only)
 - Other public sources that discuss wishlist behavior across fashion/lifestyle platforms
 
 The corpus should prioritize signals related to:
@@ -148,7 +150,7 @@ The engine must help answer questions such as:
 - When is the wishlist used for real purchase intent versus casual bookmarking?
 - How do users compare shortlisted products?
 - What information do users seek outside Myntra before purchasing?
-- How do these behaviors vary across categories, intents, and user segments?
+- How do these behaviors vary across categories and scrape sources?
 - What unmet needs appear repeatedly across conversations?
 - **Why do users wishlist on Myntra vs Nykaa, Ajio, or other competitors?**
 - **Which wishlist motives are shared across platforms, and which are platform-specific?**
@@ -189,24 +191,20 @@ The system should produce:
 
 ### Dashboard Outputs
 
-- ranked non-conversion reason categories
-- segment and category comparisons
-- uncertainty and friction heatmaps
-- intent-type views such as “active shortlist” vs “passive bookmarking”
-- **competitive wishlist motive / barrier comparison** (Myntra vs Nykaa, Ajio, etc.)
-- **shared vs platform-specific theme views**
-- source-level evidence summaries
-- confidence scores and evidence volume indicators (including by platform where available)
+- scrape strip (1,217 comments) + Opportunity Matrix
+- category / source / min-confidence filters
+- **competitive wishlist motive / barrier comparison** (Myntra vs Nykaa vs Ajio)
+- source-level public evidence summaries
+- confidence scores and evidence volume (0–10 on the matrix; % on chat)
 
 
 
 ### Chat Assistant Outputs
 
 - concise answers to stakeholder questions, including competitive questions
-- evidence-backed synthesis across multiple sources and platforms
-- drill-down explanations by category, segment, occasion, **or competitor**
-- supporting excerpts or references from retrieved conversations
-- transparent indication of source and competitive-coverage limitations
+- the same footer on every in-scope answer: platform chips + Confidence: N%
+- supporting public excerpts in the evidence drawer
+- no interview Q&A and no inline `(confidence 0.84, volume …)`
 
 
 
@@ -232,14 +230,14 @@ The system should produce:
 - The system should avoid overstating conclusions from isolated anecdotes
 - The chatbot must remain grounded in retrieved evidence and structured insight layers
 
-### Primary research corpus (age-aware)
+### Primary research corpus (RAG only)
 
-Approved survey inputs currently include:
+Approved survey inputs still include:
 
-1. **`Myntra Wishlist.xlsx`** — Myntra wishlist non-conversion questionnaire with an **Age** field (responses predominantly **25–35**). Primary blockers skew toward price too high, changing mind / no longer need, and fit uncertainty; multi-select stops often combine sale waiting with size unavailability.
-2. **`Your Wishlist Habits (Responses).xlsx`** — Cross-platform wishlist habits form with **Which age range are you in?** (predominantly **18–24**, with a smaller **25–34** cohort mapped to **25–35**). Younger respondents more often cite occasion timing, sale waiting, forgetting, and indecision among similar saves; they most often ask for real customer photos/videos to decide.
+1. **`Myntra Wishlist.xlsx`** — Myntra wishlist non-conversion questionnaire.
+2. **`Your Wishlist Habits (Responses).xlsx`** — Cross-platform wishlist habits form.
 
-The ingestion pipeline scrapes **both** workbooks into `source=research`, stamps `age_band` on documents/chunks, and exposes **Age 18–24** / **Age 25–35** as first-class segment filters for the dashboard and Ask AI.
+The pipeline stores both (plus interviews) as `source=research`. Discovery Chat may retrieve them. The **dashboard KPI is scrape-only (1,217 comments)**. Age 18–24 vs 25–35 is **not** a first-class filter or card — that mixed a 42-person form with public reviews.
 
 
 
@@ -250,9 +248,9 @@ The discovery engine should:
 - identify recurring reasons behind wishlist non-conversion
 - distinguish purchase-intent wishlisting from passive bookmarking
 - highlight the most plausible opportunity areas tied to the target metric
-- compare patterns across sources, categories, and user segments
+- compare patterns across scrape sources and categories
 - **compare wishlist motives and barriers for Myntra vs competitors (Nykaa, Ajio, etc.) with evidence**
-- provide a **unified single-page** dashboard + Ask AI experience, including competitive views
+- provide a **three-tab** Dashboard + Competitive + Discovery Chat experience
 - generate credible, PM-usable insights rather than raw summaries
 
 
@@ -260,4 +258,4 @@ The discovery engine should:
 
 The goal is to build a credible, structured, and scalable wishlist conversion insight system for Myntra — including a **competitive analysis lens** on why users wishlist on Myntra versus platforms like Nykaa and Ajio.
 
-By combining a dashboard, a semantic analytics layer, and a grounded RAG assistant, the system should help researchers and product managers understand why wishlist intent often fails to convert into purchase within 30 days, and how those motives and frictions differ across competitors. It should uncover the real frictions, uncertainties, and unmet needs between product interest and purchase, while presenting them in a form that is measurable, explainable, actionable, and competitively aware.
+By combining a scrape-only dashboard, a semantic analytics layer, and Discovery Chat, the system should help researchers and product managers understand why wishlist intent often fails to convert into purchase within 30 days, and how those motives and frictions differ across competitors. Survey forms stay in RAG. Every chat answer cites a public platform and a confidence score.
