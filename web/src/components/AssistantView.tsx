@@ -302,6 +302,10 @@ export default function AssistantView({
   const submit = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
+    if (trimmed.length < 5) {
+      setError("Please ask a slightly longer question (at least 5 characters).");
+      return;
+    }
     setDraft("");
     setMessages((prev) => [...prev, { role: "user", text: trimmed }]);
     setLoading(true);

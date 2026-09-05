@@ -185,7 +185,19 @@ export async function askAssistant(question: string, platforms?: string[]): Prom
     signal: controller.signal,
   }).finally(() => window.clearTimeout(timer));
   if (!resp.ok) {
-    throw new Error(`${resp.status} ${resp.statusText}`);
+    let detail = `${resp.status} ${resp.statusText}`;
+    try {
+      const body = (await resp.json()) as { detail?: unknown };
+      if (Array.isArray(body.detail) && body.detail.length > 0) {
+        const first = body.detail[0] as { msg?: string };
+        if (first?.msg) detail = first.msg;
+      } else if (typeof body.detail === "string") {
+        detail = body.detail;
+      }
+    } catch {
+      /* keep status text */
+    }
+    throw new Error(detail);
   }
   return resp.json() as Promise<AssistantAskResponse>;
 }
