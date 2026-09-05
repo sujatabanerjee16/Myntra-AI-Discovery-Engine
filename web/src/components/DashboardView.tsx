@@ -754,13 +754,6 @@ export default function DashboardView({ filters, onFiltersChange, sidebar, onSid
 
       <div className="wi-dash-content">
         {error && <div className="error-banner">{error}</div>}
-        {loading && reasons !== null && (
-          <div className="wi-updating-chip" role="status" aria-live="polite">
-            <span className="wi-updating-spinner" aria-hidden="true" />
-            Updating…
-          </div>
-        )}
-
         {reasons !== null && view === "dashboard" && (
           <>
             {onAskQuestion && <QuestionsView onAsk={onAskQuestion} />}
