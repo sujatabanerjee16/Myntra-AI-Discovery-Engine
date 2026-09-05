@@ -15,7 +15,7 @@ import { formatReason } from "./ConfidenceBadge";
 
 const PLATFORM_COLORS: Record<string, string> = {
   myntra: "#FF3F6C",
-  nykaa: "#FC2779",
+  nykaa: "#7C3AED",
   ajio: "#3b82f6",
 };
 

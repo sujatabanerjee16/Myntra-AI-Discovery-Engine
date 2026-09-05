@@ -205,7 +205,7 @@ export const DEFAULT_SIDEBAR: SidebarFilters = {
 
 export const PLATFORM_META: { id: PlatformId; label: string; color: string }[] = [
   { id: "myntra", label: "Myntra", color: "#ff3e6c" },
-  { id: "nykaa", label: "Nykaa", color: "#fc2779" },
+  { id: "nykaa", label: "Nykaa", color: "#7c3aed" },
   { id: "ajio", label: "Ajio", color: "#3b82f6" },
 ];
 
